@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Windows.Threading;
 
@@ -26,7 +27,7 @@ namespace CoverRetriever.ViewModel
 		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\ДДТ");
 		private AudioFile _fileDetails;
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
-		
+
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
 		{
@@ -140,6 +141,17 @@ namespace CoverRetriever.ViewModel
 
 		private void SaveCoverCommandExecute(RemoteCover remoteCover)
 		{
+			StartOperation(CoverRetrieverResources.MessageSaveCover);
+
+			_coverRetrieverService.DownloadCover(remoteCover.CoverUri)
+				.Finally(EndOperation)
+				.Subscribe(
+					stream =>
+					{
+						FileDetails.CoverOrganizer.Single(x => x is DirectoryCoverOrganizer)
+							.SaveCover(stream, Path.GetFileName(remoteCover.CoverUri.AbsolutePath));
+			
+					});
 
 		}
 		

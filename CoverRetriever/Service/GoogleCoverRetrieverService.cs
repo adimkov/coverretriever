@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -64,6 +65,35 @@ namespace CoverRetriever.Service
 						return ParseGoogleImageResponce(jsonResponce.EventArgs.Result).Take(coverCount);
 					});
 		}
+
+		#region Implementation of ICoverRetrieverService
+
+		/// <summary>
+		/// Download cover by uri
+		/// </summary>
+		/// <param name="coverUri">Uri of cover</param>
+		/// <returns></returns>
+		public IObservable<Stream> DownloadCover(Uri coverUri)
+		{
+			var downloader = new WebClient();
+			var downloadOpservable = Observable.FromEvent<OpenReadCompletedEventArgs>(downloader, "OpenReadCompleted")
+				.Select(
+				x => 
+				{
+					if (x.EventArgs.Error != null)
+					{
+						throw new CoverSearchException("Unable to download cover", x.EventArgs.Error);
+					}
+					return x.EventArgs.Result;
+				})
+				.Take(1);
+
+			downloader.OpenReadAsync(coverUri);
+
+			return downloadOpservable;
+		}
+
+		#endregion
 
 		private IEnumerable<RemoteCover> ParseGoogleImageResponce(string jsonResponce)
 		{

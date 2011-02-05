@@ -61,7 +61,7 @@ namespace CoverRetriever.Service
 						Path.GetFileName(name),
 						parent,
 						_metaProviderFactory.GetMetaProviderForFile(name),
-						_serviceLocator.GetAllInstances<ICoverOrganizer>())).ToList();
+						_serviceLocator.GetAllInstances(typeof(ICoverOrganizer)).Cast<ICoverOrganizer>().ToList()));
 
 			if (dispatcher != null)
 			{

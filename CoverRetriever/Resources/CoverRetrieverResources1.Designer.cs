@@ -70,6 +70,15 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saving the cover....
+        /// </summary>
+        public static string MessageSaveCover {
+            get {
+                return ResourceManager.GetString("MessageSaveCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Album:.
         /// </summary>
         public static string TextAlbum {
@@ -102,6 +111,15 @@ namespace CoverRetriever.Resources {
         public static string TextFileDetails {
             get {
                 return ResourceManager.GetString("TextFileDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string TextSaveCoverInToDirectory {
+            get {
+                return ResourceManager.GetString("TextSaveCoverInToDirectory", resourceCulture);
             }
         }
         

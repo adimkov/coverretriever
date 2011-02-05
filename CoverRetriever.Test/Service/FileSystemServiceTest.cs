@@ -91,7 +91,6 @@ namespace CoverRetriever.Test.Service
 			Assert.That(((Folder)rootFolder.Children[1]).Children.Count, Is.EqualTo(9));
 			Assert.That(((Folder)rootFolder.Children[2]).Children.Count, Is.EqualTo(8));
 			Assert.That(((Folder)rootFolder.Children[3]).Children.Count, Is.EqualTo(8));
-			
 		}
 	}
 }

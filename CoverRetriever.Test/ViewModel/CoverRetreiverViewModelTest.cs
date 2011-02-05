@@ -73,6 +73,7 @@ namespace CoverRetriever.Test.ViewModel
 			root.Children.Add(new AudioFile("name", root, new Lazy<IMetaProvider>(() => mettaProvider.Object)));
 			
 			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			
 			target.PropertyChanged += (sender, args) => eventCounter++;
 
 			target.FileSystemSelectedItemChangedCommand.Execute(root);

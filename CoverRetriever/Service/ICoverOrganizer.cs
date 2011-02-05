@@ -22,7 +22,7 @@ namespace CoverRetriever.Service
 		/// Get cover stream
 		/// </summary>
 		/// <returns>Image stream</returns>
-		Stream GetCoverStream();
+		string GetCoverFullPath();
 		
 		/// <summary>
 		/// Save stream into cover

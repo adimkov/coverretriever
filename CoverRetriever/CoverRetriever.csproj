@@ -180,6 +180,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
+    <Compile Include="Converter\CoverOrganizerToImageConverter.cs" />
     <Compile Include="Converter\FolderSourceConverter.cs" />
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />

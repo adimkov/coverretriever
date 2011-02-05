@@ -121,6 +121,10 @@
     <value>Download covers...</value>
     <comment>Shell operation message</comment>
   </data>
+  <data name="MessageSaveCover" xml:space="preserve">
+    <value>Saving the cover...</value>
+    <comment>Operation message</comment>
+  </data>
   <data name="TextAlbum" xml:space="preserve">
     <value>Album:</value>
     <comment>Shell Text</comment>
@@ -136,6 +140,10 @@
   <data name="TextFileDetails" xml:space="preserve">
     <value>Audio Info</value>
     <comment>Shell Text</comment>
+  </data>
+  <data name="TextSaveCoverInToDirectory" xml:space="preserve">
+    <value>Save</value>
+    <comment>Button</comment>
   </data>
   <data name="TextTrackName" xml:space="preserve">
     <value>Title:</value>
