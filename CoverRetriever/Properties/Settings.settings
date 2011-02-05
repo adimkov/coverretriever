@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CoverRetriever.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SearhGoogle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://ajax.googleapis.com/ajax/services/search/images</Value>
+    </Setting>
+    <Setting Name="SearhGooglePattern" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">{0}-{1}</Value>
+    </Setting>
+    <Setting Name="KeyGoogle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ABQIAAAAyJOVurPXLFVPtU1RN7FF_RT1b26EPce9DeOid2McjHSSSzE4jRRSIw3t1tJbbma6w0bpHwFki780Aw</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

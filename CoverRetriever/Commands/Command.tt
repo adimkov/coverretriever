@@ -1,0 +1,35 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="CommandTemplate.ttinclude" #>
+
+<#
+var commands = new Dictionary<string, string>()
+{
+	{"Activated", "Window"},
+	{"Deactivated", "Window"},
+	{"Loaded", "Window"},
+	{"Unloaded", "Window"},
+	{"MouseDoubleClick", "Control"},
+	
+	{"SelectedItemChanged", "TreeView"},
+};
+string namespaceName = "Microsoft.Practices.Prism.Commands";
+#>
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+namespace <#=namespaceName#>
+{
+<# 
+foreach(var keyValue in commands)
+{
+	GenerateCommand(keyValue.Key, keyValue.Value);	
+}
+#>
+}

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever", "CoverRetriever\CoverRetriever.csproj", "{C0DE9A06-DBC4-4FD1-A470-A7254623137E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.Test", "CoverRetriever.Test\CoverRetriever.Test.csproj", "{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.AudioInfo", "CoverRetriever.AudioInfo\CoverRetriever.AudioInfo.csproj", "{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0DE9A06-DBC4-4FD1-A470-A7254623137E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0DE9A06-DBC4-4FD1-A470-A7254623137E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0DE9A06-DBC4-4FD1-A470-A7254623137E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0DE9A06-DBC4-4FD1-A470-A7254623137E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
