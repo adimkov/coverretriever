@@ -16,7 +16,7 @@ using Notification = Microsoft.Practices.Prism.Interactivity.InteractionRequest.
 namespace CoverRetriever.ViewModel
 {
 	[Export]
-	public class CoverRetreiverViewModel : ViewModelBase
+	public class CoverRetrieverViewModel : ViewModelBase
 	{
 		private const int SuggestedCountOfCovers = 5;
 
@@ -28,7 +28,7 @@ namespace CoverRetriever.ViewModel
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
 		
 		[ImportingConstructor]
-		public CoverRetreiverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
+		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
 		{
 			_fileSystemService = fileSystemService;
 			_coverRetrieverService = coverRetrieverService;
@@ -145,7 +145,7 @@ namespace CoverRetriever.ViewModel
 		
 		private void FindRemoteCovers(AudioFile fileDetails)
 		{
-			StartOperation(CoverRetreiverResources.MessageDownloadCover);
+			StartOperation(CoverRetrieverResources.MessageDownloadCover);
 			_suggestedCovers.Clear();
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, fileDetails.Album, SuggestedCountOfCovers)
 				.Finally(EndOperation)

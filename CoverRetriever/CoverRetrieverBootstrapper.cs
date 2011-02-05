@@ -11,7 +11,7 @@ namespace CoverRetriever
 	/// <summary>
 	/// Install cover retriever to start
 	/// </summary>
-	public class CoverRetreiverBootstrapper : MefBootstrapper
+	public class CoverRetrieverBootstrapper : MefBootstrapper
 	{
 		/// <summary>
 		/// Creates the shell or main window of the application.
@@ -54,7 +54,7 @@ namespace CoverRetriever
 			base.ConfigureAggregateCatalog();
 
 			// Add this assembly to export ModuleTracker
-			this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetreiverBootstrapper).Assembly));
+			this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
 			this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
 		}
 	}

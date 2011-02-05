@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.ViewModel
 {
 	[TestFixture]
-	public class CoverRetreiverViewModelTest
+	public class CoverRetrieverViewModelTest
 	{
 		[Test]
 		public void Ctr_should_not_throws_exception()
@@ -22,7 +22,7 @@ namespace CoverRetriever.Test.ViewModel
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			Assert.DoesNotThrow(() => new CoverRetreiverViewModel(fileSystemService.Object, coverRetrieverService.Object));
+			Assert.DoesNotThrow(() => new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object));
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace CoverRetriever.Test.ViewModel
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			var target = new CoverRetreiverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
 
 			Assert.That(target.LoadedCommand, Is.Not.Null);
 			Assert.That(target.FileSystemSelectedItemChangedCommand, Is.Not.Null);
@@ -48,7 +48,7 @@ namespace CoverRetriever.Test.ViewModel
 				.AtMostOnce();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			var target = new CoverRetreiverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
 
 			target.LoadedCommand.Execute();
 			
@@ -72,7 +72,7 @@ namespace CoverRetriever.Test.ViewModel
 			var root = new RootFolder("Root");
 			root.Children.Add(new AudioFile("name", root, new Lazy<IMetaProvider>(() => mettaProvider.Object)));
 			
-			var target = new CoverRetreiverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
 			target.PropertyChanged += (sender, args) => eventCounter++;
 
 			target.FileSystemSelectedItemChangedCommand.Execute(root);

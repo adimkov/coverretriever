@@ -9,10 +9,10 @@ namespace CoverRetriever.View
 	[Export]
 	public partial class Shell
 	{
-		private readonly CoverRetreiverViewModel _viewModel;
+		private readonly CoverRetrieverViewModel _viewModel;
 
 		[ImportingConstructor]
-		public Shell(CoverRetreiverViewModel viewModel)
+		public Shell(CoverRetrieverViewModel viewModel)
 		{
 			InitializeComponent();
 			_viewModel = viewModel;

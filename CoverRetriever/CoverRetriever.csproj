@@ -181,7 +181,7 @@
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
     <Compile Include="Converter\FolderSourceConverter.cs" />
-    <Compile Include="CoverRetreiverBootstrapper.cs" />
+    <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
@@ -192,12 +192,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Resources\CoverRetreiverResources.Designer.cs">
+    <Compile Include="Resources\CoverRetrieverResources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CoverRetreiverResources.resx</DependentUpon>
+      <DependentUpon>CoverRetrieverResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\CoverRetreiverResourcesWrapper.cs" />
+    <Compile Include="Resources\CoverRetrieverResourcesWrapper.cs" />
     <Compile Include="SampleData\RemoteCoverData.cs" />
     <Compile Include="Service\DirectoryCoverOrganizer.cs" />
     <Compile Include="Service\GoogleCoverRetrieverService.cs" />
@@ -206,7 +206,7 @@
     <Compile Include="Service\FileSystemService.cs" />
     <Compile Include="Service\IFileSystemService.cs" />
     <Compile Include="Service\MettaProviderFactory.cs" />
-    <Compile Include="ViewModel\CoverRetreiverViewModel.cs" />
+    <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\CoverPreviewWindow.xaml.cs">
@@ -284,9 +284,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\CoverRetreiverResources.resx">
+    <EmbeddedResource Include="Resources\CoverRetrieverResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>CoverRetreiverResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>CoverRetrieverResources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
