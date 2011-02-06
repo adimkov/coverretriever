@@ -61,7 +61,16 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download covers....
+        ///   Looks up a localized string similar to Loading Cover....
+        /// </summary>
+        public static string MessageCoverPreview {
+            get {
+                return ResourceManager.GetString("MessageCoverPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading covers....
         /// </summary>
         public static string MessageDownloadCover {
             get {
@@ -102,6 +111,24 @@ namespace CoverRetriever.Resources {
         public static string TextCover {
             get {
                 return ResourceManager.GetString("TextCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height:.
+        /// </summary>
+        public static string TextCoverSixeHeight {
+            get {
+                return ResourceManager.GetString("TextCoverSixeHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width:.
+        /// </summary>
+        public static string TextCoverSixeWidth {
+            get {
+                return ResourceManager.GetString("TextCoverSixeWidth", resourceCulture);
             }
         }
         

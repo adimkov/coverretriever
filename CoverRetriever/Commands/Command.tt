@@ -16,6 +16,9 @@ var commands = new Dictionary<string, string>()
 	{"MouseDoubleClick", "Control"},
 	
 	{"SelectedItemChanged", "TreeView"},
+	
+	{"Closed", "Window"},
+	{"Closing", "Window"},
 };
 string namespaceName = "Microsoft.Practices.Prism.Commands";
 #>

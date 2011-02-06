@@ -81,7 +81,36 @@ namespace CoverRetriever.Test.ViewModel
 			coverRetrieverService.VerifyAll();
 			Assert.That(target.FileDetails, Is.EqualTo(root.Children[0]));
 			Assert.That(target.SuggestedCovers.Count, Is.EqualTo(1));
-			Assert.That(eventCounter, Is.EqualTo(5));
+			Assert.That(eventCounter, Is.EqualTo(6));
+		}
+
+		[Test]
+		public void FileSystemSelectedItemChangedCommand_should_set_sugested_cover()
+		{
+			var eventCounter = 0;
+			var fileSystemService = GetFileSystemServiceMock();
+			var coverRetrieverService = GetCoverRetrieverServiceMock();
+			coverRetrieverService.Setup(x => x.GetCoverFor(It.IsAny<string>(), It.IsAny<string>(), 5))
+				.Returns(Observable.Return(new System.Collections.Generic.List<RemoteCover>
+				{
+					new RemoteCover()
+				}))
+				.AtMostOnce();
+
+			var mettaProvider = new Mock<IMetaProvider>();
+			var root = new RootFolder("Root");
+			root.Children.Add(new AudioFile("name", root, new Lazy<IMetaProvider>(() => mettaProvider.Object)));
+
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+
+			target.PropertyChanged += (sender, args) => eventCounter++;
+
+			target.FileSystemSelectedItemChangedCommand.Execute(root);
+
+			coverRetrieverService.VerifyAll();
+			Assert.That(target.SuggestedCovers.Count, Is.EqualTo(1));
+			Assert.That(target.SelectedSuggestedCover, Is.Not.Null);
+			Assert.That(eventCounter, Is.EqualTo(6));
 		}
 
 		private Mock<IFileSystemService> GetFileSystemServiceMock()

@@ -117,8 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MessageCoverPreview" xml:space="preserve">
+    <value>Loading Cover...</value>
+    <comment>Preview operation</comment>
+  </data>
   <data name="MessageDownloadCover" xml:space="preserve">
-    <value>Download covers...</value>
+    <value>Downloading covers...</value>
     <comment>Shell operation message</comment>
   </data>
   <data name="MessageSaveCover" xml:space="preserve">
@@ -136,6 +140,14 @@
   <data name="TextCover" xml:space="preserve">
     <value>Current cover:</value>
     <comment>Shell Text</comment>
+  </data>
+  <data name="TextCoverSixeHeight" xml:space="preserve">
+    <value>Height:</value>
+    <comment>CoverPreview</comment>
+  </data>
+  <data name="TextCoverSixeWidth" xml:space="preserve">
+    <value>Width:</value>
+    <comment>CoverPreview</comment>
   </data>
   <data name="TextFileDetails" xml:space="preserve">
     <value>Audio Info</value>

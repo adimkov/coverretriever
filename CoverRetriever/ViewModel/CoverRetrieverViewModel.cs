@@ -24,9 +24,10 @@ namespace CoverRetriever.ViewModel
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ICoverRetrieverService _coverRetrieverService;
 		//todo:Remove stub
-		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\ДДТ");
+		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\ДДТ\");
 		private AudioFile _fileDetails;
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
+		private RemoteCover _selectedSuggestedCover;
 
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
@@ -107,6 +108,22 @@ namespace CoverRetriever.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Get or set suggested cover
+		/// </summary>
+		public RemoteCover SelectedSuggestedCover
+		{
+			get
+			{
+				return _selectedSuggestedCover;
+			}
+			set 
+			{
+				_selectedSuggestedCover = value;
+				RaisePropertyChanged("SelectedSuggestedCover");
+			}
+		}
+
 		private void LoadedCommandExecute()
 		{
 			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, null);
@@ -132,36 +149,59 @@ namespace CoverRetriever.ViewModel
 		
 		private void PreviewCoverCommandExecute(RemoteCover remoteCover)
 		{
+			var viewModel = new CoverPreviewViewModel(remoteCover);
+			
+			viewModel.SaveCover.Subscribe(
+				x =>
+				{
+					viewModel.SetBusy(true, CoverRetrieverResources.MessageSaveCover);
+					SaveRemoteCover(x, () => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover));
+				});
+
 			PreviewCoverRequest.Raise(new Notification
 			{
 				Title = "Cover of album {0} - {1}".FormatUIString(FileDetails.Artist, FileDetails.Album),
-				Content = remoteCover
+				Content = viewModel 
 			});
 		}
 
 		private void SaveCoverCommandExecute(RemoteCover remoteCover)
 		{
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
+			SaveRemoteCover(remoteCover, EndOperation);
+		}
 
+		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
+		{
 			_coverRetrieverService.DownloadCover(remoteCover.CoverUri)
-				.Finally(EndOperation)
+				.Finally(
+					() =>
+					{
+						var swapFileDetails = FileDetails;
+						FileDetails = null;
+						FileDetails = swapFileDetails;
+						onCompllete();
+					})
 				.Subscribe(
 					stream =>
 					{
 						FileDetails.CoverOrganizer.Single(x => x is DirectoryCoverOrganizer)
 							.SaveCover(stream, Path.GetFileName(remoteCover.CoverUri.AbsolutePath));
-			
 					});
-
 		}
-		
+
 		private void FindRemoteCovers(AudioFile fileDetails)
 		{
 			StartOperation(CoverRetrieverResources.MessageDownloadCover);
 			_suggestedCovers.Clear();
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, fileDetails.Album, SuggestedCountOfCovers)
 				.Finally(EndOperation)
-				.Subscribe(x => SuggestedCovers.AddRange(x));
+				.Subscribe(
+				x =>
+				{
+					SuggestedCovers.AddRange(x);
+					SelectedSuggestedCover = _suggestedCovers.Max();
+				});
 		}
 	}
 }

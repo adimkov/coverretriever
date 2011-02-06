@@ -67,7 +67,8 @@ namespace CoverRetriever.Service
 			}
 
 			var ext = Path.GetExtension(name);
-			var newCoverPath = Path.Combine(GetBasePath(), DefaultCoverName + ext);
+			CoverName = DefaultCoverName + ext;
+			var newCoverPath = Path.Combine(GetBasePath(), CoverName);
 
 			try
 			{
@@ -100,7 +101,7 @@ namespace CoverRetriever.Service
 			if (String.IsNullOrEmpty(CoverName))
 			{
 				var imagesFilder = Directory.GetFiles(GetBasePath())
-					.Where(x => _supportedGraphicsFiles.Contains(Path.GetExtension(x)));
+					.Where(x => _supportedGraphicsFiles.Contains(Path.GetExtension(x).ToLower()));
 
 				var imageAsCoverFirst = imagesFilder.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == DefaultCoverName);
 

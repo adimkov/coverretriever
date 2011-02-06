@@ -154,6 +154,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\packages\WPFToolkit.Extended\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup>
     <ExpressionBlendPrototypingEnabled>false</ExpressionBlendPrototypingEnabled>
@@ -199,7 +202,6 @@
       <DependentUpon>CoverRetrieverResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\CoverRetrieverResourcesWrapper.cs" />
-    <Compile Include="SampleData\RemoteCoverData.cs" />
     <Compile Include="Service\DirectoryCoverOrganizer.cs" />
     <Compile Include="Service\GoogleCoverRetrieverService.cs" />
     <Compile Include="Service\ICoverOrganizer.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="Service\FileSystemService.cs" />
     <Compile Include="Service\IFileSystemService.cs" />
     <Compile Include="Service\MettaProviderFactory.cs" />
+    <Compile Include="ViewModel\CoverPreviewViewModel.cs" />
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

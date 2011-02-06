@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 using CoverRetriever.Service;
 
@@ -25,7 +27,22 @@ namespace CoverRetriever.Converter
 			var directoryCoverOrganizer = coverOrganizerList.First();
 			if (directoryCoverOrganizer.IsCoverExists())
 			{
-				return directoryCoverOrganizer.GetCoverFullPath();
+				//read cover in memory and release file
+				using (var coverStream = File.OpenRead(directoryCoverOrganizer.GetCoverFullPath()))
+				{
+					var ms = new MemoryStream();
+
+					ms.SetLength(coverStream.Length);
+					coverStream.Read(ms.GetBuffer(), 0, (int)coverStream.Length);
+					ms.Flush();
+					
+					BitmapImage src = new BitmapImage();
+					src.BeginInit();
+					src.StreamSource = ms;
+					src.EndInit();
+
+					return src;
+				}
 			}
 			return null;
 		}

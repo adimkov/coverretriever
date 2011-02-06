@@ -717,4 +717,240 @@ namespace Microsoft.Practices.Prism.Commands
 			ExecuteCommand();
 		}
 	}
+	/// <summary>
+	/// Static Class that holds all Dependency Properties and Static methods to allow 
+	/// the Closed event of the  Window class to be attached to a Command. 
+	/// </summary>
+	public static class Closed
+	{
+		private static readonly DependencyProperty ClosedCommandBehaviorProperty = DependencyProperty.RegisterAttached(
+			"ClosedCommandBehavior",
+			typeof(ClosedCommandBehavior),
+			typeof(Closed),
+			null);
+
+
+		/// <summary>
+		/// Command to execute on click event.
+		/// </summary>
+		public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+			"Command",
+			typeof(ICommand),
+			typeof(Closed),
+			new PropertyMetadata(OnSetCommandCallback));
+
+		/// <summary>
+		/// Command parameter to supply on command execution.
+		/// </summary>
+		public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached(
+			"CommandParameter",
+			typeof(object),
+			typeof(Closed),
+			new PropertyMetadata(OnSetCommandParameterCallback));
+
+
+		/// <summary>
+		/// Sets the <see cref="ICommand"/> to execute on the click event.
+		/// </summary>
+		/// <param name="control"> Window dependency object to attach command</param>
+		/// <param name="command">Command to attach</param>
+		public static void SetCommand(Window control, ICommand command)
+		{
+			control.SetValue(CommandProperty, command);
+		}
+
+		/// <summary>
+		/// Retrieves the <see cref="ICommand"/> attached to the <see cref="ButtonBase"/>.
+		/// </summary>
+		/// <param name="control">Window containing the Command dependency property</param>
+		/// <returns>The value of the command attached</returns>
+		public static ICommand GetCommand(Window control)
+		{
+			return control.GetValue(CommandProperty) as ICommand;
+		}
+
+		/// <summary>
+		/// Sets the value for the CommandParameter attached property on the provided <see cref="Window"/>.
+		/// </summary>
+		/// <param name="control">ButtonBase to attach CommandParameter</param>
+		/// <param name="parameter">Parameter value to attach</param>
+		public static void SetCommandParameter(Window control, object parameter)
+		{
+			control.SetValue(CommandParameterProperty, parameter);
+		}
+
+		/// <summary>
+		/// Gets the value in CommandParameter attached property on the provided <see cref="ButtonBase"/>
+		/// </summary>
+		/// <param name="control">Window that has the CommandParameter</param>
+		/// <returns>The value of the property</returns>
+		public static object GetCommandParameter(Window control)
+		{
+			return control.GetValue(CommandParameterProperty);
+		}
+
+		private static void OnSetCommandCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+		{
+			Window control = dependencyObject as Window;
+			if (control != null)
+			{
+				var behavior = GetOrCreateBehavior(control);
+				behavior.Command = e.NewValue as ICommand;
+			}
+		}
+
+		private static void OnSetCommandParameterCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+		{
+			Window control = dependencyObject as Window;
+			if (control != null)
+			{
+				var behavior = GetOrCreateBehavior(control);
+				behavior.CommandParameter = e.NewValue;
+			}
+		}
+
+		private static ClosedCommandBehavior GetOrCreateBehavior(Window control)
+		{
+			var behavior = control.GetValue(ClosedCommandBehaviorProperty) as ClosedCommandBehavior;
+			if (behavior == null)
+			{
+				behavior = new ClosedCommandBehavior(control);
+				control.SetValue(ClosedCommandBehaviorProperty, behavior);
+			}
+
+			return behavior;
+		}
+	}
+	
+	public class ClosedCommandBehavior : CommandBehaviorBase<Window>
+	{
+		public ClosedCommandBehavior(Window targetObject)
+			: base(targetObject)
+		{
+			targetObject.Closed += OnClosed;
+		}
+
+		private void OnClosed(object sender, EventArgs routedEventArgs)
+		{
+			ExecuteCommand();
+		}
+	}
+	/// <summary>
+	/// Static Class that holds all Dependency Properties and Static methods to allow 
+	/// the Closing event of the  Window class to be attached to a Command. 
+	/// </summary>
+	public static class Closing
+	{
+		private static readonly DependencyProperty ClosingCommandBehaviorProperty = DependencyProperty.RegisterAttached(
+			"ClosingCommandBehavior",
+			typeof(ClosingCommandBehavior),
+			typeof(Closing),
+			null);
+
+
+		/// <summary>
+		/// Command to execute on click event.
+		/// </summary>
+		public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+			"Command",
+			typeof(ICommand),
+			typeof(Closing),
+			new PropertyMetadata(OnSetCommandCallback));
+
+		/// <summary>
+		/// Command parameter to supply on command execution.
+		/// </summary>
+		public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached(
+			"CommandParameter",
+			typeof(object),
+			typeof(Closing),
+			new PropertyMetadata(OnSetCommandParameterCallback));
+
+
+		/// <summary>
+		/// Sets the <see cref="ICommand"/> to execute on the click event.
+		/// </summary>
+		/// <param name="control"> Window dependency object to attach command</param>
+		/// <param name="command">Command to attach</param>
+		public static void SetCommand(Window control, ICommand command)
+		{
+			control.SetValue(CommandProperty, command);
+		}
+
+		/// <summary>
+		/// Retrieves the <see cref="ICommand"/> attached to the <see cref="ButtonBase"/>.
+		/// </summary>
+		/// <param name="control">Window containing the Command dependency property</param>
+		/// <returns>The value of the command attached</returns>
+		public static ICommand GetCommand(Window control)
+		{
+			return control.GetValue(CommandProperty) as ICommand;
+		}
+
+		/// <summary>
+		/// Sets the value for the CommandParameter attached property on the provided <see cref="Window"/>.
+		/// </summary>
+		/// <param name="control">ButtonBase to attach CommandParameter</param>
+		/// <param name="parameter">Parameter value to attach</param>
+		public static void SetCommandParameter(Window control, object parameter)
+		{
+			control.SetValue(CommandParameterProperty, parameter);
+		}
+
+		/// <summary>
+		/// Gets the value in CommandParameter attached property on the provided <see cref="ButtonBase"/>
+		/// </summary>
+		/// <param name="control">Window that has the CommandParameter</param>
+		/// <returns>The value of the property</returns>
+		public static object GetCommandParameter(Window control)
+		{
+			return control.GetValue(CommandParameterProperty);
+		}
+
+		private static void OnSetCommandCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+		{
+			Window control = dependencyObject as Window;
+			if (control != null)
+			{
+				var behavior = GetOrCreateBehavior(control);
+				behavior.Command = e.NewValue as ICommand;
+			}
+		}
+
+		private static void OnSetCommandParameterCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+		{
+			Window control = dependencyObject as Window;
+			if (control != null)
+			{
+				var behavior = GetOrCreateBehavior(control);
+				behavior.CommandParameter = e.NewValue;
+			}
+		}
+
+		private static ClosingCommandBehavior GetOrCreateBehavior(Window control)
+		{
+			var behavior = control.GetValue(ClosingCommandBehaviorProperty) as ClosingCommandBehavior;
+			if (behavior == null)
+			{
+				behavior = new ClosingCommandBehavior(control);
+				control.SetValue(ClosingCommandBehaviorProperty, behavior);
+			}
+
+			return behavior;
+		}
+	}
+	
+	public class ClosingCommandBehavior : CommandBehaviorBase<Window>
+	{
+		public ClosingCommandBehavior(Window targetObject)
+			: base(targetObject)
+		{
+			targetObject.Closing += OnClosing;
+		}
+
+		private void OnClosing(object sender, EventArgs routedEventArgs)
+		{
+			ExecuteCommand();
+		}
+	}
 }

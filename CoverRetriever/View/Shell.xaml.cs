@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition;
+
 using CoverRetriever.ViewModel;
 
 namespace CoverRetriever.View
