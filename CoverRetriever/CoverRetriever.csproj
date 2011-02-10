@@ -188,6 +188,7 @@
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
     <Compile Include="Helpers\TreeViewExtensions.cs" />
+    <Compile Include="Interaction\ContentChildWindow.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
@@ -214,8 +215,8 @@
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Compile Include="View\CoverPreviewWindow.xaml.cs">
-      <DependentUpon>CoverPreviewWindow.xaml</DependentUpon>
+    <Compile Include="View\CoverPreviewView.xaml.cs">
+      <DependentUpon>CoverPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
@@ -276,7 +277,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\CoverPreviewWindow.xaml">
+    <Page Include="View\CoverPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

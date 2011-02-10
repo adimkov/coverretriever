@@ -25,7 +25,7 @@ namespace CoverRetriever.ViewModel
 			_coverImage.DownloadFailed += CoverImageOnDownloadCompleted;
 
 			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute);
-			CloseCommand = new DelegateCommand(CloseCommandExecute);
+			FinishCommand = new DelegateCommand(FinishCommandExecute);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace CoverRetriever.ViewModel
 		/// <summary>
 		/// Release all resources
 		/// </summary>
-		public DelegateCommand CloseCommand { get; private set; }
+		public DelegateCommand FinishCommand { get; private set; }
 
 		/// <summary>
 		/// fire on user click Save cover button
@@ -98,7 +98,7 @@ namespace CoverRetriever.ViewModel
 			_saveCoverSubject.OnNext(_remoteCover);
 		}
 
-		private void CloseCommandExecute()
+		private void FinishCommandExecute()
 		{
 			_saveCoverSubject.OnCompleted();
 		}

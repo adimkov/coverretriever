@@ -247,7 +247,7 @@ namespace Microsoft.Practices.Prism.Commands
 	}
 	/// <summary>
 	/// Static Class that holds all Dependency Properties and Static methods to allow 
-	/// the Loaded event of the  Window class to be attached to a Command. 
+	/// the Loaded event of the  Control class to be attached to a Command. 
 	/// </summary>
 	public static class Loaded
 	{
@@ -280,9 +280,9 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Sets the <see cref="ICommand"/> to execute on the click event.
 		/// </summary>
-		/// <param name="control"> Window dependency object to attach command</param>
+		/// <param name="control"> Control dependency object to attach command</param>
 		/// <param name="command">Command to attach</param>
-		public static void SetCommand(Window control, ICommand command)
+		public static void SetCommand(Control control, ICommand command)
 		{
 			control.SetValue(CommandProperty, command);
 		}
@@ -290,19 +290,19 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Retrieves the <see cref="ICommand"/> attached to the <see cref="ButtonBase"/>.
 		/// </summary>
-		/// <param name="control">Window containing the Command dependency property</param>
+		/// <param name="control">Control containing the Command dependency property</param>
 		/// <returns>The value of the command attached</returns>
-		public static ICommand GetCommand(Window control)
+		public static ICommand GetCommand(Control control)
 		{
 			return control.GetValue(CommandProperty) as ICommand;
 		}
 
 		/// <summary>
-		/// Sets the value for the CommandParameter attached property on the provided <see cref="Window"/>.
+		/// Sets the value for the CommandParameter attached property on the provided <see cref="Control"/>.
 		/// </summary>
 		/// <param name="control">ButtonBase to attach CommandParameter</param>
 		/// <param name="parameter">Parameter value to attach</param>
-		public static void SetCommandParameter(Window control, object parameter)
+		public static void SetCommandParameter(Control control, object parameter)
 		{
 			control.SetValue(CommandParameterProperty, parameter);
 		}
@@ -310,16 +310,16 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Gets the value in CommandParameter attached property on the provided <see cref="ButtonBase"/>
 		/// </summary>
-		/// <param name="control">Window that has the CommandParameter</param>
+		/// <param name="control">Control that has the CommandParameter</param>
 		/// <returns>The value of the property</returns>
-		public static object GetCommandParameter(Window control)
+		public static object GetCommandParameter(Control control)
 		{
 			return control.GetValue(CommandParameterProperty);
 		}
 
 		private static void OnSetCommandCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
 		{
-			Window control = dependencyObject as Window;
+			Control control = dependencyObject as Control;
 			if (control != null)
 			{
 				var behavior = GetOrCreateBehavior(control);
@@ -329,7 +329,7 @@ namespace Microsoft.Practices.Prism.Commands
 
 		private static void OnSetCommandParameterCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
 		{
-			Window control = dependencyObject as Window;
+			Control control = dependencyObject as Control;
 			if (control != null)
 			{
 				var behavior = GetOrCreateBehavior(control);
@@ -337,7 +337,7 @@ namespace Microsoft.Practices.Prism.Commands
 			}
 		}
 
-		private static LoadedCommandBehavior GetOrCreateBehavior(Window control)
+		private static LoadedCommandBehavior GetOrCreateBehavior(Control control)
 		{
 			var behavior = control.GetValue(LoadedCommandBehaviorProperty) as LoadedCommandBehavior;
 			if (behavior == null)
@@ -350,9 +350,9 @@ namespace Microsoft.Practices.Prism.Commands
 		}
 	}
 	
-	public class LoadedCommandBehavior : CommandBehaviorBase<Window>
+	public class LoadedCommandBehavior : CommandBehaviorBase<Control>
 	{
-		public LoadedCommandBehavior(Window targetObject)
+		public LoadedCommandBehavior(Control targetObject)
 			: base(targetObject)
 		{
 			targetObject.Loaded += OnLoaded;
@@ -365,7 +365,7 @@ namespace Microsoft.Practices.Prism.Commands
 	}
 	/// <summary>
 	/// Static Class that holds all Dependency Properties and Static methods to allow 
-	/// the Unloaded event of the  Window class to be attached to a Command. 
+	/// the Unloaded event of the  Control class to be attached to a Command. 
 	/// </summary>
 	public static class Unloaded
 	{
@@ -398,9 +398,9 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Sets the <see cref="ICommand"/> to execute on the click event.
 		/// </summary>
-		/// <param name="control"> Window dependency object to attach command</param>
+		/// <param name="control"> Control dependency object to attach command</param>
 		/// <param name="command">Command to attach</param>
-		public static void SetCommand(Window control, ICommand command)
+		public static void SetCommand(Control control, ICommand command)
 		{
 			control.SetValue(CommandProperty, command);
 		}
@@ -408,19 +408,19 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Retrieves the <see cref="ICommand"/> attached to the <see cref="ButtonBase"/>.
 		/// </summary>
-		/// <param name="control">Window containing the Command dependency property</param>
+		/// <param name="control">Control containing the Command dependency property</param>
 		/// <returns>The value of the command attached</returns>
-		public static ICommand GetCommand(Window control)
+		public static ICommand GetCommand(Control control)
 		{
 			return control.GetValue(CommandProperty) as ICommand;
 		}
 
 		/// <summary>
-		/// Sets the value for the CommandParameter attached property on the provided <see cref="Window"/>.
+		/// Sets the value for the CommandParameter attached property on the provided <see cref="Control"/>.
 		/// </summary>
 		/// <param name="control">ButtonBase to attach CommandParameter</param>
 		/// <param name="parameter">Parameter value to attach</param>
-		public static void SetCommandParameter(Window control, object parameter)
+		public static void SetCommandParameter(Control control, object parameter)
 		{
 			control.SetValue(CommandParameterProperty, parameter);
 		}
@@ -428,16 +428,16 @@ namespace Microsoft.Practices.Prism.Commands
 		/// <summary>
 		/// Gets the value in CommandParameter attached property on the provided <see cref="ButtonBase"/>
 		/// </summary>
-		/// <param name="control">Window that has the CommandParameter</param>
+		/// <param name="control">Control that has the CommandParameter</param>
 		/// <returns>The value of the property</returns>
-		public static object GetCommandParameter(Window control)
+		public static object GetCommandParameter(Control control)
 		{
 			return control.GetValue(CommandParameterProperty);
 		}
 
 		private static void OnSetCommandCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
 		{
-			Window control = dependencyObject as Window;
+			Control control = dependencyObject as Control;
 			if (control != null)
 			{
 				var behavior = GetOrCreateBehavior(control);
@@ -447,7 +447,7 @@ namespace Microsoft.Practices.Prism.Commands
 
 		private static void OnSetCommandParameterCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
 		{
-			Window control = dependencyObject as Window;
+			Control control = dependencyObject as Control;
 			if (control != null)
 			{
 				var behavior = GetOrCreateBehavior(control);
@@ -455,7 +455,7 @@ namespace Microsoft.Practices.Prism.Commands
 			}
 		}
 
-		private static UnloadedCommandBehavior GetOrCreateBehavior(Window control)
+		private static UnloadedCommandBehavior GetOrCreateBehavior(Control control)
 		{
 			var behavior = control.GetValue(UnloadedCommandBehaviorProperty) as UnloadedCommandBehavior;
 			if (behavior == null)
@@ -468,9 +468,9 @@ namespace Microsoft.Practices.Prism.Commands
 		}
 	}
 	
-	public class UnloadedCommandBehavior : CommandBehaviorBase<Window>
+	public class UnloadedCommandBehavior : CommandBehaviorBase<Control>
 	{
-		public UnloadedCommandBehavior(Window targetObject)
+		public UnloadedCommandBehavior(Control targetObject)
 			: base(targetObject)
 		{
 			targetObject.Unloaded += OnUnloaded;

@@ -11,8 +11,8 @@ var commands = new Dictionary<string, string>()
 {
 	{"Activated", "Window"},
 	{"Deactivated", "Window"},
-	{"Loaded", "Window"},
-	{"Unloaded", "Window"},
+	{"Loaded", "Control"},
+	{"Unloaded", "Control"},
 	{"MouseDoubleClick", "Control"},
 	
 	{"SelectedItemChanged", "TreeView"},
