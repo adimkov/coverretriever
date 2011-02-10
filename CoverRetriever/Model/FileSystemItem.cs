@@ -1,10 +1,13 @@
+using System.Diagnostics;
 using System.IO;
+
 
 namespace CoverRetriever.Model
 {
 	/// <summary>
 	/// File or folder
 	/// </summary>
+	[DebuggerDisplay("FileName={Name}")]
 	public class FileSystemItem
 	{
 		public FileSystemItem(string name)

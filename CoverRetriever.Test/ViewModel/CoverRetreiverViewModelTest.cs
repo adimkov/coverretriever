@@ -44,7 +44,7 @@ namespace CoverRetriever.Test.ViewModel
 		public void LoadedCommand_should_set_initialize_file_system_collection()
 		{
 			var fileSystemService = GetFileSystemServiceMock();
-			fileSystemService.Setup(x => x.FillRootFolderAsync(It.IsAny<RootFolder>(), It.IsAny<Dispatcher>(), null))
+			fileSystemService.Setup(x => x.FillRootFolderAsync(It.IsAny<RootFolder>(), It.IsAny<Dispatcher>(), It.IsAny<Action>()))
 				.AtMostOnce();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 

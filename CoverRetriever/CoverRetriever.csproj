@@ -184,9 +184,10 @@
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
     <Compile Include="Converter\CoverOrganizerToImageConverter.cs" />
-    <Compile Include="Converter\FolderSourceConverter.cs" />
+    <Compile Include="Converter\TreePathContructor.cs" />
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
+    <Compile Include="Helpers\TreeViewExtensions.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />

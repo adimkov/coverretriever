@@ -4,11 +4,9 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Windows.Threading;
-
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
 using CoverRetriever.Service;
-
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 
@@ -24,10 +22,11 @@ namespace CoverRetriever.ViewModel
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ICoverRetrieverService _coverRetrieverService;
 		//todo:Remove stub
-		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\ДДТ\");
+		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\");
 		private AudioFile _fileDetails;
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
 		private RemoteCover _selectedSuggestedCover;
+		private FileSystemItem _selectedFileSystemItem;
 
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
@@ -74,6 +73,22 @@ namespace CoverRetriever.ViewModel
 		public ObservableCollection<FileSystemItem> FileSystem
 		{
 			get { return _rootFolder.Children; }
+		}
+
+		/// <summary>
+		/// Set or get selected File system item
+		/// </summary>
+		public FileSystemItem SelectedFileSystemItem
+		{
+			get
+			{
+				return _selectedFileSystemItem;
+			}
+			set
+			{
+				_selectedFileSystemItem = value;
+				RaisePropertyChanged("SelectedFileSystemItem");
+			}
 		}
 
 		/// <summary>
@@ -126,7 +141,12 @@ namespace CoverRetriever.ViewModel
 
 		private void LoadedCommandExecute()
 		{
-			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, null);
+			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, SelectFirstAutioFile);
+		}
+
+		private void SelectFirstAutioFile()
+		{
+			Dispatcher.CurrentDispatcher.Invoke(new Action(() => SelectedFileSystemItem = FindFirstAudioFile(_rootFolder)));
 		}
 
 		private void FileSystemSelectedItemChangedCommandExecute(FileSystemItem file)
@@ -202,6 +222,29 @@ namespace CoverRetriever.ViewModel
 					SuggestedCovers.AddRange(x);
 					SelectedSuggestedCover = _suggestedCovers.Max();
 				});
+		}
+
+		private FileSystemItem FindFirstAudioFile(Folder rootFolder)
+		{
+			foreach (var child in rootFolder.Children)
+			{
+				var audioFile = child as AudioFile;
+				var folder = child as Folder;
+				if (audioFile != null)
+				{
+					return audioFile;
+				}
+				
+				if (folder != null)
+				{
+					var folderWithAudioFile = FindFirstAudioFile(folder);
+					if (folderWithAudioFile != null)
+					{
+						return folderWithAudioFile;
+					}
+				}
+			}
+			return null;
 		}
 	}
 }

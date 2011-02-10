@@ -19,6 +19,8 @@ namespace CoverRetriever.Service
 		
 		private MetaProviderFactory _metaProviderFactory;
 		private IServiceLocator _serviceLocator;
+		private int _countRequestOfAddItems;
+		private Action _onComplete;
 
 		[ImportingConstructor]
 		public FileSystemService(MetaProviderFactory metaProviderFactory, IServiceLocator serviceLocator)
@@ -32,16 +34,15 @@ namespace CoverRetriever.Service
 			ThreadPool.QueueUserWorkItem(
 				state => 
 				{
+					_onComplete = onComplete;
 					GetFileSystemItems(parent, dispatcher);
-					if (onComplete != null)
-					{
-						onComplete();
-					}
 				});
 		}
 
 		private void GetFileSystemItems(Folder parent, Dispatcher dispatcher)
 		{
+			_countRequestOfAddItems += 2;
+
 			var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
 				.Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
 
@@ -53,7 +54,6 @@ namespace CoverRetriever.Service
 			{
 				AddItemsToFolder(parent, directories);
 			}
-			
 
 			var files = Directory.GetFiles(parent.GetFileSystemItemFullPath(), AudioFilesPatern)
 				.Select(name =>
@@ -80,7 +80,12 @@ namespace CoverRetriever.Service
 
 		private void AddItemsToFolder(Folder parent, IEnumerable<FileSystemItem> children)
 		{
-			parent.Children.AddRange(children);	
+			_countRequestOfAddItems -= 1;
+			parent.Children.AddRange(children);
+			if (_countRequestOfAddItems == 0 && _onComplete != null)
+			{
+				_onComplete();
+			}
 		}
 
 		private delegate void AddItemsToFolderDelegate(Folder parent, IEnumerable<FileSystemItem> children);

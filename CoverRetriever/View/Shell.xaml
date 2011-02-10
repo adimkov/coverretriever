@@ -1,4 +1,5 @@
-﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+﻿<Window x:Class="CoverRetriever.View.Shell"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 		xmlns:cmd="clr-namespace:Microsoft.Practices.Prism.Commands" 
 		xmlns:converter="clr-namespace:CoverRetriever.Converter" 
@@ -6,13 +7,27 @@
 		xmlns:fluid="clr-namespace:FluidKit.Controls;assembly=FluidKit" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-		xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity" xmlns:interaction="clr-namespace:CoverRetriever.Interaction" xmlns:view="clr-namespace:CoverRetriever.View" xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended" mc:Ignorable="d" x:Class="CoverRetriever.View.Shell"
+		xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+		xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity" 
+		xmlns:interaction="clr-namespace:CoverRetriever.Interaction" 
+		xmlns:view="clr-namespace:CoverRetriever.View" 
+		xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended" 
+		xmlns:helper="clr-namespace:CoverRetriever.Helpers" 
+		xmlns:model="clr-namespace:CoverRetriever.Model" mc:Ignorable="d" 
 		cmd:Loaded.Command="{Binding LoadedCommand}"
 		Title="Shell" Width="800" Height="600">
 	<Window.Resources>
-		<converter:FolderSourceConverter x:Key="folderSourceConverter"/>
+		<converter:TreePathContructor x:Key="treePathContructor"/>
 		<converter:CoverOrganizerToImageConverter x:Key="coverOrganizerToImageConverter"/>
 		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
+
+		<HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Children}">
+			<TextBlock Text="{Binding Path=Name}"/>
+		</HierarchicalDataTemplate>
+		<HierarchicalDataTemplate DataType="{x:Type model:AudioFile}">
+			<TextBlock Text="{Binding Path=Name}"/>
+		</HierarchicalDataTemplate>
+
 		<DataTemplate x:Key="SuggestedCoverDataTemplate_Reflection">
 			<Grid>
 				<Grid.RowDefinitions>
@@ -62,15 +77,11 @@
 			<ColumnDefinition Width="60*" />
 		</Grid.ColumnDefinitions>
 		<Border x:Name="FileSystemBorder" Grid.RowSpan="2" >
-			<TreeView ItemsSource="{Binding FileSystem}" 
+				<TreeView ItemsSource="{Binding FileSystem}" 
 					  cmd:SelectedItemChanged.Command="{Binding FileSystemSelectedItemChangedCommand}" 
-					  cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}">
-				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate ItemsSource="{Binding Converter={StaticResource folderSourceConverter}}">
-						<TextBlock Text="{Binding Name}"/>	
-					</HierarchicalDataTemplate>
-				</TreeView.ItemTemplate>
-			</TreeView>
+					  cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+					  helper:TreeViewExtensions.SelectedItem="{Binding SelectedFileSystemItem, Converter={StaticResource treePathContructor}}">
+				</TreeView>
 		</Border>
 		<GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch"/>
 		<Border x:Name="FileInfoBorder" DataContext="{Binding FileDetails}" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" Grid.RowSpan="1">
