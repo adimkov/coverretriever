@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Windows.Threading;
 
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
@@ -22,7 +21,7 @@ namespace CoverRetriever.Test.ViewModel
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			Assert.DoesNotThrow(() => new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object));
+			Assert.DoesNotThrow(() => new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object));
 		}
 
 		[Test]
@@ -31,7 +30,7 @@ namespace CoverRetriever.Test.ViewModel
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
 
 			Assert.That(target.LoadedCommand, Is.Not.Null);
 			Assert.That(target.FileSystemSelectedItemChangedCommand, Is.Not.Null);
@@ -41,18 +40,17 @@ namespace CoverRetriever.Test.ViewModel
 		}
 
 		[Test]
-		public void LoadedCommand_should_set_initialize_file_system_collection()
+		public void LoadedCommand_should_request_for_select_folder()
 		{
+			bool isRequestedForSelectFolder = false;
 			var fileSystemService = GetFileSystemServiceMock();
-			fileSystemService.Setup(x => x.FillRootFolderAsync(It.IsAny<RootFolder>(), It.IsAny<Dispatcher>(), It.IsAny<Action>()))
-				.AtMostOnce();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
 
-			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
+			target.SelectRootFolderRequest.Raised += (sender, args) => isRequestedForSelectFolder = true;
 
 			target.LoadedCommand.Execute();
-			
-			fileSystemService.VerifyAll();
+			Assert.IsTrue(isRequestedForSelectFolder);
 		}
 
 		[Test]
@@ -71,8 +69,8 @@ namespace CoverRetriever.Test.ViewModel
 			var mettaProvider = new Mock<IMetaProvider>();
 			var root = new RootFolder("Root");
 			root.Children.Add(new AudioFile("name", root, new Lazy<IMetaProvider>(() => mettaProvider.Object)));
-			
-			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
 			
 			target.PropertyChanged += (sender, args) => eventCounter++;
 
@@ -101,7 +99,7 @@ namespace CoverRetriever.Test.ViewModel
 			var root = new RootFolder("Root");
 			root.Children.Add(new AudioFile("name", root, new Lazy<IMetaProvider>(() => mettaProvider.Object)));
 
-			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object);
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
 
 			target.PropertyChanged += (sender, args) => eventCounter++;
 
@@ -121,6 +119,11 @@ namespace CoverRetriever.Test.ViewModel
 		private Mock<ICoverRetrieverService> GetCoverRetrieverServiceMock()
 		{
 			return new Mock<ICoverRetrieverService>();
+		}
+
+		private Mock<OpenFolderViewModel> GetRootFolderViewModelMock()
+		{
+			return new Mock<OpenFolderViewModel>();
 		}
 	}
 }

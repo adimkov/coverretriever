@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -10,9 +9,9 @@ using System.Windows;
 [assembly: AssemblyTitle("CoverRetriever")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Cerber Soft")]
 [assembly: AssemblyProduct("CoverRetriever")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © Cerber Soft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -41,3 +40,6 @@ using System.Windows;
                              //(used if a resource is not found in the page, 
                              // app, or any theme specific resource dictionaries)
 )]
+[assembly: AssemblyVersionAttribute("0.1.*")]
+[assembly: AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: NeutralResourcesLanguageAttribute("")]

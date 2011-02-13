@@ -27,6 +27,13 @@ namespace CoverRetriever.Interaction
 				return;
 			}
 
+			var closeRequest = args.Context as CloseNotification;
+			if (closeRequest != null)
+			{
+				window.Close();
+				return;
+			}
+
 			var callback = args.Callback;
 			
 			CancelEventHandler handler = null;

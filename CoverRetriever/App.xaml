@@ -13,6 +13,9 @@
 				<GradientStop Offset=".5"
 						  Color="Transparent" />
 			</LinearGradientBrush>
+			<Style TargetType="Button">
+				<Setter Property="MinWidth" Value="75"/>
+			</Style>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

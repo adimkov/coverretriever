@@ -17,6 +17,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <Utf8Output>true</Utf8Output>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,11 +30,10 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>0.1.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
-    <Utf8Output>true</Utf8Output>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -143,6 +144,7 @@
     <Reference Include="System.Reactive.Testing">
       <HintPath>..\packages\Rx-Testing.1.0.2838.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -161,6 +163,24 @@
   <PropertyGroup>
     <ExpressionBlendPrototypingEnabled>false</ExpressionBlendPrototypingEnabled>
     <ExpressionBlendPrototypeHarness>true</ExpressionBlendPrototypeHarness>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>D740DC17A6B7729E3906590701D25A59880F2283</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>CoverRetriever_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Windows.Interactivity" />
@@ -188,11 +208,13 @@
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
     <Compile Include="Helpers\TreeViewExtensions.cs" />
-    <Compile Include="Interaction\ContentChildWindow.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
+    <Compile Include="Interaction\CloseNotification.cs" />
+    <Compile Include="Interaction\WindowTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
     <Compile Include="Model\RemoteCover.cs" />
+    <Compile Include="Model\RootFolderResult.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -214,9 +236,13 @@
     <Compile Include="ViewModel\CoverPreviewViewModel.cs" />
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
+    <Compile Include="ViewModel\OpenFolderViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\CoverPreviewView.xaml.cs">
       <DependentUpon>CoverPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OpenFolderView.xaml.cs">
+      <DependentUpon>OpenFolderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
@@ -229,7 +255,6 @@
     <Compile Include="Model\FileSystemItem.cs" />
     <Compile Include="Model\Folder.cs" />
     <Compile Include="Model\RootFolder.cs" />
-    <Compile Include="Properties\Version.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <AppDesigner Include="Properties\" />
     <None Include="app.config" />
@@ -239,7 +264,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Commands\CommandTemplate.ttinclude" />
+    <None Include="CoverRetriever_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -278,6 +305,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\CoverPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OpenFolderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

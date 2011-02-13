@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Windows.Threading;
+using CoverRetriever.Interaction;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
 using CoverRetriever.Service;
@@ -21,26 +22,30 @@ namespace CoverRetriever.ViewModel
 
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ICoverRetrieverService _coverRetrieverService;
-		//todo:Remove stub
-		private readonly Folder _rootFolder = new RootFolder(@"g:\Музыка\");
+		private readonly OpenFolderViewModel _openFolderViewModel;
+		private Folder _rootFolder;
 		private AudioFile _fileDetails;
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
 		private RemoteCover _selectedSuggestedCover;
 		private FileSystemItem _selectedFileSystemItem;
+		
 
 		[ImportingConstructor]
-		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService)
+		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService, OpenFolderViewModel openFolderViewModel)
 		{
 			_fileSystemService = fileSystemService;
 			_coverRetrieverService = coverRetrieverService;
-//			_rootFolder = rootFolder;
+			_openFolderViewModel = openFolderViewModel;
+			openFolderViewModel.PushRootFolder.Subscribe(OnNext_PushRootFolder);
 			LoadedCommand = new DelegateCommand(LoadedCommandExecute);
 			FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
 			PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
 			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute);
 
 			PreviewCoverRequest = new InteractionRequest<Notification>();
+			SelectRootFolderRequest = new InteractionRequest<Notification>();
 		}
+
 
 		/// <summary>
 		/// Loaded window Command
@@ -66,13 +71,25 @@ namespace CoverRetriever.ViewModel
 		/// Preview cover dialog request
 		/// </summary>
 		public InteractionRequest<Notification> PreviewCoverRequest { get; private set; }
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public InteractionRequest<Notification> SelectRootFolderRequest { get; private set; }
 
 		/// <summary>
 		/// Get file system items
 		/// </summary>
 		public ObservableCollection<FileSystemItem> FileSystem
 		{
-			get { return _rootFolder.Children; }
+			get
+			{
+				if(_rootFolder != null)
+				{
+					return _rootFolder.Children;
+				}
+				return new ObservableCollection<FileSystemItem>();
+			}
 		}
 
 		/// <summary>
@@ -141,8 +158,24 @@ namespace CoverRetriever.ViewModel
 
 		private void LoadedCommandExecute()
 		{
-			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, SelectFirstAutioFile);
+			if (_rootFolder == null)
+			{
+				SelectRootFolderRequest.Raise(new Notification
+				{
+					Title = "Select",
+					Content = _openFolderViewModel
+				});
+			}
 		}
+
+		private void OnNext_PushRootFolder(RootFolderResult rootFolderResult)
+		{
+			_rootFolder = new RootFolder(rootFolderResult.RootFolder);
+			RaisePropertyChanged("FileSystem");
+			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, SelectFirstAutioFile);
+			SelectRootFolderRequest.Raise(new CloseNotification());
+		}
+
 
 		private void SelectFirstAutioFile()
 		{

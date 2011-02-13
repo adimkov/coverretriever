@@ -137,6 +137,14 @@
     <value>Artist:</value>
     <comment>Shell Text</comment>
   </data>
+  <data name="TextBrowse" xml:space="preserve">
+    <value>Browse</value>
+    <comment>Button</comment>
+  </data>
+  <data name="TextCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Button</comment>
+  </data>
   <data name="TextCover" xml:space="preserve">
     <value>Current cover:</value>
     <comment>Shell Text</comment>
@@ -152,6 +160,10 @@
   <data name="TextFileDetails" xml:space="preserve">
     <value>Audio Info</value>
     <comment>Shell Text</comment>
+  </data>
+  <data name="TextOk" xml:space="preserve">
+    <value>Ok</value>
+    <comment>Button</comment>
   </data>
   <data name="TextSaveCoverInToDirectory" xml:space="preserve">
     <value>Save</value>

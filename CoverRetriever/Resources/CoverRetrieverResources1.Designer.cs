@@ -106,6 +106,24 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string TextBrowse {
+            get {
+                return ResourceManager.GetString("TextBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string TextCancel {
+            get {
+                return ResourceManager.GetString("TextCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current cover:.
         /// </summary>
         public static string TextCover {
@@ -138,6 +156,15 @@ namespace CoverRetriever.Resources {
         public static string TextFileDetails {
             get {
                 return ResourceManager.GetString("TextFileDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string TextOk {
+            get {
+                return ResourceManager.GetString("TextOk", resourceCulture);
             }
         }
         
