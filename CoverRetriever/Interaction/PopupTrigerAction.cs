@@ -12,8 +12,6 @@ namespace CoverRetriever.Interaction
 	/// </summary>
 	public abstract class PopupTrigerAction : TriggerAction<FrameworkElement>
 	{
-		protected bool HideOnClose { get; set; }
-
 		/// <summary>
 		/// Displays the child window and collects results for <see cref="IInteractionRequest"/>.
 		/// </summary>
@@ -41,11 +39,6 @@ namespace CoverRetriever.Interaction
 				(o, e) =>
 				{
 					window.Closing -= handler;
-					if (HideOnClose)
-					{
-						e.Cancel = true;
-						window.Hide();
-					}
 					callback();
 				};
 

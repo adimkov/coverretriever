@@ -41,11 +41,13 @@ namespace CoverRetriever.ViewModel
 			FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
 			PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
 			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute);
+			FinishCommand = new DelegateCommand(FinishCommandExecute);
 
 			PreviewCoverRequest = new InteractionRequest<Notification>();
 			SelectRootFolderRequest = new InteractionRequest<Notification>();
 		}
 
+		
 
 		/// <summary>
 		/// Loaded window Command
@@ -66,6 +68,11 @@ namespace CoverRetriever.ViewModel
 		/// Save selected cover in to selected directory
 		/// </summary>
 		public DelegateCommand<RemoteCover> SaveCoverCommand { get; private set; }
+		
+		/// <summary>
+		/// Finish work of application
+		/// </summary>
+		public DelegateCommand FinishCommand { get; private set; }
 
 		/// <summary>
 		/// Preview cover dialog request
@@ -223,7 +230,12 @@ namespace CoverRetriever.ViewModel
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
 			SaveRemoteCover(remoteCover, EndOperation);
 		}
-
+		
+		private void FinishCommandExecute()
+		{
+			WindowHandler.CloseAllWindow();
+		}
+		
 		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
 		{
 			_coverRetrieverService.DownloadCover(remoteCover.CoverUri)

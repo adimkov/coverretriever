@@ -210,6 +210,9 @@
     <Compile Include="Helpers\TreeViewExtensions.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
     <Compile Include="Interaction\CloseNotification.cs" />
+    <Compile Include="Interaction\WindowExtensions.cs" />
+    <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
+    <Compile Include="Interaction\WindowHandler.cs" />
     <Compile Include="Interaction\WindowTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />

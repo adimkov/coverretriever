@@ -10,11 +10,6 @@ namespace CoverRetriever.Interaction
 			DependencyProperty.Register("Window", typeof (Window), typeof (WindowTrigerAction),
 				new PropertyMetadata(null));
 
-		public WindowTrigerAction()
-		{
-			HideOnClose = true;
-		}
-
 		/// <summary>
 		/// Get or set window for show
 		/// </summary>

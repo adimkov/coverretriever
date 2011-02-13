@@ -15,6 +15,7 @@
 		xmlns:helper="clr-namespace:CoverRetriever.Helpers" 
 		xmlns:model="clr-namespace:CoverRetriever.Model" mc:Ignorable="d" 
 		cmd:Loaded.Command="{Binding LoadedCommand}"
+		cmd:Closing.Command="{Binding FinishCommand}"
 		Title="Shell" Width="800" Height="600">
 	<Window.Resources>
 		<converter:TreePathContructor x:Key="treePathContructor"/>
