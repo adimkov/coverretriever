@@ -28,15 +28,19 @@ namespace CoverRetriever.Interaction
 
 		private static void OnHideOnCloseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var hideOnClose = (bool)e.NewValue;
-			SmartGetBehavior(d).HideOnClose = hideOnClose;
-			if(hideOnClose)
+			var window = d as Window;
+			if (window != null)
 			{
-				WindowHandler.SafeAddWindow((Window)d);
-			}
-			else
-			{
-				WindowHandler.SafeRemoveWindow((Window)d);	
+				var hideOnClose = (bool)e.NewValue;
+				SmartGetBehavior(d).HideOnClose = hideOnClose;
+				if (hideOnClose)
+				{
+					WindowHandler.SafeAddWindow(window);
+				}
+				else
+				{
+					WindowHandler.SafeRemoveWindow(window);
+				}
 			}
 		}
 
