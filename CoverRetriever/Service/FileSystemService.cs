@@ -39,6 +39,20 @@ namespace CoverRetriever.Service
 				});
 		}
 
+		#region Implementation of IFileSystemService
+
+		/// <summary>
+		/// Check for directory existence on client machine
+		/// </summary>
+		/// <param name="directoryPath">full path</param>
+		/// <returns></returns>
+		public bool IsDirectoryExists(string directoryPath)
+		{
+			return Directory.Exists(directoryPath);
+		}
+
+		#endregion
+
 		private void GetFileSystemItems(Folder parent, Dispatcher dispatcher)
 		{
 			_countRequestOfAddItems += 2;

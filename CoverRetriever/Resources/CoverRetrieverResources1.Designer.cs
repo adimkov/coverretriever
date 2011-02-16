@@ -178,6 +178,24 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System will load audio files to search for a cover from selected folder (including subfolders).
+        /// </summary>
+        public static string TextStepOne {
+            get {
+                return ResourceManager.GetString("TextStepOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 1. Choice a folder with audio files.
+        /// </summary>
+        public static string TextStepOneHeader {
+            get {
+                return ResourceManager.GetString("TextStepOneHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
         public static string TextTrackName {
@@ -192,6 +210,15 @@ namespace CoverRetriever.Resources {
         public static string TextYear {
             get {
                 return ResourceManager.GetString("TextYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choice a folder.
+        /// </summary>
+        public static string TitleStepOne {
+            get {
+                return ResourceManager.GetString("TitleStepOne", resourceCulture);
             }
         }
     }

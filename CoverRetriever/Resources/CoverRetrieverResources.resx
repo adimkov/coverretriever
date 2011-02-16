@@ -169,6 +169,14 @@
     <value>Save</value>
     <comment>Button</comment>
   </data>
+  <data name="TextStepOne" xml:space="preserve">
+    <value>System will load audio files to search for a cover from selected folder (including subfolders)</value>
+    <comment>Open folder dialog</comment>
+  </data>
+  <data name="TextStepOneHeader" xml:space="preserve">
+    <value>Step 1. Choice a folder with audio files</value>
+    <comment>Open folder dialog</comment>
+  </data>
   <data name="TextTrackName" xml:space="preserve">
     <value>Title:</value>
     <comment>Shell Text</comment>
@@ -176,5 +184,9 @@
   <data name="TextYear" xml:space="preserve">
     <value>Year:</value>
     <comment>Shell Text</comment>
+  </data>
+  <data name="TitleStepOne" xml:space="preserve">
+    <value>Choice a folder</value>
+    <comment>Open folder dialog</comment>
   </data>
 </root>

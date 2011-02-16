@@ -3,30 +3,50 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-		xmlns:resources="clr-namespace:CoverRetriever.Resources" xmlns:interact="clr-namespace:CoverRetriever.Interaction" 
+		xmlns:resources="clr-namespace:CoverRetriever.Resources" 
+		xmlns:interact="clr-namespace:CoverRetriever.Interaction" 
 		interact:WindowExtensions.HideOnClose="True"
 		mc:Ignorable="d" 
-		Height="180" Width="459">
+		Height="180" Width="459" 
+		ResizeMode="NoResize"
+		Background="{DynamicResource Backround}" WindowStartupLocation="CenterOwner">
 	<Window.Resources>
 		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
 	</Window.Resources>
-	<Grid>
+	<Grid Margin="{DynamicResource LayoutRootMargin}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="40"/>
 			<RowDefinition Height="25" />
 		</Grid.RowDefinitions>
-		<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,0,20">
-			<TextBox x:Name="FolderPathTextBlock" Width="301"/>
-			<Button Content="{Binding Path=CoverRetrieverResources.TextBrowse, Source={StaticResource coverRetrieverResources}}"
-					Click="Browse_OnClick"
-					IsDefault="True"/>
-		</StackPanel>
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 4, 4" Grid.Row="1" >
-			<Button Content="{Binding Path=CoverRetrieverResources.TextOk, Source={StaticResource coverRetrieverResources}}"
+		<Image Source="/CoverRetriever;component/Assets/folder.png" Grid.RowSpan="2"/>
+		<TextBlock Text="{Binding Path=CoverRetrieverResources.TextStepOneHeader, Source={StaticResource coverRetrieverResources}}" d:LayoutOverrides="Width, Height" Grid.Column="1" Style="{DynamicResource H1TextBlock}" Margin="10,0,0,0"/>
+		<TextBlock Text="{Binding Path=CoverRetrieverResources.TextStepOne, Source={StaticResource coverRetrieverResources}}" d:LayoutOverrides="Width, Height" Grid.Row="1" Grid.Column="1" Margin="10,5,0,0"/>
+		<Grid Grid.ColumnSpan="2" Grid.Row="2" d:LayoutOverrides="Height" VerticalAlignment="Top">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="300"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<TextBox x:Name="FolderPathTextBlock" VerticalAlignment="Top" Margin="4,0,0,0"/>
+			<Image x:Name="errorImage" Source="/CoverRetriever;component/Assets/no_entry.png" Stretch="Fill" VerticalAlignment="Top" Width="16" Height="16" Margin="0,13,-8,0" HorizontalAlignment="Right" Visibility="Collapsed"/>
+			<Button Content="{Binding CoverRetrieverResources.TextBrowse, Source={StaticResource coverRetrieverResources}}"
+				Click="Browse_OnClick"
+				IsDefault="True" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="8,0,0,0"/>
+		</Grid>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 4, 4" Grid.Row="3" Grid.Column="1" >
+			<Button x:Name="OkButton" 
+					Content="{Binding CoverRetrieverResources.TextOk, Source={StaticResource coverRetrieverResources}}"
 					Command="{Binding ConfirmCommand}"
-					CommandParameter="{Binding Path=Text, ElementName=FolderPathTextBlock}"
-					Margin="0, 0, 4, 0" Click="Button_Click" />
-			<Button Content="{Binding Path=CoverRetrieverResources.TextCancel, Source={StaticResource coverRetrieverResources}}"
+					CommandParameter="{Binding Text, ElementName=FolderPathTextBlock}"
+					Margin="0, 0, 4, 0"
+					IsEnabled="False"/>
+			<Button Content="{Binding CoverRetrieverResources.TextCancel, Source={StaticResource coverRetrieverResources}}"
+					IsEnabled="{Binding IsCloseEnable}"
 					IsCancel="True"/>
 		</StackPanel>
 	</Grid>

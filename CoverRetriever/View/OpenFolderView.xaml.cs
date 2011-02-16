@@ -1,6 +1,15 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
+using CoverRetriever.Resources;
+using CoverRetriever.ViewModel;
+
+using Application = System.Windows.Application;
 
 namespace CoverRetriever.View
 {
@@ -12,13 +21,24 @@ namespace CoverRetriever.View
 		public OpenFolderView()
 		{
 			InitializeComponent();
+			Observable.FromEvent<TextChangedEventArgs>(FolderPathTextBlock, "TextChanged")
+				.Throttle(TimeSpan.FromMilliseconds(500))
+				.ObserveOnDispatcher()
+				.Subscribe(CheckFolderExistence);
+		}
+		
+		/// <summary>
+		/// Get view model
+		/// </summary>
+		public OpenFolderViewModel ViewModel
+		{
+			get { return DataContext as OpenFolderViewModel; }
 		}
 
 		private void Browse_OnClick(object sender, RoutedEventArgs e)
 		{
-
 			var openDialog = new FolderBrowserDialog();
-			openDialog.Description = "Enter description here";
+			openDialog.Description = CoverRetrieverResources.TextStepOneHeader;
 			openDialog.ShowNewFolderButton = false;
 			openDialog.SelectedPath = FolderPathTextBlock.Text;
 
@@ -28,9 +48,28 @@ namespace CoverRetriever.View
 			}
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
+		private void CheckFolderExistence(IEvent<TextChangedEventArgs> @event)
 		{
-			Close();
+			if (ViewModel != null)
+			{
+				var isCorrect =  ViewModel.CheckForFolderExists(FolderPathTextBlock.Text);
+				OkButton.IsEnabled = isCorrect;
+
+				errorImage.Visibility = isCorrect?Visibility.Collapsed:Visibility.Visible;
+			} 	
+		}
+
+		/// <summary>
+		/// Raises the <see cref="E:System.Windows.Window.Closing"/> event.
+		/// </summary>
+		/// <param name="e">A <see cref="T:System.ComponentModel.CancelEventArgs"/> that contains the event data.</param>
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+			if (ViewModel != null && !ViewModel.IsCloseEnable)
+			{
+				Application.Current.Shutdown(0);
+			}
 		}
 	}
 }

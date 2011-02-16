@@ -41,6 +41,7 @@ namespace CoverRetriever.ViewModel
 			FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
 			PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
 			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute);
+			SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
 			FinishCommand = new DelegateCommand(FinishCommandExecute);
 
 			PreviewCoverRequest = new InteractionRequest<Notification>();
@@ -68,7 +69,12 @@ namespace CoverRetriever.ViewModel
 		/// Save selected cover in to selected directory
 		/// </summary>
 		public DelegateCommand<RemoteCover> SaveCoverCommand { get; private set; }
-		
+
+		/// <summary>
+		/// Change root directory command
+		/// </summary>
+		public DelegateCommand SelectFolderCommand { get; private set; }
+
 		/// <summary>
 		/// Finish work of application
 		/// </summary>
@@ -167,11 +173,8 @@ namespace CoverRetriever.ViewModel
 		{
 			if (_rootFolder == null)
 			{
-				SelectRootFolderRequest.Raise(new Notification
-				{
-					Title = "Select",
-					Content = _openFolderViewModel
-				});
+				_openFolderViewModel.IsCloseEnable = false;
+				SelectFolderCommand.Execute();
 			}
 		}
 
@@ -182,7 +185,6 @@ namespace CoverRetriever.ViewModel
 			_fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, SelectFirstAutioFile);
 			SelectRootFolderRequest.Raise(new CloseNotification());
 		}
-
 
 		private void SelectFirstAutioFile()
 		{
@@ -230,7 +232,20 @@ namespace CoverRetriever.ViewModel
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
 			SaveRemoteCover(remoteCover, EndOperation);
 		}
-		
+
+		private void SelectFolderCommandExecute()
+		{
+			if (_rootFolder != null)
+			{
+				_rootFolder.Children.Clear();
+			}
+			SelectRootFolderRequest.Raise(new Notification
+			{
+				Title = CoverRetrieverResources.TitleStepOne,
+				Content = _openFolderViewModel
+			});
+		}
+
 		private void FinishCommandExecute()
 		{
 			WindowHandler.CloseAllWindow();

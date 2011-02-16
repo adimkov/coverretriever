@@ -13,8 +13,24 @@
 				<GradientStop Offset=".5"
 						  Color="Transparent" />
 			</LinearGradientBrush>
+			
+			<SolidColorBrush x:Key="Backround" Color="#FFEFEFEF"/>
+			
+			<Thickness x:Key="LayoutRootMargin" Left="4" Right="4" Top="4" Bottom="4"/>
+			
 			<Style TargetType="Button">
 				<Setter Property="MinWidth" Value="75"/>
+			</Style>
+			
+			<Style TargetType="TextBlock">
+				<Setter Property="FontFamily" Value="Tahoma"/>
+				<Setter Property="TextWrapping" Value="Wrap"/>
+			</Style>
+			
+			<Style x:Key="H1TextBlock" TargetType="TextBlock">
+				<Setter Property="FontWeight" Value="Bold"/>
+				<Setter Property="Foreground" Value="#FF606060"/>
+				<Setter Property="FontFamily" Value="Tahoma"/>
 			</Style>
 		</ResourceDictionary>
 	</Application.Resources>

@@ -18,5 +18,12 @@ namespace CoverRetriever.Service
 		/// <param name="dispatcher">Syncronization context</param>
 		/// <param name="onComplete">Complete operation notify</param>
 		void FillRootFolderAsync(Folder parent, Dispatcher dispatcher, Action onComplete);
+
+		/// <summary>
+		/// Check for directory existence on client machine
+		/// </summary>
+		/// <param name="directoryPath">full path</param>
+		/// <returns></returns>
+		bool IsDirectoryExists(string directoryPath);
 	}
 }
