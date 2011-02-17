@@ -20,7 +20,9 @@
 	<Window.Resources>
 		<converter:TreePathContructor x:Key="treePathContructor"/>
 		<converter:CoverOrganizerToImageConverter x:Key="coverOrganizerToImageConverter"/>
+		<converter:SelectedFileSystemItemConverter x:Key="selectedFileSystemItemConverter"/>
 		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
+		
 
 		<HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Children}">
 			<TextBlock Text="{Binding Path=Name}"/>
@@ -92,7 +94,7 @@
 		<Border x:Name="FileSystemBorder" Grid.RowSpan="3" Grid.Row="1" >
 				<TreeView ItemsSource="{Binding FileSystem}" 
 					  cmd:SelectedItemChanged.Command="{Binding FileSystemSelectedItemChangedCommand}" 
-					  cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+					  cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, Converter={StaticResource selectedFileSystemItemConverter}, RelativeSource={RelativeSource Self}}"
 					  helper:TreeViewExtensions.SelectedItem="{Binding SelectedFileSystemItem, Converter={StaticResource treePathContructor}}"/>
 		</Border>
 		<GridSplitter Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" Grid.Row="1"/>

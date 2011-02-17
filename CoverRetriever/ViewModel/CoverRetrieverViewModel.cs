@@ -235,10 +235,6 @@ namespace CoverRetriever.ViewModel
 
 		private void SelectFolderCommandExecute()
 		{
-			if (_rootFolder != null)
-			{
-				_rootFolder.Children.Clear();
-			}
 			SelectRootFolderRequest.Raise(new Notification
 			{
 				Title = CoverRetrieverResources.TitleStepOne,
