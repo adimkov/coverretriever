@@ -22,7 +22,7 @@ namespace CoverRetriever.View
 		{
 			InitializeComponent();
 			Observable.FromEvent<TextChangedEventArgs>(FolderPathTextBlock, "TextChanged")
-				.Throttle(TimeSpan.FromMilliseconds(500))
+				.Throttle(TimeSpan.FromMilliseconds(300))
 				.ObserveOnDispatcher()
 				.Subscribe(CheckFolderExistence);
 		}

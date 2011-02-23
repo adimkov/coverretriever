@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -93,15 +94,11 @@ namespace CoverRetriever.ViewModel
 		/// <summary>
 		/// Get file system items
 		/// </summary>
-		public ObservableCollection<FileSystemItem> FileSystem
+		public IEnumerable<FileSystemItem> FileSystem
 		{
 			get
 			{
-				if(_rootFolder != null)
-				{
-					return _rootFolder.Children;
-				}
-				return new ObservableCollection<FileSystemItem>();
+				return Enumerable.Repeat(_rootFolder, 1);
 			}
 		}
 

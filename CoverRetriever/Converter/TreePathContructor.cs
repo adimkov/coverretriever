@@ -46,7 +46,7 @@ namespace CoverRetriever.Converter
 		{
 			var list = new List<FileSystemItem>();
 			list.Add(item);
-			if (item.Parent != null && !(item.Parent is RootFolder))
+			if (item.Parent != null)
 			{
 				list.AddRange(GetObjectPath(item.Parent));
 			}

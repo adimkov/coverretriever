@@ -204,11 +204,15 @@
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
     <Compile Include="Converter\CoverOrganizerToImageConverter.cs" />
+    <Compile Include="Converter\FolderImageConverter.cs" />
+    <Compile Include="Converter\NullToBoolConverter.cs" />
+    <Compile Include="Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Converter\SelectedFileSystemItemConverter.cs" />
     <Compile Include="Converter\TreePathContructor.cs" />
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
     <Compile Include="Helpers\TreeViewExtensions.cs" />
+    <Compile Include="Infrastructure\AudioFormat.cs" />
     <Compile Include="Interaction\PopupTrigerAction.cs" />
     <Compile Include="Interaction\CloseNotification.cs" />
     <Compile Include="Interaction\WindowExtensions.cs" />
@@ -331,10 +335,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\folder.png" />
+    <Resource Include="Assets\no_entry.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\no_entry.png" />
+    <Resource Include="Assets\OpenFolder.png" />
+    <Resource Include="Assets\ShellFolder.png" />
+    <Resource Include="Assets\ShellFolder_Audio.png" />
+    <Resource Include="Assets\Shell_File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Shell_NoCover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

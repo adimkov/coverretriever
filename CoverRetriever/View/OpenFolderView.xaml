@@ -24,7 +24,7 @@
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="25" />
 		</Grid.RowDefinitions>
-		<Image Source="/CoverRetriever;component/Assets/folder.png" Grid.RowSpan="2"/>
+		<Image Source="/CoverRetriever;component/Assets/OpenFolder.png" Grid.RowSpan="2"/>
 		<TextBlock Text="{Binding Path=CoverRetrieverResources.TextStepOneHeader, Source={StaticResource coverRetrieverResources}}" d:LayoutOverrides="Width, Height" Grid.Column="1" Style="{DynamicResource H1TextBlock}" Margin="10,0,0,0"/>
 		<TextBlock Text="{Binding Path=CoverRetrieverResources.TextStepOne, Source={StaticResource coverRetrieverResources}}" d:LayoutOverrides="Width, Height" Grid.Row="1" Grid.Column="1" Margin="10,5,0,0"/>
 		<Grid Grid.ColumnSpan="2" Grid.Row="2" d:LayoutOverrides="Height" VerticalAlignment="Top">

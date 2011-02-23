@@ -16,19 +16,34 @@
 		xmlns:model="clr-namespace:CoverRetriever.Model" mc:Ignorable="d" 
 		cmd:Loaded.Command="{Binding LoadedCommand}"
 		cmd:Closing.Command="{Binding FinishCommand}"
-		Title="Shell" Width="800" Height="600" Background="{DynamicResource Backround}">
+		Title="Shell" Width="800" Height="600" Background="{DynamicResource Backround}" MinWidth="800" MinHeight="600">
 	<Window.Resources>
 		<converter:TreePathContructor x:Key="treePathContructor"/>
 		<converter:CoverOrganizerToImageConverter x:Key="coverOrganizerToImageConverter"/>
 		<converter:SelectedFileSystemItemConverter x:Key="selectedFileSystemItemConverter"/>
-		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
+		<converter:FolderImageConverter x:Key="folderImageConverter"/>
 		
+		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
 
 		<HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Children}">
-			<TextBlock Text="{Binding Path=Name}"/>
+			<StackPanel Orientation="Horizontal">
+				<Image Width="18" Height="18" Source="{Binding Path=., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
+				<TextBlock Text="{Binding Name}"/>
+			</StackPanel>
 		</HierarchicalDataTemplate>
+
+		<HierarchicalDataTemplate DataType="{x:Type model:RootFolder}" ItemsSource="{Binding Children}">
+			<StackPanel Orientation="Horizontal">
+				<Image Width="18" Height="18" Source="{Binding Path=., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
+				<TextBlock Text="{Binding Name}" FontStyle="Italic"/>
+			</StackPanel>
+		</HierarchicalDataTemplate>
+
 		<HierarchicalDataTemplate DataType="{x:Type model:AudioFile}">
-			<TextBlock Text="{Binding Path=Name}"/>
+			<StackPanel Orientation="Horizontal">
+				<Image Width="18" Height="18" Source="/CoverRetriever;component/Assets/Shell_File.png" Margin="0,0,4,0"/>
+				<TextBlock Text="{Binding Path=Name}"/>
+			</StackPanel>
 		</HierarchicalDataTemplate>
 
 		<DataTemplate x:Key="SuggestedCoverDataTemplate_Reflection">
@@ -59,6 +74,12 @@
 				</Rectangle>
 			</Grid>
 		</DataTemplate>
+		
+		<Style x:Key="AudioFileMetaTextBox" TargetType="TextBox">
+			<Setter Property="IsReadOnly" Value="True"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+		</Style>
+		
 	</Window.Resources>
 	<i:Interaction.Triggers>
 		<prism:InteractionRequestTrigger SourceObject="{Binding PreviewCoverRequest}">
@@ -76,9 +97,9 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="0.489*"/>
-			<RowDefinition Height="0.452*" />
-			<RowDefinition Height="0.059*" />
+			<RowDefinition Height="230"/>
+			<RowDefinition MinHeight="268" />
+			<RowDefinition Height="35" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="30*" />
@@ -103,11 +124,12 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="50" />
 					<ColumnDefinition Width="180" />
-					<ColumnDefinition Width="30" />
-					<ColumnDefinition Width="50" />
-				</Grid.ColumnDefinitions>
+					<ColumnDefinition Width="37" />
+					<ColumnDefinition Width="60" />
+						<ColumnDefinition Width="207*" />
+					</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="25" />
+					<RowDefinition Height="30" />
 					<RowDefinition Height="25" />
 					<RowDefinition Height="25" />
 					<RowDefinition Height="25" />
@@ -115,16 +137,31 @@
 				</Grid.RowDefinitions>
 				<TextBlock Text="{Binding CoverRetrieverResources.TextFileDetails, Source={StaticResource coverRetrieverResources}}" Grid.ColumnSpan="4" />
 				<TextBlock Text="{Binding CoverRetrieverResources.TextTrackName, Source={StaticResource coverRetrieverResources}}" Grid.Row="1"/>
-				<TextBox Text="{Binding TrackName, Mode=OneWay}" IsReadOnly="True" Grid.Column="1" Grid.Row="1"/>
+				<TextBox Text="{Binding TrackName, Mode=OneWay}" 
+						 Style="{StaticResource AudioFileMetaTextBox}" 
+						 Grid.Column="1" Grid.Row="1"/>
 				<TextBlock Text="{Binding CoverRetrieverResources.TextArtist, Source={StaticResource coverRetrieverResources}}" Grid.Row="2"/>
-				<TextBox Text="{Binding Artist, Mode=OneWay}" IsReadOnly="True" Grid.Column="1" Grid.Row="2"/>
+				<TextBox Text="{Binding Artist, Mode=OneWay}" 
+						 Style="{StaticResource AudioFileMetaTextBox}" 
+						 Grid.Column="1" Grid.Row="2"/>
 				<TextBlock Text="{Binding CoverRetrieverResources.TextAlbum, Source={StaticResource coverRetrieverResources}}" Grid.Row="3"/>
-				<TextBox Text="{Binding Album, Mode=OneWay}" IsReadOnly="True" Grid.Column="1" Grid.Row="3"/>
-				<TextBlock Text="{Binding CoverRetrieverResources.TextYear, Source={StaticResource coverRetrieverResources}}" Grid.Column="2" Grid.Row="3"/>
-				<TextBox Text="{Binding Year, Mode=OneWay}" IsReadOnly="True" Grid.Column="3" Grid.Row="3"/>
-				<Border Grid.Row="4" Height="150" Width="150" Padding="2" BorderThickness="1" CornerRadius="2" BorderBrush="Black" Grid.ColumnSpan="2" HorizontalAlignment="Left">
-					<Image Source="{Binding CoverOrganizer, Converter={StaticResource coverOrganizerToImageConverter}}"/>
-				</Border>
+				<TextBox Text="{Binding Album, Mode=OneWay}" 
+						 Style="{StaticResource AudioFileMetaTextBox}" 
+						 Grid.Column="1" Grid.Row="3"/>
+				<TextBlock Text="{Binding CoverRetrieverResources.TextYear, Source={StaticResource coverRetrieverResources}}" 
+						   Margin="4,0,0,0" 
+						   Grid.Column="2" Grid.Row="3"/>
+				<TextBox Text="{Binding Year, Mode=OneWay}" 
+						 Style="{StaticResource AudioFileMetaTextBox}" 
+						 Grid.Column="3" Grid.Row="3"/>
+			</Grid>
+		</Border>
+		<Border DataContext="{Binding FileDetails}"  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Height="128" Width="128" BorderThickness="1" CornerRadius="2" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,110,0,0">
+			<Grid>
+				<Image Source="/CoverRetriever;component/Assets/Shell_NoCover.png" 
+					   Visibility="{Binding Path=., Converter={StaticResource nullToVisibilityConverter}}" />
+				<Image Source="{Binding CoverOrganizer, Converter={StaticResource coverOrganizerToImageConverter}}" 
+					   Visibility="{Binding Path=., Converter={StaticResource notNullToVisibilityConverter}}" />
 			</Grid>
 		</Border>
 		<Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
@@ -160,6 +197,6 @@
 						MinWidth="75"/>
 			</StackPanel>
 		</Border>
-	</Grid>
+		</Grid>
 	</toolkit:BusyIndicator>
 </Window>
