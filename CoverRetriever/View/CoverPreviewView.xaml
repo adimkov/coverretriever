@@ -13,26 +13,39 @@
 	<Window.Resources>
 		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
 	</Window.Resources>
-	<toolkit:BusyIndicator IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Margin="{DynamicResource LayoutRootMargin}" Background="{DynamicResource Backround}">
+	<toolkit:BusyIndicator IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Background="{DynamicResource Backround}">
 		<Grid RenderTransformOrigin="0.5,0.5">
 			<Grid.RowDefinitions>
 				<RowDefinition/>
-				<RowDefinition Height="30"/>
+				<RowDefinition Height="38"/>
 			</Grid.RowDefinitions>
-			<Image x:Name="image" 
-			   Source="{Binding CoverImage, Mode=OneWay}" 
-			   VerticalAlignment="Center" />
-			<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="16,0" HorizontalAlignment="Left" VerticalAlignment="Center">
-				<TextBlock Text="{Binding Path=CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" Margin="0,0,2,0"/>
-				<TextBlock Text="{Binding CoverSize.Width}" Margin="0,0,8,0"/>
-				<TextBlock Text="{Binding Path=CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}"  Margin="0,0,2,0"/>
-				<TextBlock Text="{Binding CoverSize.Height}"/>
-			</StackPanel>
-			<Button Content="{Binding Path=CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
-					Command="{Binding SaveCoverCommand}"
-					Grid.Row="1"
-					HorizontalAlignment="Center"
-					MinWidth="75"/>
+			<Border>
+				<Border.Background>
+					<ImageBrush ImageSource="/CoverRetriever;component/Assets/CoverPreview_Background.png" 
+								Viewport="0,0,152,152"
+      							ViewportUnits="Absolute" 
+      							TileMode="Tile"/>
+				</Border.Background>
+				<Image x:Name="image" 
+					Source="{Binding CoverImage, Mode=OneWay}" Margin="4,4,4,8" >
+					<Image.Effect>
+						<DropShadowEffect ShadowDepth="0" BlurRadius="20"/>
+					</Image.Effect>
+				</Image>
+			</Border>
+			<Border Grid.Row="1" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Background="{DynamicResource BottomBrush}">
+				<Grid>
+					<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="16,0,0,0">
+						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" Margin="0,0,2,0"/>
+						<TextBlock Text="{Binding CoverSize.Width}" Margin="0,0,8,0"/>
+						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}"  Margin="0,0,2,0"/>
+						<TextBlock Text="{Binding CoverSize.Height}"/>
+					</StackPanel>
+					<Button Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
+						Command="{Binding SaveCoverCommand}" IsHitTestVisible="True" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25"
+						/>
+				</Grid>
+			</Border>
 		</Grid>
 	</toolkit:BusyIndicator>
 </Window>
