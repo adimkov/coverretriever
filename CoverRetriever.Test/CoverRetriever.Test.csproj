@@ -74,7 +74,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.CoreEx, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Reactive, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Reactive.Testing">
+      <HintPath>..\packages\Rx-Testing.1.0.2838.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,6 +97,7 @@
     <Compile Include="Service\DirectoryCoverOrganizerTest.cs" />
     <Compile Include="Service\FileSystemServiceTest.cs" />
     <Compile Include="Service\GoogleCoverRetrieverTest.cs" />
+    <Compile Include="ViewModel\CoverPreviewViewModelTest.cs" />
     <Compile Include="ViewModel\CoverRetreiverViewModelTest.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
     <Compile Include="ViewModel\OpenFolderViewModelTest.cs" />
@@ -111,7 +116,9 @@
       <Name>CoverRetriever</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Input.CoverPreviewViewModelTest\Penguins.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
