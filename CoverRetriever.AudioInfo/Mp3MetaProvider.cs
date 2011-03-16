@@ -1,6 +1,4 @@
-using System;
 using System.ComponentModel.Composition;
-
 
 using TagLib;
 
@@ -9,80 +7,59 @@ namespace CoverRetriever.AudioInfo
 	[Export(typeof(IMetaProvider))]
 	public class Mp3MetaProvider : IMetaProvider
 	{
+		private readonly File _file;
 		
-		File _file;
+		static Mp3MetaProvider()
+		{
+			TagLib.Id3v1.Tag.DefaultStringHandler = new AutoStringHandler();
+			TagLib.Id3v2.Tag.DefaultEncoding = StringType.Latin1;
+			ByteVector.UseBrokenLatin1Behavior = true;	
+		}
+		
 		public Mp3MetaProvider(string fileName)
 		{
 			_file = File.Create(fileName, ReadStyle.None);
-			TagLib.Id3v1.Tag.DefaultStringHandler = new AutoStringHandler();
-			TagLib.Id3v2.Tag.DefaultEncoding = StringType.Latin1;
 		}
 
 		public string GetAlbum()
 		{
-			string album = string.Empty;
-			var id3v2 = _file.GetTag(TagTypes.Id3v2);
-
-			if (!String.IsNullOrEmpty(id3v2.Album))
-			{
-				album = id3v2.Album;
-			}
-			else
-			{
-				album = _file.GetTag(TagTypes.Id3v1).Album;
-			}
-			return album;
+			var id3 = GetPrioritizedTag(_file);
+			return id3.Album;
 		}
 
 		public string GetArtist()
 		{
-			string artistName = string.Empty;
-			var id3v2 = _file.GetTag(TagTypes.Id3v2);
-
-			if (!String.IsNullOrEmpty(id3v2.FirstArtist))
-			{
-				artistName = id3v2.FirstArtist;
-			}
-			else
-			{
-				artistName = _file.GetTag(TagTypes.Id3v1).FirstArtist;
-			}
-
-			return artistName;
+			var id3 = GetPrioritizedTag(_file);
+			return id3.FirstArtist;
 		}
 
 		public string GetTrackName()
 		{
-			string trackName = string.Empty;
-			var id3v2 = _file.GetTag(TagTypes.Id3v2);
-			
-			if (!String.IsNullOrEmpty(id3v2.Title))
-			{
-				trackName = id3v2.Title;
-			}
-			else
-			{
-				trackName = _file.GetTag(TagTypes.Id3v1).Title;
-			}
-			return trackName;
+			var id3 = GetPrioritizedTag(_file);
+			return id3.Title;
 		}
 
 		public string GetYear()
 		{
-			string year = string.Empty;
-			var id3v2 = _file.GetTag(TagTypes.Id3v2);
+			var id3 = GetPrioritizedTag(_file);
+			return id3.Year.ToString();
+		}
 
-			if (id3v2.Year > 0)
+		/// <summary>
+		/// Get tab from file.
+		/// <remarks>
+		///	IDv2 has highest priority
+		/// </remarks>
+		/// </summary>
+		/// <param name="file"></param>
+		/// <returns></returns>
+		private Tag GetPrioritizedTag(File file)
+		{
+			if ((file.TagTypesOnDisk & TagTypes.Id3v2) == TagTypes.Id3v2)
 			{
-				year = id3v2.Year.ToString();
+				return file.GetTag(TagTypes.Id3v2);
 			}
-			else
-			{
-				
-				year = _file.GetTag(TagTypes.Id3v1).Year.ToString();
-			}
-			
-			return year;
+			return file.GetTag(TagTypes.Id3v1);
 		}
 	}
 }
