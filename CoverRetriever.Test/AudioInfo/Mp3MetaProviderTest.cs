@@ -13,26 +13,42 @@ namespace CoverRetriever.Test.AudioInfo
 		private const string FileWithLatinEncoding = "LatinEncoding.mp3";
 		private const string FileWithWindowsEncoding = "WindowsEncoding.mp3";
 		private const string FileWithEmptyFarame = "EmptyFrameFile.mp3";
+		private const string FileWithДДТ = "ДДТ - Поэт.mp3";
 		
 		[Test]
 		public void GetArtist_should_retreive_from_file_album_string_in_latin()
 		{
-			var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithLatinEncoding));
-			Assert.That(target.GetAlbum(), Is.EqualTo("Wild Obsession"));
+			using(var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithLatinEncoding)))
+			{
+				Assert.That(target.GetAlbum(), Is.EqualTo("Wild Obsession"));
+			}
 		}
 
 		[Test]
 		public void GetArtist_should_retreive_from_file_album_string_in_windows1251()
 		{
-			var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithWindowsEncoding));
-			Assert.That(target.GetAlbum(), Is.EqualTo("Пиратский альбом"));
+			using (var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithWindowsEncoding)))
+			{
+				Assert.That(target.GetAlbum(), Is.EqualTo("Пиратский альбом"));
+			}
 		}
 
 		[Test]
 		public void GetArtist_should_get_empty_string_from_none_frame_file()
 		{
-			var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithEmptyFarame));
-			Assert.That(target.GetAlbum(), Is.Null);
+			using(var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithEmptyFarame)))
+			{
+				Assert.That(target.GetAlbum(), Is.Null);
+			}
+		}
+
+		[Test]
+		public void GetArtist_should_retreive_from_file_with_both_tags_and_IDv3_is_empty()
+		{
+			using(var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithДДТ)))
+			{
+				Assert.That(target.GetAlbum(), Is.EqualTo("Я получил эту роль"));
+			}
 		}
 
 		private string BuildFullResourcePate(string fileName)

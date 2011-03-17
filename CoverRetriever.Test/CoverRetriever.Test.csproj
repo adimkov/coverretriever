@@ -121,6 +121,9 @@
     <Resource Include="Input.CoverPreviewViewModelTest\Penguins.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Input.AudioInfo\ДДТ - Поэт.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Input.AudioInfo\LatinEncoding.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

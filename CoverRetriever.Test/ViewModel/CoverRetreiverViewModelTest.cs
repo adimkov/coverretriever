@@ -123,7 +123,7 @@ namespace CoverRetriever.Test.ViewModel
 
 		private Mock<OpenFolderViewModel> GetRootFolderViewModelMock()
 		{
-			return new Mock<OpenFolderViewModel>();
+			return new Mock<OpenFolderViewModel>(new Mock<IFileSystemService>().Object);
 		}
 	}
 }
