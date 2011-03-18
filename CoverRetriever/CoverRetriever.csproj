@@ -241,6 +241,8 @@
     <Compile Include="Service\ICoverRetrieverService.cs" />
     <Compile Include="Service\FileSystemService.cs" />
     <Compile Include="Service\IFileSystemService.cs" />
+    <Compile Include="Service\IImageDownloader.cs" />
+    <Compile Include="Service\ImageDownloader.cs" />
     <Compile Include="Service\MettaProviderFactory.cs" />
     <Compile Include="ViewModel\CoverPreviewViewModel.cs" />
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />

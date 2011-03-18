@@ -23,15 +23,18 @@
 				<Border.Background>
 					<ImageBrush ImageSource="/CoverRetriever;component/Assets/CoverPreview_Background.png" 
 								Viewport="0,0,152,152"
-      							ViewportUnits="Absolute" 
-      							TileMode="Tile"/>
+								ViewportUnits="Absolute" 
+								TileMode="Tile"/>
 				</Border.Background>
-				<Image x:Name="image" 
-					Source="{Binding CoverImage, Mode=OneWay}" Margin="4,4,4,8" >
-					<Image.Effect>
-						<DropShadowEffect ShadowDepth="0" BlurRadius="20"/>
-					</Image.Effect>
-				</Image>
+				<Grid Margin="4,4,4,8">
+					<TextBlock Text="{Binding ErrorMessage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<Image x:Name="image" 
+						Source="{Binding CoverImage, Mode=OneWay}"  >
+						<Image.Effect>
+							<DropShadowEffect ShadowDepth="0" BlurRadius="20"/>
+						</Image.Effect>
+					</Image>
+				</Grid>
 			</Border>
 			<Border Grid.Row="1" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Background="{DynamicResource BottomBrush}">
 				<Grid>

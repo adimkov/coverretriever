@@ -208,7 +208,7 @@ namespace CoverRetriever.ViewModel
 		
 		private void PreviewCoverCommandExecute(RemoteCover remoteCover)
 		{
-			var viewModel = new CoverPreviewViewModel(remoteCover);
+			var viewModel = new CoverPreviewViewModel(new ImageDownloader(), remoteCover);
 			
 			viewModel.SaveCover.Subscribe(
 				x =>
