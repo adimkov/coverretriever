@@ -29,7 +29,7 @@ namespace CoverRetriever.ViewModel
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
 		private RemoteCover _selectedSuggestedCover;
 		private FileSystemItem _selectedFileSystemItem;
-		
+		private string _coverRetrieveErrorMessage;
 
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService, OpenFolderViewModel openFolderViewModel)
@@ -166,6 +166,22 @@ namespace CoverRetriever.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Get error message of retrieve cover from web
+		/// </summary>
+		public string CoverRetrieveErrorMessage
+		{
+			get
+			{
+				return _coverRetrieveErrorMessage;
+			}
+			private set
+			{
+				_coverRetrieveErrorMessage = value;
+				RaisePropertyChanged("CoverRetrieveErrorMessage");
+			}
+		}
+
 		private void LoadedCommandExecute()
 		{
 			if (_rootFolder == null)
@@ -244,6 +260,28 @@ namespace CoverRetriever.ViewModel
 			WindowHandler.CloseAllWindow();
 		}
 		
+		/// <summary>
+		/// Set error message of cover retrieve
+		/// </summary>
+		/// <param name="ex"></param>
+		private void SetErrorCoverRetrieve(Exception ex)
+		{
+			CoverRetrieveErrorMessage = ex.Message;
+		}
+
+		/// <summary>
+		/// Clear error message of cover retieve
+		/// </summary>
+		private void ResetErrorCoverRetrieve()
+		{
+			CoverRetrieveErrorMessage = String.Empty;
+		}
+
+		/// <summary>
+		/// Save image of caver at disc
+		/// </summary>
+		/// <param name="remoteCover"></param>
+		/// <param name="onCompllete"></param>
 		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
 		{
 			_coverRetrieverService.DownloadCover(remoteCover.CoverUri)
@@ -263,9 +301,14 @@ namespace CoverRetriever.ViewModel
 					});
 		}
 
+		/// <summary>
+		/// Perform search covers in web
+		/// </summary>
+		/// <param name="fileDetails"></param>
 		private void FindRemoteCovers(AudioFile fileDetails)
 		{
 			StartOperation(CoverRetrieverResources.MessageDownloadCover);
+			ResetErrorCoverRetrieve();
 			_suggestedCovers.Clear();
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, fileDetails.Album, SuggestedCountOfCovers)
 				.Finally(EndOperation)
@@ -274,7 +317,8 @@ namespace CoverRetriever.ViewModel
 				{
 					SuggestedCovers.AddRange(x);
 					SelectedSuggestedCover = _suggestedCovers.Max();
-				});
+				},
+				SetErrorCoverRetrieve);
 		}
 
 		private FileSystemItem FindFirstAudioFile(Folder rootFolder)
