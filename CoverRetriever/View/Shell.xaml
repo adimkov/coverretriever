@@ -115,6 +115,11 @@
 				<view:OpenFolderView/>
 			</interaction:WindowTrigerAction>
 		</prism:InteractionRequestTrigger>
+		<prism:InteractionRequestTrigger SourceObject="{Binding AboutRequest}">
+			<interaction:WindowTrigerAction>
+				<view:AboutView/>
+			</interaction:WindowTrigerAction>
+		</prism:InteractionRequestTrigger>
 	</i:Interaction.Triggers>
 	<toolkit:BusyIndicator  IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Margin="{DynamicResource LayoutRootMargin}">
 	<Grid>
@@ -133,7 +138,7 @@
 			<MenuItem Header="File" Padding="7,5,8,3">
 				<MenuItem Header="Open Folder" Command="{Binding SelectFolderCommand}"/>
 			</MenuItem>
-			<MenuItem Header="About" Padding="7,5,8,3"/>
+			<MenuItem Header="About" Padding="7,5,8,3" Command="{Binding AboutCommand}"/>
 		</Menu>
 		<Border x:Name="FileSystemBorder" Grid.RowSpan="3" Grid.Row="1" >
 				<TreeView ItemsSource="{Binding FileSystem}" 
@@ -201,15 +206,15 @@
 		<Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
 				<Grid>
 					<fluid:ElementFlow x:Name="elementFlow"
-								   ItemsSource="{Binding SuggestedCovers}" 
-								   SelectedItem="{Binding SelectedSuggestedCover}"
-								   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
-								   cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
-								   cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
-								   ItemGap="0.5"
-								   FrontItemGap="0"
-								   PopoutDistance="1"
-								   ElementHeight="700" TiltAngle="50">
+									   ItemsSource="{Binding SuggestedCovers}" 
+									   SelectedItem="{Binding SelectedSuggestedCover}"
+									   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
+									   cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
+									   cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+									   ItemGap="0.5"
+									   FrontItemGap="0"
+									   PopoutDistance="1"
+									   ElementHeight="700" TiltAngle="50">
 						<fluid:ElementFlow.Layout>
 							<fluid:CoverFlow />
 						</fluid:ElementFlow.Layout>
@@ -227,12 +232,25 @@
 		<Border x:Name="CommandBorder" 
 				Grid.Row="3"
 				Grid.Column="2" d:LayoutOverrides="GridBox" Background="{DynamicResource BottomBrush}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="-4,0,-4,-4">
-			<StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="{DynamicResource LayoutRootMargin}">
-				<Button Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
-						Command="{Binding SaveCoverCommand}"
-						CommandParameter="{Binding SelectedItem, ElementName=elementFlow}" Height="25"
+				<Grid Margin="{DynamicResource LayoutRootMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+					<StackPanel DataContext="{Binding SelectedSuggestedCover}" 
+								Visibility="{Binding Path=., Converter={StaticResource notNullToVisibilityConverter}}"
+								Orientation="Horizontal" 
+								HorizontalAlignment="Left" 
+								VerticalAlignment="Center" 
+								Margin="16,0,0,0">
+						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" Margin="0,0,2,0"/>
+						<TextBlock Text="{Binding CoverSize.Width}" Margin="0,0,8,0"/>
+						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}"  Margin="0,0,2,0"/>
+						<TextBlock Text="{Binding CoverSize.Height}"/>
+					</StackPanel>
+					<Button Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
+							Command="{Binding SaveCoverCommand}"
+							CommandParameter="{Binding SelectedItem, ElementName=elementFlow}" 
+							Height="25"
+							HorizontalAlignment="Right"
 						/>
-			</StackPanel>
+				</Grid>
 		</Border>
 		</Grid>
 	</toolkit:BusyIndicator>

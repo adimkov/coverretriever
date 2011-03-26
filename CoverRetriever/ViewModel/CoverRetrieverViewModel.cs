@@ -44,9 +44,11 @@ namespace CoverRetriever.ViewModel
 			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute);
 			SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
 			FinishCommand = new DelegateCommand(FinishCommandExecute);
+			AboutCommand = new DelegateCommand(AboutCommandExecute);
 
 			PreviewCoverRequest = new InteractionRequest<Notification>();
 			SelectRootFolderRequest = new InteractionRequest<Notification>();
+			AboutRequest = new InteractionRequest<Notification>();
 		}
 
 		
@@ -80,6 +82,11 @@ namespace CoverRetriever.ViewModel
 		/// Finish work of application
 		/// </summary>
 		public DelegateCommand FinishCommand { get; private set; }
+		
+		/// <summary>
+		/// About dialog command
+		/// </summary>
+		public DelegateCommand AboutCommand { get; private set; }
 
 		/// <summary>
 		/// Preview cover dialog request
@@ -87,9 +94,14 @@ namespace CoverRetriever.ViewModel
 		public InteractionRequest<Notification> PreviewCoverRequest { get; private set; }
 		
 		/// <summary>
-		/// 
+		/// Select new root folder dialog
 		/// </summary>
 		public InteractionRequest<Notification> SelectRootFolderRequest { get; private set; }
+
+		/// <summary>
+		/// About dialog
+		/// </summary>
+		public InteractionRequest<Notification> AboutRequest { get; set; }
 
 		/// <summary>
 		/// Get file system items
@@ -259,7 +271,12 @@ namespace CoverRetriever.ViewModel
 		{
 			WindowHandler.CloseAllWindow();
 		}
-		
+
+		private void AboutCommandExecute()
+		{
+			AboutRequest.Raise(new Notification());
+		}
+
 		/// <summary>
 		/// Set error message of cover retrieve
 		/// </summary>

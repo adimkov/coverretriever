@@ -29,7 +29,7 @@
 								TileMode="Tile"/>
 				</Border.Background>
 				<Grid Margin="4,4,4,8">
-					<controls:ErrorIndicator ErrorContent="{Binding ErrorMessage}" OverlayBrush="{x:Null}">
+					<controls:ErrorIndicator ErrorContent="{Binding ErrorMessage}" OverlayBrush="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 						<Image x:Name="image" 
 						Source="{Binding CoverImage, Mode=OneWay}"  >
 							<Image.Effect>
