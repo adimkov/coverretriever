@@ -174,7 +174,7 @@
     <comment>Open folder dialog</comment>
   </data>
   <data name="TextStepOneHeader" xml:space="preserve">
-    <value>Step 1. Choice a folder with audio files</value>
+    <value>Step 1. Choose a folder with audio files</value>
     <comment>Open folder dialog</comment>
   </data>
   <data name="TextTrackName" xml:space="preserve">
@@ -186,7 +186,7 @@
     <comment>Shell Text</comment>
   </data>
   <data name="TitleStepOne" xml:space="preserve">
-    <value>Choice a folder</value>
+    <value>Choose a folder</value>
     <comment>Open folder dialog</comment>
   </data>
 </root>

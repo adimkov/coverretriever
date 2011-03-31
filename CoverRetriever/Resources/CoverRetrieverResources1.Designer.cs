@@ -187,7 +187,7 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 1. Choice a folder with audio files.
+        ///   Looks up a localized string similar to Step 1. Choose a folder with audio files.
         /// </summary>
         public static string TextStepOneHeader {
             get {
@@ -214,7 +214,7 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choice a folder.
+        ///   Looks up a localized string similar to Choose a folder.
         /// </summary>
         public static string TitleStepOne {
             get {
