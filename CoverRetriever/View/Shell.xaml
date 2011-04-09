@@ -205,7 +205,13 @@
 		</Border>
 		<Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
 				<Grid>
-					<fluid:ElementFlow x:Name="elementFlow"
+					<controls:ErrorIndicator ErrorContent="{Binding CoverRetrieveErrorMessage}" 
+											 OverlayBrush="{x:Null}" 
+											 HorizontalAlignment="Stretch" 
+											 VerticalAlignment="Stretch" 
+											 HorizontalContentAlignment="Stretch"
+											 VerticalContentAlignment="Stretch">
+						<fluid:ElementFlow x:Name="elementFlow"
 									   ItemsSource="{Binding SuggestedCovers}" 
 									   SelectedItem="{Binding SelectedSuggestedCover}"
 									   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
@@ -215,18 +221,16 @@
 									   FrontItemGap="0"
 									   PopoutDistance="1"
 									   ElementHeight="700" TiltAngle="50">
-						<fluid:ElementFlow.Layout>
-							<fluid:CoverFlow />
-						</fluid:ElementFlow.Layout>
-						<fluid:ElementFlow.Camera>
-						<PerspectiveCamera FieldOfView="27"
+							<fluid:ElementFlow.Layout>
+								<fluid:CoverFlow />
+							</fluid:ElementFlow.Layout>
+							<fluid:ElementFlow.Camera>
+								<PerspectiveCamera FieldOfView="27"
 										   Position="0,0,5" 
 										   LookDirection="-5.32689704113657E-06,0.0660727483790081,-0.997814808415504" />
-						</fluid:ElementFlow.Camera>
-					</fluid:ElementFlow>
-					<controls:ErrorIndicator ErrorContent="{Binding CoverRetrieveErrorMessage}" 
-											 OverlayBrush="{x:Null}"
-											 />
+							</fluid:ElementFlow.Camera>
+						</fluid:ElementFlow>
+					</controls:ErrorIndicator>
 				</Grid>
 		</Border>
 		<Border x:Name="CommandBorder" 

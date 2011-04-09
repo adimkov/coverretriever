@@ -86,26 +86,18 @@ namespace CoverRetriever.Controls
 			set { SetValue(IsErroredProperty, value); }
 		}
 
-		private static void OnIsErroredChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		/// <summary>
+		/// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate"/>.
+		/// </summary>
+		public override void OnApplyTemplate()
 		{
-			((ErrorIndicator)d).OnIsErroredChanged(e);
-		}
-
-		private static void OnErrorContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			((ErrorIndicator)d).OnErrorContentChanged(e);
+			GoToState(IsErrored);
 		}
 
 		protected virtual void OnIsErroredChanged(DependencyPropertyChangedEventArgs e)
 		{
-			if ((bool)e.NewValue)
-			{
-				VisualStateManager.GoToState(this, VisualStateError, true);
-			}
-			else
-			{
-				VisualStateManager.GoToState(this, VisualStateNoError, true);
-			}
+			var isErrored = (bool)e.NewValue;
+			GoToState(isErrored);
 		}
 
 		protected virtual void OnErrorContentChanged(DependencyPropertyChangedEventArgs e)
@@ -117,6 +109,32 @@ namespace CoverRetriever.Controls
 			else
 			{
 				IsErrored = e.NewValue != null;
+			}
+		}
+
+		private static void OnIsErroredChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			((ErrorIndicator)d).OnIsErroredChanged(e);
+		}
+
+		private static void OnErrorContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			((ErrorIndicator)d).OnErrorContentChanged(e);
+		}
+
+		/// <summary>
+		/// Go to state "Error" if parameter is <see cref="bool">True</see>. Otherwise go to "NoError" state
+		/// </summary>
+		/// <param name="isErrored">indicate is error occur</param>
+		private void GoToState(bool isErrored)
+		{
+			if (isErrored)
+			{
+				VisualStateManager.GoToState(this, VisualStateError, true);
+			}
+			else
+			{
+				VisualStateManager.GoToState(this, VisualStateNoError, true);
 			}
 		}
 	}
