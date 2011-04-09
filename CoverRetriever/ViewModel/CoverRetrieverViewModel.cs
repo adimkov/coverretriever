@@ -30,6 +30,7 @@ namespace CoverRetriever.ViewModel
 		private RemoteCover _selectedSuggestedCover;
 		private FileSystemItem _selectedFileSystemItem;
 		private string _coverRetrieveErrorMessage;
+		private Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
 
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService, OpenFolderViewModel openFolderViewModel)
@@ -50,8 +51,6 @@ namespace CoverRetriever.ViewModel
 			SelectRootFolderRequest = new InteractionRequest<Notification>();
 			AboutRequest = new InteractionRequest<Notification>();
 		}
-
-		
 
 		/// <summary>
 		/// Loaded window Command
@@ -194,6 +193,15 @@ namespace CoverRetriever.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Get push collection of Saving cover result
+		/// </summary>
+		public IObservable<ProcessResult> SavingCoverResult
+		{
+			get { return _savingCoverResult; }
+			
+		}
+
 		private void LoadedCommandExecute()
 		{
 			if (_rootFolder == null)
@@ -255,7 +263,13 @@ namespace CoverRetriever.ViewModel
 		private void SaveCoverCommandExecute(RemoteCover remoteCover)
 		{
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
-			SaveRemoteCover(remoteCover, EndOperation);
+			_savingCoverResult.OnNext(ProcessResult.Begin);
+			SaveRemoteCover(remoteCover,
+				() =>
+				{
+					_savingCoverResult.OnNext(ProcessResult.Done);
+					EndOperation();
+				});
 		}
 
 		private void SelectFolderCommandExecute()

@@ -1,5 +1,8 @@
 using System;
+using System.Concurrency;
+using System.IO;
 using System.Linq;
+using System.Reactive.Testing.Mocks;
 
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
@@ -109,6 +112,48 @@ namespace CoverRetriever.Test.ViewModel
 			Assert.That(target.SuggestedCovers.Count, Is.EqualTo(1));
 			Assert.That(target.SelectedSuggestedCover, Is.Not.Null);
 			Assert.That(eventCounter, Is.EqualTo(6));
+		}
+
+		[Test]
+		public void SavingCoverResult_should_push_begin_on_starting_saving_image()
+		{
+			var testScheduler = new TestScheduler();
+			var mockObserver = new MockObserver<ProcessResult>(testScheduler);
+			var fileSystemService = GetFileSystemServiceMock();
+			var coverRetrieverService = GetCoverRetrieverServiceMock();
+			coverRetrieverService.Setup(x => x.DownloadCover(It.IsAny<Uri>()))
+				.Returns(Observable.Empty<Stream>());
+
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
+			
+			target.SavingCoverResult.Subscribe(mockObserver);
+
+			target.SaveCoverCommand.Execute(new RemoteCover());
+
+			coverRetrieverService.VerifyAll();
+
+			Assert.That(mockObserver[0].Value.Value, Is.EqualTo(ProcessResult.Begin));
+		}
+
+		[Test]
+		public void SavingCoverResult_should_push_Done_on_image_has_saved()
+		{
+			var testScheduler = new TestScheduler();
+			var mockObserver = new MockObserver<ProcessResult>(testScheduler);
+			var fileSystemService = GetFileSystemServiceMock();
+			var coverRetrieverService = GetCoverRetrieverServiceMock();
+			coverRetrieverService.Setup(x => x.DownloadCover(It.IsAny<Uri>()))
+				.Returns(Observable.Empty<Stream>());
+
+			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
+
+			target.SavingCoverResult.Subscribe(mockObserver);
+
+			target.SaveCoverCommand.Execute(new RemoteCover());
+
+			coverRetrieverService.VerifyAll();
+
+			Assert.That(mockObserver[1].Value.Value, Is.EqualTo(ProcessResult.Done));
 		}
 
 		private Mock<IFileSystemService> GetFileSystemServiceMock()

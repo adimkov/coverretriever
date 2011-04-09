@@ -223,6 +223,7 @@
     <Compile Include="Interaction\WindowTrigerAction.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
+    <Compile Include="Model\ProcessResult.cs" />
     <Compile Include="Model\RemoteCover.cs" />
     <Compile Include="Model\RootFolderResult.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
