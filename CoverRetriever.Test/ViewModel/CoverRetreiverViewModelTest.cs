@@ -23,7 +23,7 @@ namespace CoverRetriever.Test.ViewModel
 		{
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
-
+			
 			Assert.DoesNotThrow(() => new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object));
 		}
 
@@ -169,6 +169,11 @@ namespace CoverRetriever.Test.ViewModel
 		private Mock<OpenFolderViewModel> GetRootFolderViewModelMock()
 		{
 			return new Mock<OpenFolderViewModel>(new Mock<IFileSystemService>().Object);
+		}
+
+		private Mock<AboutViewModel> GetAboutViewModelMock()
+		{
+			return new Mock<AboutViewModel>(new Mock<IServiceProvider>().Object);
 		}
 	}
 }

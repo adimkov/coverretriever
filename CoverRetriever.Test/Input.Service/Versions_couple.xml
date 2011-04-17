@@ -1,0 +1,21 @@
+<VersionHistory>
+  <Version number="2.5.13.3">
+	<Change>
+	  Some change #1
+	</Change>
+	<Change>
+	  Some change #2
+	</Change>
+	<Change>
+	  Some change #3
+	</Change>
+  </Version>
+	<Version number="1.0.0.0">
+		<Change>
+			Some change #1
+		</Change>
+		<Change>
+			Some change #2
+		</Change>
+	</Version>
+</VersionHistory>

@@ -8,6 +8,7 @@
 		<ResourceDictionary>
 			<converter:NullToVisibilityConverter x:Key="notNullToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed"/>
 			<converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible"/>
+			<converter:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
 			
 			<LinearGradientBrush x:Key="ReflectionBrush"
 							 StartPoint="0,0"

@@ -1,7 +1,9 @@
+using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Windows;
-
 using CoverRetriever.AudioInfo;
+using CoverRetriever.Infrastructure;
 using CoverRetriever.View;
 
 using Microsoft.Practices.Prism.MefExtensions;
@@ -13,6 +15,38 @@ namespace CoverRetriever
 	/// </summary>
 	public class CoverRetrieverBootstrapper : MefBootstrapper
 	{
+		public CoverRetrieverBootstrapper()
+		{
+			VersionControlConnectionString = "http://adimkov.users.sourceforge.net/CoverRetrieverAssets/Versions.xml";
+			ProjectHomeUri = new Uri("http://sourceforge.net/p/coverretriever/home/");
+			BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
+			GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
+		}
+
+		/// <summary>
+		/// Get uri to file that describe versions history
+		/// </summary>
+		[Export(ConfigurationKeys.VersionControlConnectionString)]
+		public string VersionControlConnectionString { get; private set; }
+
+		/// <summary>
+		/// Get address of project home
+		/// </summary>
+		[Export(ConfigurationKeys.ProjectHomeUri)]
+		public Uri ProjectHomeUri { get; private set; }
+
+		/// <summary>
+		/// Get address of my blog
+		/// </summary>
+		[Export(ConfigurationKeys.BlogUri)]
+		public Uri BlogUri { get; private set; }
+
+		/// <summary>
+		/// Get address where available new product version
+		/// </summary>
+		[Export(ConfigurationKeys.GetNewVersionUri)]
+		public Uri GetNewVersionUri { get; private set; }
+
 		/// <summary>
 		/// Creates the shell or main window of the application.
 		/// </summary>
@@ -54,8 +88,8 @@ namespace CoverRetriever
 			base.ConfigureAggregateCatalog();
 
 			// Add this assembly to export ModuleTracker
-			this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
-			this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
+			AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
+			AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
 		}
 	}
 }

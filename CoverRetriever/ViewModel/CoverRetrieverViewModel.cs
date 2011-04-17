@@ -38,6 +38,7 @@ namespace CoverRetriever.ViewModel
 			_fileSystemService = fileSystemService;
 			_coverRetrieverService = coverRetrieverService;
 			_openFolderViewModel = openFolderViewModel;
+
 			openFolderViewModel.PushRootFolder.Subscribe(OnNext_PushRootFolder);
 			LoadedCommand = new DelegateCommand(LoadedCommandExecute);
 			FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
@@ -202,6 +203,9 @@ namespace CoverRetriever.ViewModel
 			
 		}
 
+		[Import(typeof(AboutViewModel))]
+		private Lazy<AboutViewModel> AboutViewModel { get; set; }
+
 		private void LoadedCommandExecute()
 		{
 			if (_rootFolder == null)
@@ -288,7 +292,10 @@ namespace CoverRetriever.ViewModel
 
 		private void AboutCommandExecute()
 		{
-			AboutRequest.Raise(new Notification());
+			AboutRequest.Raise(new Notification
+			{
+				Content = AboutViewModel.Value
+			});
 		}
 
 		/// <summary>

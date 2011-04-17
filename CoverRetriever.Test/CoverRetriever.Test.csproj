@@ -95,9 +95,12 @@
     <Compile Include="Model\FileSystemItemTest.cs" />
     <Compile Include="Model\FolderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceUtils.cs" />
     <Compile Include="Service\DirectoryCoverOrganizerTest.cs" />
     <Compile Include="Service\FileSystemServiceTest.cs" />
     <Compile Include="Service\GoogleCoverRetrieverTest.cs" />
+    <Compile Include="Service\RevisionVersionParserTest.cs" />
+    <Compile Include="Service\VersionControlServiceTest.cs" />
     <Compile Include="ViewModel\CoverPreviewViewModelTest.cs" />
     <Compile Include="ViewModel\CoverRetreiverViewModelTest.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
@@ -133,6 +136,8 @@
     <Content Include="Input.AudioInfo\EmptyFrameFile.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Input.Service\Versions_couple.xml" />
+    <Resource Include="Input.Service\Versions_single.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
