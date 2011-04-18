@@ -30,8 +30,8 @@ namespace CoverRetriever.ViewModel
 				x => { DownloadProgress = x; },
 				ex => { ErrorMessage = ex.Message; },
 				() => { ErrorMessage = null; });
-			
-			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute);
+
+			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute, () => String.IsNullOrEmpty(ErrorMessage));
 			CloseCommand = new DelegateCommand(CloseCommandExecute);
 		}
 
@@ -69,6 +69,7 @@ namespace CoverRetriever.ViewModel
 			private set
 			{
 				_errorMessage = value;
+				SaveCoverCommand.RaiseCanExecuteChanged();
 				RaisePropertyChanged("ErrorMessage");
 			}
 		}

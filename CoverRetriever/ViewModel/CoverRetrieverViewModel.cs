@@ -43,7 +43,7 @@ namespace CoverRetriever.ViewModel
 			LoadedCommand = new DelegateCommand(LoadedCommandExecute);
 			FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
 			PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
-			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute);
+			SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute, rc => String.IsNullOrEmpty(CoverRetrieveErrorMessage));
 			SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
 			FinishCommand = new DelegateCommand(FinishCommandExecute);
 			AboutCommand = new DelegateCommand(AboutCommandExecute);
@@ -198,6 +198,7 @@ namespace CoverRetriever.ViewModel
 			private set
 			{
 				_coverRetrieveErrorMessage = value;
+				SaveCoverCommand.RaiseCanExecuteChanged();
 				RaisePropertyChanged("CoverRetrieveErrorMessage");
 			}
 		}
