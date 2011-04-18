@@ -58,7 +58,8 @@
 						BorderThickness="2"
 						BorderBrush="LightYellow"
 						Background="Black"
-						Padding="2">
+						Padding="2"
+						>
 					<Image Source="{Binding ThumbCoverUri}" Stretch="Uniform">
 						<i:Interaction.Behaviors>
 							<ei:FluidMoveSetTagBehavior Tag="DataContext"/>
@@ -256,15 +257,17 @@
 											 HorizontalContentAlignment="Stretch"
 											 VerticalContentAlignment="Stretch">
 						<fluid:ElementFlow x:Name="elementFlow"
-									   ItemsSource="{Binding SuggestedCovers}" 
-									   SelectedItem="{Binding SelectedSuggestedCover}"
-									   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
-									   cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
-									   cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
-									   ItemGap="0.5"
-									   FrontItemGap="0"
-									   PopoutDistance="1"
-									   ElementHeight="700" TiltAngle="50">
+										   ItemsSource="{Binding SuggestedCovers}" 
+										   SelectedItem="{Binding SelectedSuggestedCover}"
+										   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
+										   cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
+										   cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+										   Cursor="Hand" 
+										   ToolTip="{Binding Path=CoverRetrieverResources.TooltipPreviewAction, Source={StaticResource coverRetrieverResources}}"
+										   ItemGap="0.5"
+										   FrontItemGap="0"
+										   PopoutDistance="1"
+										   ElementHeight="700" TiltAngle="50">
 							<fluid:ElementFlow.Layout>
 								<fluid:CoverFlow />
 							</fluid:ElementFlow.Layout>

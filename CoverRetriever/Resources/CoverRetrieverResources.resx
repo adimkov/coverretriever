@@ -135,7 +135,7 @@
   </data>
   <data name="TextAlbum" xml:space="preserve">
     <value>Album:</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TextAppicationDescription" xml:space="preserve">
     <value>The tool gets album covers from the internet using the meta tags from the MP3 file and stores found covers locally on your computer's hard drive.</value>
@@ -143,7 +143,7 @@
   </data>
   <data name="TextArtist" xml:space="preserve">
     <value>Artist:</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TextAuthor" xml:space="preserve">
     <value>by Anton Dimkov</value>
@@ -159,7 +159,7 @@
   </data>
   <data name="TextCover" xml:space="preserve">
     <value>Current cover:</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TextCoverSixeHeight" xml:space="preserve">
     <value>Height:</value>
@@ -171,7 +171,7 @@
   </data>
   <data name="TextFileDetails" xml:space="preserve">
     <value>Audio Info</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TextNewVersion" xml:space="preserve">
     <value>New Version Available: {0}</value>
@@ -203,14 +203,18 @@
   </data>
   <data name="TextTrackName" xml:space="preserve">
     <value>Title:</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TextYear" xml:space="preserve">
     <value>Year:</value>
-    <comment>Shell Text</comment>
+    <comment>Shell</comment>
   </data>
   <data name="TitleStepOne" xml:space="preserve">
     <value>Choose a folder</value>
     <comment>Open folder dialog</comment>
+  </data>
+  <data name="TooltipPreviewAction" xml:space="preserve">
+    <value>Double click to preview</value>
+    <comment>Shell</comment>
   </data>
 </root>

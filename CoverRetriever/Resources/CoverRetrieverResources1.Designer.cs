@@ -275,5 +275,14 @@ namespace CoverRetriever.Resources {
                 return ResourceManager.GetString("TitleStepOne", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Double click to preview.
+        /// </summary>
+        public static string TooltipPreviewAction {
+            get {
+                return ResourceManager.GetString("TooltipPreviewAction", resourceCulture);
+            }
+        }
     }
 }
