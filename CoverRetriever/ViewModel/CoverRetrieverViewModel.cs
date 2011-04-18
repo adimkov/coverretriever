@@ -47,11 +47,14 @@ namespace CoverRetriever.ViewModel
 			SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
 			FinishCommand = new DelegateCommand(FinishCommandExecute);
 			AboutCommand = new DelegateCommand(AboutCommandExecute);
+			CloseErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
 
 			PreviewCoverRequest = new InteractionRequest<Notification>();
 			SelectRootFolderRequest = new InteractionRequest<Notification>();
 			AboutRequest = new InteractionRequest<Notification>();
 		}
+
+		
 
 		/// <summary>
 		/// Loaded window Command
@@ -87,6 +90,11 @@ namespace CoverRetriever.ViewModel
 		/// About dialog command
 		/// </summary>
 		public DelegateCommand AboutCommand { get; private set; }
+
+		/// <summary>
+		/// Close an error message
+		/// </summary>
+		public DelegateCommand CloseErrorMessage { get; private set; }
 
 		/// <summary>
 		/// Preview cover dialog request
@@ -298,6 +306,11 @@ namespace CoverRetriever.ViewModel
 			});
 		}
 
+		private void CloseErrorMessageExecute()
+		{
+			CoverRetrieveErrorMessage = String.Empty;
+		}
+
 		/// <summary>
 		/// Set error message of cover retrieve
 		/// </summary>
@@ -336,6 +349,10 @@ namespace CoverRetriever.ViewModel
 					{
 						FileDetails.CoverOrganizer.Single(x => x is DirectoryCoverOrganizer)
 							.SaveCover(stream, Path.GetFileName(remoteCover.CoverUri.AbsolutePath));
+					},
+					ex =>
+					{
+						CoverRetrieveErrorMessage = ex.Message;
 					});
 		}
 

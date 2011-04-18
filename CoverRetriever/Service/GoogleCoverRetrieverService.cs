@@ -82,7 +82,7 @@ namespace CoverRetriever.Service
 				{
 					if (x.EventArgs.Error != null)
 					{
-						throw new CoverSearchException("Unable to download cover", x.EventArgs.Error);
+						throw new CoverSearchException(x.EventArgs.Error.Message, x.EventArgs.Error);
 					}
 					return x.EventArgs.Result;
 				})

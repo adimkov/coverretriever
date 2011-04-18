@@ -80,6 +80,30 @@
 				</Rectangle>
 			</Grid>
 		</DataTemplate>
+		<DataTemplate x:Key="ErrorIndicatorErrorTemplate">
+			<Border Padding="4" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="3">
+				<Grid d:DesignWidth="160" d:DesignHeight="64" Height="Auto" Width="Auto">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition MinWidth="16" Width="Auto"/>
+						<ColumnDefinition MinWidth="40" Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<Image Source="/CoverRetriever;component/Assets/Alert.png" Width="32"/>
+					<ContentPresenter Content="{Binding ''}" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0"/>
+					<Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource coverRetrieverResources}}" 
+							Command="{Binding Path=DataContext.CloseErrorMessage, ElementName=LayoutRoot}"
+							Grid.Row="1" 
+							Grid.ColumnSpan="2" 
+							Width="75" 
+							HorizontalAlignment="Center" 
+							VerticalAlignment="Top" 
+							Margin="0,4,0,0"/>
+				</Grid>
+			</Border>
+		</DataTemplate>
 		
 		<Style x:Key="AudioFileMetaTextBox" TargetType="{x:Type TextBox}">
 			<Setter Property="IsReadOnly" Value="True"/>
@@ -127,7 +151,7 @@
 		</prism:InteractionRequestTrigger>
 	</i:Interaction.Triggers>
 	<toolkit:BusyIndicator  IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Margin="{DynamicResource LayoutRootMargin}">
-	<Grid>
+	<Grid x:Name="LayoutRoot">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="170"/>
@@ -225,7 +249,8 @@
 		<Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
 				<Grid>
 					<controls:ErrorIndicator ErrorContent="{Binding CoverRetrieveErrorMessage}" 
-											 OverlayBrush="{x:Null}" 
+											 ErrorContentTemplate="{StaticResource ErrorIndicatorErrorTemplate}"
+											 OverlayBrush="#E4EFEFEF" 
 											 HorizontalAlignment="Stretch" 
 											 VerticalAlignment="Stretch" 
 											 HorizontalContentAlignment="Stretch"
