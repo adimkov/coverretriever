@@ -40,6 +40,6 @@ using System.Resources;
                              //(used if a resource is not found in the page, 
                              // app, or any theme specific resource dictionaries)
 )]
-[assembly: AssemblyVersionAttribute("0.3.0.0")]
+[assembly: AssemblyVersionAttribute("0.4.0.0")]
 [assembly: AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("")]

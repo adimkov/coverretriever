@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Data;
 
 using CoverRetriever.Model;
+using CoverRetriever.Resources;
 using CoverRetriever.ViewModel;
 
 namespace CoverRetriever.View
@@ -21,6 +22,7 @@ namespace CoverRetriever.View
 		public Shell(CoverRetrieverViewModel viewModel)
 		{
 			InitializeComponent();
+			Title = CoverRetrieverResources.TextProduct;
 			_viewModel = viewModel;
 			_viewModel.SavingCoverResult
 				.ObserveOnDispatcher()
