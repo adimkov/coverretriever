@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoStringHandler.cs" />
+    <Compile Include="IActivator.cs" />
     <Compile Include="IMetaProvider.cs" />
+    <Compile Include="MetaProviderException.cs" />
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

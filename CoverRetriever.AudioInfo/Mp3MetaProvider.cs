@@ -5,21 +5,28 @@ using TagLib;
 
 namespace CoverRetriever.AudioInfo
 {
-	[Export(typeof(IMetaProvider))]
-	public class Mp3MetaProvider : IMetaProvider, IDisposable
+	[Export("mp3", typeof(IMetaProvider))]
+	[PartCreationPolicy(CreationPolicy.NonShared)]	
+	public class Mp3MetaProvider : IMetaProvider, IDisposable, IActivator
 	{
-		private readonly File _file;
-		
+		private File _file;
+		private bool _initialized;
+
 		static Mp3MetaProvider()
 		{
 			TagLib.Id3v1.Tag.DefaultStringHandler = new AutoStringHandler();
 			TagLib.Id3v2.Tag.DefaultEncoding = StringType.Latin1;
 			ByteVector.UseBrokenLatin1Behavior = true;	
 		}
-		
+
+		public Mp3MetaProvider()
+		{
+		}
+
 		public Mp3MetaProvider(string fileName)
 		{
 			_file = File.Create(fileName, ReadStyle.None);
+			_initialized = true;
 		}
 
 		public string GetAlbum()
@@ -51,6 +58,20 @@ namespace CoverRetriever.AudioInfo
 			if (_file != null)
 			{
 				_file.Dispose();
+			}
+		}
+
+		public void Activate(params object[] param)
+		{
+			if (!_initialized)
+			{
+				var filePath = (string) param[0];
+				_file = File.Create(filePath, ReadStyle.None);
+				_initialized = true;
+			}
+			else
+			{
+				throw new MetaProviderException("Instance already has been initialized");
 			}
 		}
 
