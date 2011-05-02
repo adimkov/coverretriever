@@ -31,6 +31,19 @@ namespace CoverRetriever.AudioInfo
 			_initialized = true;
 		}
 
+		/// <summary>
+		/// Indicate is Meta Data empty
+		/// </summary>
+		public bool IsEmpty
+		{
+			get
+			{
+				EnsureInstanceWasNotDisposed();
+				return _file.GetTag(TagTypes.Id3v2).IsEmpty &&
+					_file.GetTag(TagTypes.Id3v1).IsEmpty;
+			}
+		}
+
 		public string GetAlbum()
 		{
 			EnsureInstanceWasNotDisposed();

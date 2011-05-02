@@ -61,6 +61,15 @@ namespace CoverRetriever.Test.AudioInfo
 		}
 
 		[Test]
+		public void Should_indicate_that_tag_in_not_empty()
+		{
+			using (var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithÄÄÒ)))
+			{
+				Assert.IsFalse(target.IsEmpty);
+			}
+		}
+
+		[Test]
 		public void Should_throw_error_on_attempt_to_access_when_instance_was_desposed()
 		{
 			var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithÄÄÒ));

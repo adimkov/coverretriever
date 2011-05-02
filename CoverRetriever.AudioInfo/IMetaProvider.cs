@@ -6,6 +6,11 @@ namespace CoverRetriever.AudioInfo
 	public interface IMetaProvider
 	{
 		/// <summary>
+		/// Indicate is Meta Data empty
+		/// </summary>
+		bool IsEmpty { get; }
+
+		/// <summary>
 		/// Get an album name
 		/// </summary>
 		/// <returns></returns>

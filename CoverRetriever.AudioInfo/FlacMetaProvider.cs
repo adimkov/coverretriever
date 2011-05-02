@@ -23,6 +23,18 @@ namespace CoverRetriever.AudioInfo
 		}
 
 		/// <summary>
+		/// Indicate is Meta Data empty
+		/// </summary>
+		public bool IsEmpty
+		{
+			get
+			{
+				EnsureInstanceWasNotDisposed();
+				return _file.Tag.IsEmpty;
+			}
+		}
+
+		/// <summary>
 		/// Get an album name
 		/// </summary>
 		/// <returns></returns>

@@ -67,6 +67,15 @@ namespace CoverRetriever.Test.AudioInfo
 			}
 		}
 
+		[Test]
+		public void Should_indicate_that_tag_in_not_empty()
+		{
+			using (var target = new FlacMetaProvider(BuildFullResourcePate(Flac1)))
+			{
+				Assert.IsFalse(target.IsEmpty);
+			}
+		}
+
 		private string BuildFullResourcePate(string fileName)
 		{
 			string resourceFolder = "Input.AudioInfo";
