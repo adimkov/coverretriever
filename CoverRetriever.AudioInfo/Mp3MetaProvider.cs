@@ -11,6 +11,7 @@ namespace CoverRetriever.AudioInfo
 	{
 		private File _file;
 		private bool _initialized;
+		private bool _disposed;
 
 		static Mp3MetaProvider()
 		{
@@ -25,40 +26,43 @@ namespace CoverRetriever.AudioInfo
 
 		public Mp3MetaProvider(string fileName)
 		{
+			EnsureInstanceWasNotDisposed();
 			_file = File.Create(fileName, ReadStyle.None);
 			_initialized = true;
 		}
 
 		public string GetAlbum()
 		{
+			EnsureInstanceWasNotDisposed();
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Album));
 			return id3.Album;
 		}
 
 		public string GetArtist()
 		{
+			EnsureInstanceWasNotDisposed();
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.FirstArtist));
 			return id3.FirstArtist;
 		}
 
 		public string GetTrackName()
 		{
+			EnsureInstanceWasNotDisposed();
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Title));
 			return id3.Title;
 		}
 
 		public string GetYear()
 		{
+			EnsureInstanceWasNotDisposed();
 			var id3 = GetAudioTag(_file, x => x.Year > 0);
 			return id3.Year.ToString();
 		}
 
 		public void Dispose()
 		{
-			if (_file != null)
-			{
-				_file.Dispose();
-			}
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		public void Activate(params object[] param)
@@ -72,6 +76,22 @@ namespace CoverRetriever.AudioInfo
 			else
 			{
 				throw new MetaProviderException("Instance already has been initialized");
+			}
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					if (_file != null)
+					{
+						_file.Dispose();
+					}
+				}
+				_file = null;
+				_disposed = true;
 			}
 		}
 
@@ -92,6 +112,14 @@ namespace CoverRetriever.AudioInfo
 				return file.GetTag(TagTypes.Id3v2);
 			}
 			return file.GetTag(TagTypes.Id3v1);
+		}
+
+		private void EnsureInstanceWasNotDisposed()
+		{
+			if (_disposed)
+			{
+				throw new ObjectDisposedException("Meta provider was disposed"); 
+			}
 		}
 	}
 }

@@ -4,7 +4,7 @@ namespace CoverRetriever.Infrastructure
 {
 	public static class AudioFormat
 	{
-		private static IEnumerable<string> _audioFileExt = new [] {".mp3"};
+		private static IEnumerable<string> _audioFileExt = new [] {".mp3", ".flac"};
 
 		/// <summary>
 		/// Get supported audio files extensions
