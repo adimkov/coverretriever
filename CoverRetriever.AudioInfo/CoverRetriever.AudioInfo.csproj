@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoStringHandler.cs" />
+    <Compile Include="AudioFileMetaProvider.cs" />
     <Compile Include="IMetaProvider.cs" />
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
