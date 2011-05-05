@@ -250,7 +250,6 @@
     <Compile Include="Service\IImageDownloader.cs" />
     <Compile Include="Service\ImageDownloader.cs" />
     <Compile Include="Service\IVersionControlService.cs" />
-    <Compile Include="Service\MettaProviderFactory.cs" />
     <Compile Include="Service\HttpVersionControlService.cs" />
     <Compile Include="Service\RevisionVersionParser.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />

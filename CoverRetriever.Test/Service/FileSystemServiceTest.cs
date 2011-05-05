@@ -58,7 +58,7 @@ namespace CoverRetriever.Test.Service
 			serviceLocatorMock.Setup(x => x.GetAllInstances<ICoverOrganizer>())
 				.Returns(new[] {coverOrganizerMock.Object});
 
-			var target = new FileSystemService(new MetaProviderFactory(), serviceLocatorMock.Object);
+			var target = new FileSystemService(serviceLocatorMock.Object);
 			target.FillRootFolderAsync(rootFolder, null, () => manualResetEvent.Set());
 
 			manualResetEvent.WaitOne();
@@ -82,7 +82,7 @@ namespace CoverRetriever.Test.Service
 			serviceLocatorMock.Setup(x => x.GetAllInstances<ICoverOrganizer>())
 				.Returns(new[] { coverOrganizerMock.Object });
 
-			var target = new FileSystemService(new MetaProviderFactory(), serviceLocatorMock.Object);
+			var target = new FileSystemService(serviceLocatorMock.Object);
 			target.FillRootFolderAsync(rootFolder, null, () => manuelResetEvent.Set());
 
 			manuelResetEvent.WaitOne();

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
-
+using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
 
 using Microsoft.Practices.ServiceLocation;
@@ -17,15 +17,13 @@ namespace CoverRetriever.Service
 	{
 		private const string AudioFilesPatern = "*.mp3";
 		
-		private MetaProviderFactory _metaProviderFactory;
 		private IServiceLocator _serviceLocator;
 		private int _countRequestOfAddItems;
 		private Action _onComplete;
 
 		[ImportingConstructor]
-		public FileSystemService(MetaProviderFactory metaProviderFactory, IServiceLocator serviceLocator)
+		public FileSystemService(IServiceLocator serviceLocator)
 		{
-			_metaProviderFactory = metaProviderFactory;
 			_serviceLocator = serviceLocator;
 		}
 
@@ -74,7 +72,7 @@ namespace CoverRetriever.Service
 					new AudioFile(
 						Path.GetFileName(name),
 						parent,
-						_metaProviderFactory.GetMetaProviderForFile(name),
+						ActivateIMetaProvider(name),
 						_serviceLocator.GetAllInstances(typeof(ICoverOrganizer)).Cast<ICoverOrganizer>().ToList()));
 
 			if (dispatcher != null)
@@ -103,5 +101,25 @@ namespace CoverRetriever.Service
 		}
 
 		private delegate void AddItemsToFolderDelegate(Folder parent, IEnumerable<FileSystemItem> children);
+
+		private Lazy<IMetaProvider> ActivateIMetaProvider(string filePath)
+		{
+			var fileExtension = Path.GetExtension(filePath).TrimStart('.').ToLower();
+			var metaProvider = new Lazy<IMetaProvider>(
+				() =>
+					{
+						var activator = _serviceLocator.GetInstance<IMetaProvider>(fileExtension) as IActivator;
+						if (activator == null)
+						{
+							throw new MetaProviderException("Unable to activate meta provider, activator was not found");
+
+						}
+						activator.Activate(filePath);
+						return (IMetaProvider)activator;
+					});
+			
+
+			return metaProvider;
+		}
 	}
 }
