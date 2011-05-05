@@ -51,6 +51,15 @@ namespace CoverRetriever.Test.AudioInfo
 			}
 		}
 
+		[Test]
+		public void GetTrackName_should_get_track_name_from_file_name_if_tag_empty()
+		{
+			using (var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithEmptyFarame)))
+			{
+				Assert.That(target.GetTrackName(), Is.EqualTo("EmptyFrameFile"));
+			}	
+		}
+
 		private string BuildFullResourcePate(string fileName)
 		{
 			string resourceFolder = "Input.AudioInfo";

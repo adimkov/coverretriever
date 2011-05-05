@@ -1,49 +1,51 @@
 using System;
 using System.ComponentModel.Composition;
-
+using System.IO;
 using TagLib;
+using File = TagLib.File;
 
 namespace CoverRetriever.AudioInfo
 {
 	[Export(typeof(IMetaProvider))]
-	public class Mp3MetaProvider : IMetaProvider, IDisposable
+	public class Mp3MetaProvider : AudioFileMetaProvider, IDisposable
 	{
 		private readonly File _file;
-		
+
 		static Mp3MetaProvider()
 		{
 			TagLib.Id3v1.Tag.DefaultStringHandler = new AutoStringHandler();
 			TagLib.Id3v2.Tag.DefaultEncoding = StringType.Latin1;
-			ByteVector.UseBrokenLatin1Behavior = true;	
+			ByteVector.UseBrokenLatin1Behavior = true;
 		}
-		
+
 		public Mp3MetaProvider(string fileName)
 		{
 			_file = File.Create(fileName, ReadStyle.None);
+			ParseFileName(Path.GetFileNameWithoutExtension(fileName));
 		}
 
-		public string GetAlbum()
+		public override string GetAlbum()
 		{
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Album));
-			return id3.Album;
+			return id3.Album ?? base.GetAlbum();
 		}
 
-		public string GetArtist()
+		public override string GetArtist()
 		{
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.FirstArtist));
-			return id3.FirstArtist;
+			return id3.FirstArtist ?? base.GetArtist();
 		}
 
-		public string GetTrackName()
+		public override string GetTrackName()
 		{
 			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Title));
-			return id3.Title;
+			return id3.Title ?? base.GetTrackName();
 		}
 
-		public string GetYear()
+		public override string GetYear()
 		{
 			var id3 = GetAudioTag(_file, x => x.Year > 0);
-			return id3.Year.ToString();
+			return id3.Year > 0 ? id3.Year.ToString() : base.GetYear();
 		}
 
 		public void Dispose()

@@ -1,7 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -10,7 +9,6 @@ namespace CoverRetriever.AudioInfo
 	/// <summary>
 	/// Obtain Meta info from file name
 	/// </summary>
-	[Export]
 	public class AudioFileMetaProvider : IMetaProvider
 	{
 		private const string ArtistBlock = "%artist%";
