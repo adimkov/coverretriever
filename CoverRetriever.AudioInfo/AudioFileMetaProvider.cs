@@ -80,22 +80,49 @@ namespace CoverRetriever.AudioInfo
 			_trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
 			_trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
 		}
-		
+
+		/// <summary>
+		/// Indicate is Meta Data empty
+		/// </summary>
+		public virtual bool IsEmpty
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Get an album name
+		/// </summary>
+		/// <returns></returns>
 		public virtual string GetAlbum()
 		{
 			return _album;
 		}
 
+		/// <summary>
+		/// Get an artist
+		/// </summary>
+		/// <returns></returns>
 		public virtual string GetArtist()
 		{
 			return _artist;
 		}
 
+		/// <summary>
+		/// Get year of album
+		/// </summary>
+		/// <returns></returns>
 		public virtual string GetYear()
 		{
 			return _year;
 		}
 
+		/// <summary>
+		/// Get name  of track
+		/// </summary>
+		/// <returns></returns>
 		public virtual string GetTrackName()
 		{
 			return _trackName;

@@ -82,7 +82,7 @@ namespace CoverRetriever.Test.ViewModel
 			coverRetrieverService.VerifyAll();
 			Assert.That(target.FileDetails, Is.EqualTo(root.Children[0]));
 			Assert.That(target.SuggestedCovers.Count, Is.EqualTo(1));
-			Assert.That(eventCounter, Is.EqualTo(6));
+			Assert.That(eventCounter, Is.EqualTo(7));
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace CoverRetriever.Test.ViewModel
 			coverRetrieverService.VerifyAll();
 			Assert.That(target.SuggestedCovers.Count, Is.EqualTo(1));
 			Assert.That(target.SelectedSuggestedCover, Is.Not.Null);
-			Assert.That(eventCounter, Is.EqualTo(6));
+			Assert.That(eventCounter, Is.EqualTo(7));
 		}
 
 		[Test]

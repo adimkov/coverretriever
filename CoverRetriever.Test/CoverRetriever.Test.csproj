@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioInfo\AudioFileMetaProviderTest.cs" />
+    <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
@@ -109,6 +110,9 @@
     <Compile Include="ViewModel\ViewModelBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Input.AudioInfo\1.flac">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

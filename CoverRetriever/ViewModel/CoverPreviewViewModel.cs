@@ -23,16 +23,15 @@ namespace CoverRetriever.ViewModel
 			_remoteCover = remoteCover;
 			StartOperation(CoverRetrieverResources.MessageCoverPreview);
 			_imageDownloader = imageDownloader;
-			
+			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute, () => String.IsNullOrEmpty(ErrorMessage));
+			CloseCommand = new DelegateCommand(CloseCommandExecute);
+
 			_imageDownloader.DownloadImage(remoteCover.CoverUri)
 				.Finally(EndOperation)
 				.Subscribe(
 				x => { DownloadProgress = x; },
 				ex => { ErrorMessage = ex.Message; },
 				() => { ErrorMessage = null; });
-
-			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute, () => String.IsNullOrEmpty(ErrorMessage));
-			CloseCommand = new DelegateCommand(CloseCommandExecute);
 		}
 
 		/// <summary>

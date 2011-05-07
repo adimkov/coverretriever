@@ -59,6 +59,31 @@ namespace CoverRetriever.Test.AudioInfo
 				Assert.That(target.GetTrackName(), Is.EqualTo("EmptyFrameFile"));
 			}	
 		}
+		[Test]
+		public void Should_throw_error_on_attempt_to_initialize_second_time()
+		{
+			using (var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithÄÄÒ)))
+			{
+				Assert.Throws<MetaProviderException>(() => target.Activate("SomeData"));
+			}		
+		}
+
+		[Test]
+		public void Should_indicate_that_tag_in_not_empty()
+		{
+			using (var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithÄÄÒ)))
+			{
+				Assert.IsFalse(target.IsEmpty);
+			}
+		}
+
+		[Test]
+		public void Should_throw_error_on_attempt_to_access_when_instance_was_desposed()
+		{
+			var target = new Mp3MetaProvider(BuildFullResourcePate(FileWithÄÄÒ));
+			target.Dispose();
+			Assert.Throws<ObjectDisposedException>(() => target.GetAlbum());
+		}
 
 		private string BuildFullResourcePate(string fileName)
 		{
