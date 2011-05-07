@@ -366,7 +366,14 @@ namespace CoverRetriever.ViewModel
 			StartOperation(CoverRetrieverResources.MessageDownloadCover);
 			ResetErrorCoverRetrieve();
 			_suggestedCovers.Clear();
-			_coverRetrieverService.GetCoverFor(fileDetails.Artist, fileDetails.Album, SuggestedCountOfCovers)
+			var albumCondition = fileDetails.Album;
+
+			if (String.IsNullOrEmpty(albumCondition) && !String.IsNullOrEmpty(fileDetails.TrackName))
+			{
+				albumCondition = fileDetails.TrackName;
+			}
+
+			_coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
 				.Finally(EndOperation)
 				.Subscribe(
 				x =>
