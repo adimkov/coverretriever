@@ -3,7 +3,7 @@ using System.Concurrency;
 using System.IO;
 using System.Linq;
 using System.Reactive.Testing.Mocks;
-
+using System.Windows;
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
 using CoverRetriever.Service;
@@ -121,14 +121,12 @@ namespace CoverRetriever.Test.ViewModel
 			var mockObserver = new MockObserver<ProcessResult>(testScheduler);
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
-			coverRetrieverService.Setup(x => x.DownloadCover(It.IsAny<Uri>()))
-				.Returns(Observable.Empty<Stream>());
 
 			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
 			
 			target.SavingCoverResult.Subscribe(mockObserver);
 
-			target.SaveCoverCommand.Execute(new RemoteCover());
+			target.SaveCoverCommand.Execute(GetMockRemoteCover());
 
 			coverRetrieverService.VerifyAll();
 
@@ -142,14 +140,12 @@ namespace CoverRetriever.Test.ViewModel
 			var mockObserver = new MockObserver<ProcessResult>(testScheduler);
 			var fileSystemService = GetFileSystemServiceMock();
 			var coverRetrieverService = GetCoverRetrieverServiceMock();
-			coverRetrieverService.Setup(x => x.DownloadCover(It.IsAny<Uri>()))
-				.Returns(Observable.Empty<Stream>());
 
 			var target = new CoverRetrieverViewModel(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
 
 			target.SavingCoverResult.Subscribe(mockObserver);
 
-			target.SaveCoverCommand.Execute(new RemoteCover());
+			target.SaveCoverCommand.Execute(GetMockRemoteCover());
 
 			coverRetrieverService.VerifyAll();
 
@@ -174,6 +170,18 @@ namespace CoverRetriever.Test.ViewModel
 		private Mock<AboutViewModel> GetAboutViewModelMock()
 		{
 			return new Mock<AboutViewModel>(new Mock<IServiceProvider>().Object);
+		}
+
+		public RemoteCover GetMockRemoteCover()
+		{
+			return new RemoteCover(
+				"123-78asd", 
+				new Uri("http://www.google.com"), 
+				new Size(200,200),
+				new Uri("http://www.google.com"),
+				new Size(100, 100),
+				Observable.Empty<Stream>(),
+				Observable.Empty<Stream>());
 		}
 	}
 }

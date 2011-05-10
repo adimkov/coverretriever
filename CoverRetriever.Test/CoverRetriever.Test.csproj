@@ -91,6 +91,7 @@
     <Compile Include="AudioInfo\AudioFileMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
+    <Compile Include="Controls\ImageAsyncSourceTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
     <Compile Include="Model\FileSystemItemBaseTest.cs" />

@@ -1,15 +1,16 @@
 using System;
+using System.IO;
 using System.Windows;
 
 namespace CoverRetriever.Model
 {
-	public class RemoteCover : IComparable<RemoteCover>
+	public class RemoteCover : Cover, IComparable<RemoteCover>
 	{
 		public string ImageId { get; private set; }
 		public Uri CoverUri { get; private set; }
-		public Size CoverSize { get; private set; }
 		public Uri ThumbCoverUri { get; private set; }
 		public Size ThumbSize { get; private set; }
+		public IObservable<Stream> ThumbStream { get; set; }
 
 		public RemoteCover()
 		{
@@ -22,13 +23,22 @@ namespace CoverRetriever.Model
 			CoverSize = coverSize;
 		}
 
-		public RemoteCover(string imageId, Uri coverUri, Size coverSize, Uri thumbCoverUri, Size thumbSize)
+		public RemoteCover(
+			string imageId, 
+			Uri coverUri, 
+			Size coverSize, 
+			Uri thumbCoverUri, 
+			Size thumbSize,
+			IObservable<Stream> coverStream,
+			IObservable<Stream> thumbStream)
 		{
 			ImageId = imageId;
 			CoverUri = coverUri;
 			CoverSize = coverSize;
+			CoverStream = coverStream;
 
 			ThumbCoverUri = thumbCoverUri;
+			ThumbStream = thumbStream;
 			ThumbSize = thumbSize;
 		}
 

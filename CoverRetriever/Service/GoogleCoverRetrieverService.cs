@@ -66,8 +66,6 @@ namespace CoverRetriever.Service
 					});
 		}
 
-		#region Implementation of ICoverRetrieverService
-
 		/// <summary>
 		/// Download cover by uri
 		/// </summary>
@@ -88,12 +86,14 @@ namespace CoverRetriever.Service
 				})
 				.Take(1);
 
-			downloader.OpenReadAsync(coverUri);
+			var defferCaller = Observable.Defer(() =>
+			{
+				downloader.OpenReadAsync(coverUri);
+				return downloadOpservable;
+			});
 
-			return downloadOpservable;
+			return defferCaller;
 		}
-
-		#endregion
 
 		private IEnumerable<RemoteCover> ParseGoogleImageResponce(string jsonResponce)
 		{
@@ -104,20 +104,22 @@ namespace CoverRetriever.Service
 			for (int i = 0; i < entriesCount; i++)
 			{
 				var gimageSearch = covers.responseData.results[i];
-				string gImageUri = gimageSearch.url;
+
+				var gImageUri = new Uri((string)gimageSearch.url, UriKind.Absolute);
 				double width = gimageSearch.width;
 				double height = gimageSearch.height;
 
-
-				string tdGImage = gimageSearch.tbUrl;
+				var tdGImage = new Uri((string)gimageSearch.tbUrl, UriKind.Absolute);
 				double tdwidth = gimageSearch.tbWidth;
 				double tdheight = gimageSearch.tbHeight;
 				result.Add(new RemoteCover(
-					(string)gimageSearch.imageId,
-					new Uri(gImageUri, UriKind.Absolute), 
-					new Size(width, height),
-					new Uri(tdGImage, UriKind.Absolute),
-					new Size(tdwidth, tdheight)));
+				           	(string) gimageSearch.imageId,
+				           	gImageUri,
+				           	new Size(width, height),
+				           	tdGImage,
+				           	new Size(tdwidth, tdheight),
+				           	DownloadCover(gImageUri),
+							DownloadCover(tdGImage)));
 			}
 			return result;
 		}

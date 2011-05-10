@@ -206,6 +206,7 @@
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
     <Compile Include="Controls\ErrorIndicator.cs" />
+    <Compile Include="Controls\ImageAsyncSource.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\CoverOrganizerToImageConverter.cs" />
     <Compile Include="Converter\FolderImageConverter.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
     <Compile Include="Interaction\WindowHandler.cs" />
     <Compile Include="Interaction\WindowTrigerAction.cs" />
+    <Compile Include="Model\Cover.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
     <Compile Include="Model\ProcessResult.cs" />

@@ -336,7 +336,7 @@ namespace CoverRetriever.ViewModel
 		/// <param name="onCompllete"></param>
 		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
 		{
-			_coverRetrieverService.DownloadCover(remoteCover.CoverUri)
+			remoteCover.CoverStream
 				.Finally(
 					() =>
 					{
@@ -345,7 +345,7 @@ namespace CoverRetriever.ViewModel
 						FileDetails = swapFileDetails;
 						onCompllete();
 					})
-				.Subscribe(
+					.Subscribe(
 					stream =>
 					{
 						FileDetails.CoverOrganizer.Single(x => x is DirectoryCoverOrganizer)

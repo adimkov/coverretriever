@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Service
@@ -19,12 +17,5 @@ namespace CoverRetriever.Service
 		/// <param name="coverCount">count of cover. Range 1-8</param>
 		/// <returns></returns>
 		IObservable<IEnumerable<RemoteCover>> GetCoverFor(string artist, string album, int coverCount);
-
-		/// <summary>
-		/// Download cover by uri
-		/// </summary>
-		/// <param name="coverUri">Uri of cover</param>
-		/// <returns></returns>
-		IObservable<Stream> DownloadCover(Uri coverUri);
 	}
 }
