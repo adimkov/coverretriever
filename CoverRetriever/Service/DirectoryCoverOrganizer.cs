@@ -6,14 +6,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using CoverRetriever.AudioInfo;
-using CoverRetriever.Model;
 
 namespace CoverRetriever.Service
 {
 	/// <summary>
 	/// Manage cover in the parent folder of audio file
 	/// </summary>
-	[Export(typeof(ICoverOrganizer))]
+	[Export(typeof(DirectoryCoverOrganizer))]
 	[PartCreationPolicy(CreationPolicy.NonShared)]
 	public class DirectoryCoverOrganizer : ICoverOrganizer, IActivator
 	{
