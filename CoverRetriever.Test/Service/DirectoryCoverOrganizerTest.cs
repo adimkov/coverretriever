@@ -51,7 +51,13 @@ namespace CoverRetriever.Test.Service
 			var target = new DirectoryCoverOrganizer();
 			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
 
-			Assert.That(target.GetCoverFullPath(), Is.Not.Null);		
+			var cover = target.GetCover();
+			Assert.That(cover, Is.Not.Null);
+			Assert.That(cover.Name, Is.EqualTo("cover.jpg"));
+			Assert.That(cover.CoverStream, Is.Not.Null);
+			Assert.That(cover.Length, Is.EqualTo(56395));
+			Assert.That(cover.CoverSize.Width, Is.EqualTo(497));
+			Assert.That(cover.CoverSize.Height, Is.EqualTo(500));		
 		}
 
 		[Test]
@@ -63,7 +69,7 @@ namespace CoverRetriever.Test.Service
 			var target = new DirectoryCoverOrganizer();
 			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
 
-			Assert.Throws<InvalidOperationException>(() => target.GetCoverFullPath());
+			Assert.Throws<InvalidOperationException>(() => target.GetCover());
 
 		}
 	}

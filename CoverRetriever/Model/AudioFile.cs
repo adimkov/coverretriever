@@ -10,6 +10,7 @@ namespace CoverRetriever.Model
 	public class AudioFile : FileSystemItem
 	{
 		private readonly Lazy<IMetaProvider> _metaProvider;
+		private readonly IEnumerable<ICoverOrganizer> _coverOrganizer; 
 
 		public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider) 
 			: base(name, parent)
@@ -18,21 +19,24 @@ namespace CoverRetriever.Model
 			Require.NotNull(metaProvider, "metaProvider");
 			
 			_metaProvider = metaProvider;
-			CoverOrganizer = new List<ICoverOrganizer>();
+			_coverOrganizer = new List<ICoverOrganizer>();
 		}
 
 		public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider, IEnumerable<ICoverOrganizer> coverOrganizer)
 			: this(name, parent, metaProvider)
 		{
-			CoverOrganizer = coverOrganizer;
+			_coverOrganizer = coverOrganizer;
 
-			CoverOrganizer.ForEach(x => x.Init(this));
+			_coverOrganizer.ForEach(x => x.Init(this));
 		}
 
 		/// <summary>
-		/// Get methods for cover managment
+		/// Get Directory cover organizer
 		/// </summary>
-		public IEnumerable<ICoverOrganizer> CoverOrganizer { get; private set; }
+		public ICoverOrganizer DirectoryCover
+		{
+			get { return _coverOrganizer.SingleOrDefault(x => x is DirectoryCoverOrganizer); }
+		}
 
 		public string Artist
 		{

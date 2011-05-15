@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.IO;
 using System.Linq;
 using System.Windows.Threading;
 using CoverRetriever.Interaction;
@@ -141,7 +140,7 @@ namespace CoverRetriever.ViewModel
 		/// <summary>
 		/// Get audio file details
 		/// </summary>
-		public AudioFile FileDetails
+		public virtual AudioFile FileDetails
 		{
 			get
 			{
@@ -257,13 +256,16 @@ namespace CoverRetriever.ViewModel
 		
 		private void PreviewCoverCommandExecute(RemoteCover remoteCover)
 		{
-			var viewModel = new CoverPreviewViewModel(new ImageDownloader(), remoteCover);
+			var viewModel = new CoverPreviewViewModel(remoteCover);
 			
 			viewModel.SaveCover.Subscribe(
 				x =>
 				{
 					viewModel.SetBusy(true, CoverRetrieverResources.MessageSaveCover);
-					SaveRemoteCover(x, () => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover));
+					SaveRemoteCover(
+						x, 
+						FileDetails.DirectoryCover,
+						() => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover));
 				});
 
 			PreviewCoverRequest.Raise(new Notification
@@ -277,7 +279,9 @@ namespace CoverRetriever.ViewModel
 		{
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
 			_savingCoverResult.OnNext(ProcessResult.Begin);
-			SaveRemoteCover(remoteCover,
+			SaveRemoteCover(
+				remoteCover,
+				FileDetails.DirectoryCover,
 				() =>
 				{
 					_savingCoverResult.OnNext(ProcessResult.Done);
@@ -334,27 +338,21 @@ namespace CoverRetriever.ViewModel
 		/// </summary>
 		/// <param name="remoteCover"></param>
 		/// <param name="onCompllete"></param>
-		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
+		private void SaveRemoteCover(RemoteCover remoteCover, ICoverOrganizer destination, Action onCompllete)
 		{
-			remoteCover.CoverStream
+			destination
+				.SaveCover(remoteCover)
 				.Finally(
 					() =>
-					{
-						var swapFileDetails = FileDetails;
-						FileDetails = null;
-						FileDetails = swapFileDetails;
-						onCompllete();
-					})
-					.Subscribe(
-					stream =>
-					{
-						FileDetails.CoverOrganizer.Single(x => x is DirectoryCoverOrganizer)
-							.SaveCover(stream, Path.GetFileName(remoteCover.CoverUri.AbsolutePath));
-					},
-					ex =>
-					{
-						CoverRetrieveErrorMessage = ex.Message;
-					});
+						{
+							var swapFileDetails = FileDetails;
+							FileDetails = null;
+							FileDetails = swapFileDetails;
+							onCompllete();
+						})
+				.Subscribe(
+					x => { },
+					ex => { CoverRetrieveErrorMessage = ex.Message; });
 		}
 
 		/// <summary>

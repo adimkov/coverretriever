@@ -16,13 +16,15 @@ namespace CoverRetriever.Model
 			CoverStream = stream;
 		}
 
-		public Cover(Size coverSize, long length, IObservable<Stream> stream)
+		public Cover(string name, Size coverSize, long length, IObservable<Stream> stream)
 		{
+			Name = name;
 			CoverSize = coverSize;
 			Length = length;
 			CoverStream = stream;
 		}
 
+		public string Name { get; protected set; }
 		public Size CoverSize { get; protected set; }
 		public long Length { get; protected set; }
 		public IObservable<Stream> CoverStream { get; protected set; }

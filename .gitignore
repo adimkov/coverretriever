@@ -1,5 +1,6 @@
 *.user
 *.suo
+*.docstates
 [Bb]in
 [Oo]bj
 

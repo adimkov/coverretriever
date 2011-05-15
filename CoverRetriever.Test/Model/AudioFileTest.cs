@@ -23,16 +23,14 @@ namespace CoverRetriever.Test.Model
 			var target = new AudioFile("unit", RootFolder, lazyMetaProvider);
 
 			Assert.That(target, Is.Not.Null);
-			Assert.That(target.CoverOrganizer, Is.Not.Null);
 			Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
-			
 		}
 
 		[Test]
 		public void Ctr_should_create_instance_of_audio_file_but_not_creates_meta_provider_instance_init_CoverOrganizer()
 		{
 			var metaProviderMock = new Mock<IMetaProvider>();
-			var coverOrginizerMock = new Mock<ICoverOrganizer>();
+			var coverOrginizerMock = new Mock<DirectoryCoverOrganizer>().As<ICoverOrganizer>();
 			coverOrginizerMock.Setup(x => x.Init(It.IsAny<AudioFile>())).AtMostOnce();
 
 			var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
@@ -40,7 +38,7 @@ namespace CoverRetriever.Test.Model
 			var target = new AudioFile("unit", RootFolder, lazyMetaProvider, Enumerable.Repeat(coverOrginizerMock.Object, 1));
 
 			Assert.That(target, Is.Not.Null);
-			Assert.That(target.CoverOrganizer, Is.Not.Null);
+			Assert.That(target.DirectoryCover, Is.Not.Null);
 			Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
 			coverOrginizerMock.Verify();
 		}

@@ -1,5 +1,5 @@
-using System.IO;
 
+using System;
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Service
@@ -19,16 +19,15 @@ namespace CoverRetriever.Service
 		bool IsCoverExists();
 		
 		/// <summary>
-		/// Get cover stream
+		/// Get cover
 		/// </summary>
-		/// <returns>Image stream</returns>
-		string GetCoverFullPath();
+		/// <returns>Cover info</returns>
+		Cover GetCover();
 		
 		/// <summary>
 		/// Save stream into cover
 		/// </summary>
-		/// <param name="coverStream">Stream of cover</param>
-		/// <param name="name">Name of cover</param>
-		void SaveCover(Stream coverStream, string name);
+		/// <param name="cover">Cover to save</param>
+		IObservable<Unit> SaveCover(Cover cover);
 	}
 }

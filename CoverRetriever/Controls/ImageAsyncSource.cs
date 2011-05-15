@@ -28,10 +28,8 @@ namespace CoverRetriever.Controls
 			var source = e.NewValue as IObservable<Stream>;
 			if (image != null && source != null)
 			{
-				if (image.Source == null)
-				{
-					AddSource(image, source);
-				}
+				image.Source = null;
+				AddSource(image, source);
 			}
 		}
 

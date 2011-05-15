@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-
+using System.Windows;
+using System.Windows.Media.Imaging;
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Service
@@ -30,66 +31,64 @@ namespace CoverRetriever.Service
 			_audioFile = relatedFile;
 		}
 
-		/// <summary>
-		/// Get cover path.
-		/// </summary>
-		/// <returns>Image path</returns>
-		public string GetCoverFullPath()
+		public Cover GetCover()
 		{
-			var coverPath = GetCoverPath();
-			if (!String.IsNullOrEmpty(coverPath))
+			if (IsCoverExists())
 			{
-				return coverPath;
+				return PrepareCover(GetCoverPath());
 			}
 			throw new InvalidOperationException("File of cover doesn't exists");
 		}
-		
+
 		/// <summary>
 		/// Indicate the cover existence
 		/// </summary>
 		/// <returns><see cref="True"/> if cover exists</returns>
 		public bool IsCoverExists()
 		{
-			return !String.IsNullOrEmpty(GetCoverPath());
+			return File.Exists(GetCoverPath());
 		}
 
 		/// <summary>
-		/// Save stream into cover.
-		/// Stream will be closed
+		/// Save stream into cover
 		/// </summary>
-		/// <param name="coverStream">Stream of cover</param>
-		/// <param name="name">Name of cover</param>
-		public void SaveCover(Stream coverStream, string name)
+		/// <param name="cover">Cover to save</param>
+		public IObservable<Unit> SaveCover(Cover cover)
 		{
 			if (IsCoverExists())
 			{
 				File.Delete(GetCoverPath());
 			}
 
-			var ext = Path.GetExtension(name);
+			var ext = Path.GetExtension(cover.Name);
 			CoverName = DefaultCoverName + ext;
 			var newCoverPath = Path.Combine(GetBasePath(), CoverName);
 
-			try
-			{
-				using (var newCoverStream = File.Open(newCoverPath, FileMode.CreateNew, FileAccess.Write))
-				{
-					var buffer = new byte[BufferSize];
-					int readed;
-
-					do
+			var coverSaver = cover.CoverStream.Do(
+				stream =>
 					{
-						readed = coverStream.Read(buffer, 0, BufferSize);
-						newCoverStream.Write(buffer, 0, readed);
-					}
-					while (readed != 0);
-					newCoverStream.Flush();
-				}
-			}
-			finally
-			{
-				coverStream.Dispose();	
-			}
+						try
+						{
+							using (var newCoverStream = File.Open(newCoverPath, FileMode.CreateNew, FileAccess.Write))
+							{
+								var buffer = new byte[BufferSize];
+								int readed;
+
+								do
+								{
+									readed = stream.Read(buffer, 0, BufferSize);
+									newCoverStream.Write(buffer, 0, readed);
+								} while (readed != 0);
+								newCoverStream.Flush();
+							}
+						}
+						finally
+						{
+							stream.Dispose();
+						}
+					});
+
+			return coverSaver.Select(x => new Unit());
 		}
 
 		/// <summary>
@@ -128,6 +127,25 @@ namespace CoverRetriever.Service
 		private string GetBasePath()
 		{
 			return FileSystemItem.GetBasePath(_audioFile.Parent);
+		}
+
+		private Cover PrepareCover(string coverFullPath)
+		{
+			var bitmapImage = new BitmapImage(new Uri(coverFullPath, UriKind.Relative));
+			var ms = new MemoryStream();
+			
+			using (var coverStream = File.OpenRead(coverFullPath))
+			{
+				ms.SetLength(coverStream.Length);
+				coverStream.Read(ms.GetBuffer(), 0, (int)coverStream.Length);
+				ms.Flush();	
+			}
+
+			return new Cover(
+				Path.GetFileName(coverFullPath),
+				new Size(bitmapImage.PixelWidth, bitmapImage.PixelHeight), 
+				ms.Length,
+				Observable.Return(ms));
 		}
 	}
 }

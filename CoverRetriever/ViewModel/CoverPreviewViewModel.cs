@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
-using CoverRetriever.Service;
 using Microsoft.Practices.Prism.Commands;
 
 namespace CoverRetriever.ViewModel
@@ -14,24 +13,36 @@ namespace CoverRetriever.ViewModel
 	{
 		private readonly RemoteCover _remoteCover;
 		private readonly Subject<RemoteCover> _saveCoverSubject = new Subject<RemoteCover>();
-		private readonly IImageDownloader _imageDownloader;
 		private string _errorMessage;
 		private double _downloadProgress;
+		private BitmapImage _coverImage;
 
-		public CoverPreviewViewModel(IImageDownloader imageDownloader, RemoteCover remoteCover)
+		public CoverPreviewViewModel(RemoteCover remoteCover)
 		{
 			_remoteCover = remoteCover;
 			StartOperation(CoverRetrieverResources.MessageCoverPreview);
-			_imageDownloader = imageDownloader;
 			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute, () => String.IsNullOrEmpty(ErrorMessage));
 			CloseCommand = new DelegateCommand(CloseCommandExecute);
-
-			_imageDownloader.DownloadImage(remoteCover.CoverUri)
+			
+			remoteCover.CoverStream
 				.Finally(EndOperation)
 				.Subscribe(
-				x => { DownloadProgress = x; },
-				ex => { ErrorMessage = ex.Message; },
-				() => { ErrorMessage = null; });
+					stream =>
+					{
+						var coverImage = new BitmapImage();
+						coverImage.BeginInit();
+						coverImage.StreamSource = stream;
+						coverImage.EndInit();
+						CoverImage = coverImage;
+					},
+					ex =>
+					{
+						ErrorMessage = ex.Message;
+					},
+					() =>
+					{
+						ErrorMessage = null;
+					});
 		}
 
 		/// <summary>
@@ -46,13 +57,18 @@ namespace CoverRetriever.ViewModel
 		}
 
 		/// <summary>
-		/// Get cover uri
+		/// Get cover Image
 		/// </summary>
 		public BitmapImage CoverImage
 		{
 			get
 			{
-				return _imageDownloader.BitmapImage;
+				return _coverImage;
+			}
+			private set
+			{
+				_coverImage = value;
+				RaisePropertyChanged("CoverImage");
 			}
 		}
 
@@ -75,6 +91,9 @@ namespace CoverRetriever.ViewModel
 		
 		/// <summary>
 		/// Indicate image download progress
+		/// <remarks>
+		///	Property does not work at this moment
+		/// </remarks>
 		/// </summary>
 		public double DownloadProgress
 		{
@@ -82,8 +101,7 @@ namespace CoverRetriever.ViewModel
 			{
 				return _downloadProgress;
 			}
-			private 
-			set
+			private set
 			{
 				_downloadProgress = value;
 				RaisePropertyChanged("DownloadProgress");

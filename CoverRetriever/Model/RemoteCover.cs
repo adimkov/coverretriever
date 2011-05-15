@@ -7,39 +7,37 @@ namespace CoverRetriever.Model
 	public class RemoteCover : Cover, IComparable<RemoteCover>
 	{
 		public string ImageId { get; private set; }
-		public Uri CoverUri { get; private set; }
-		public Uri ThumbCoverUri { get; private set; }
 		public Size ThumbSize { get; private set; }
 		public IObservable<Stream> ThumbStream { get; set; }
+		public Uri ThumbUri { get; private set; }
 
 		public RemoteCover()
 		{
 		}
 
-		public RemoteCover(string imageId, Uri coverUri, Size coverSize)
+		public RemoteCover(string imageId, Size coverSize)
 		{
 			ImageId = imageId;
-			CoverUri = coverUri;
 			CoverSize = coverSize;
 		}
 
 		public RemoteCover(
 			string imageId, 
-			Uri coverUri, 
+			string name,
 			Size coverSize, 
-			Uri thumbCoverUri, 
 			Size thumbSize,
+			Uri thumbUri,
 			IObservable<Stream> coverStream,
 			IObservable<Stream> thumbStream)
 		{
 			ImageId = imageId;
-			CoverUri = coverUri;
+			Name = name;
 			CoverSize = coverSize;
 			CoverStream = coverStream;
 
-			ThumbCoverUri = thumbCoverUri;
 			ThumbStream = thumbStream;
 			ThumbSize = thumbSize;
+			ThumbUri = thumbUri;
 		}
 
 		#region Implementation of IComparable<in RemoteCover>

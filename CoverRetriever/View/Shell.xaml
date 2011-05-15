@@ -60,7 +60,7 @@
 						Background="Black"
 						Padding="2"
 						>
-					<Image controls:ImageAsyncSource.AsyncSource="{Binding ThumbStream}" Stretch="Uniform">
+					<Image Source="{Binding ThumbUri}" Stretch="Uniform">
 						<i:Interaction.Behaviors>
 							<ei:FluidMoveSetTagBehavior Tag="DataContext"/>
 						</i:Interaction.Behaviors>
@@ -227,10 +227,10 @@
 					<Grid Width="128" Height="128">
 						<Image Source="/CoverRetriever;component/Assets/Shell_NoCover.png" 
 							Visibility="{Binding ., Converter={StaticResource nullToVisibilityConverter}}" />
-						<Image x:Name="CurrentCoverImage" Source="{Binding CoverOrganizer, Converter={StaticResource coverOrganizerToImageConverter}}" 
+						<Image x:Name="CurrentCoverImage" controls:ImageAsyncSource.AsyncSource="{Binding DirectoryCover, Converter={StaticResource coverOrganizerToImageConverter}}" 
 							Visibility="{Binding ., Converter={StaticResource notNullToVisibilityConverter}}" Margin="0,-1,0,1" />
 						<Grid x:Name="AnimationGrid">
-							<Image x:Name="AnimatedImage" Source="{Binding ThumbCoverUri}">
+								<Image x:Name="AnimatedImage" Source="{Binding ThumbUri}">
 								<i:Interaction.Behaviors>
 									<ei:FluidMoveBehavior InitialTag="DataContext" Duration="0:0:0.5" >
 										<ei:FluidMoveBehavior.EaseY>

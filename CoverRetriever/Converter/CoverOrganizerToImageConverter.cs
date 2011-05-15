@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
-
 using CoverRetriever.Service;
 
 namespace CoverRetriever.Converter
 {
 	public class CoverOrganizerToImageConverter : IValueConverter
 	{
-		private const string NoCoverUri = "/CoverRetriever;component/Assets/Shell_NoCover.png";
+		private readonly Uri NoCoverUri = new Uri("/CoverRetriever;component/Assets/Shell_NoCover.png", UriKind.Relative);
 		#region Implementation of IValueConverter
 
 		/// <summary>
@@ -24,28 +21,13 @@ namespace CoverRetriever.Converter
 		/// <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var coverOrganizerList = (IEnumerable<ICoverOrganizer>)value;
-			var directoryCoverOrganizer = coverOrganizerList.First();
+			var directoryCoverOrganizer = (ICoverOrganizer) value;
 			if (directoryCoverOrganizer.IsCoverExists())
 			{
-				//read cover in memory and release file
-				using (var coverStream = File.OpenRead(directoryCoverOrganizer.GetCoverFullPath()))
-				{
-					var ms = new MemoryStream();
-
-					ms.SetLength(coverStream.Length);
-					coverStream.Read(ms.GetBuffer(), 0, (int)coverStream.Length);
-					ms.Flush();
-					
-					BitmapImage src = new BitmapImage();
-					src.BeginInit();
-					src.StreamSource = ms;
-					src.EndInit();
-
-					return src;
-				}
+				return directoryCoverOrganizer.GetCover().CoverStream;
 			}
-			return new BitmapImage(new Uri(NoCoverUri, UriKind.Relative));
+			var info = Application.GetResourceStream(NoCoverUri);
+			return Observable.Return(info.Stream);
 		}
 
 		/// <summary>

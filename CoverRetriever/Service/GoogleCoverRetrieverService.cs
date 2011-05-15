@@ -114,11 +114,11 @@ namespace CoverRetriever.Service
 				double tdheight = gimageSearch.tbHeight;
 				result.Add(new RemoteCover(
 				           	(string) gimageSearch.imageId,
-				           	gImageUri,
-				           	new Size(width, height),
-				           	tdGImage,
+							Path.GetFileName(gImageUri.AbsolutePath),
+							new Size(width, height),
 				           	new Size(tdwidth, tdheight),
-				           	DownloadCover(gImageUri),
+				           	tdGImage,
+							DownloadCover(gImageUri),
 							DownloadCover(tdGImage)));
 			}
 			return result;
