@@ -73,7 +73,7 @@ namespace CoverRetriever.Service
 						Path.GetFileName(name),
 						parent,
 						ActivateIMetaProvider(name),
-						_serviceLocator.GetAllInstances(typeof(ICoverOrganizer)).Cast<ICoverOrganizer>().ToList()));
+						ActivateDirectoryCoverOrganizer(name)));
 
 			if (dispatcher != null)
 			{
@@ -117,6 +117,18 @@ namespace CoverRetriever.Service
 					return (IMetaProvider)activator;
 				});
 			return metaProvider;
+		}
+
+		/// <summary>
+		/// Activate <see cref="DirectoryCoverOrganizer"/> by file path
+		/// </summary>
+		/// <param name="filePath">Full audio file path</param>
+		/// <returns></returns>
+		private DirectoryCoverOrganizer ActivateDirectoryCoverOrganizer(string  filePath)
+		{
+			var coverOrganizer = _serviceLocator.GetInstance<DirectoryCoverOrganizer>();
+			coverOrganizer.Activate(Path.GetDirectoryName(filePath));
+			return coverOrganizer;
 		}
 	}
 }

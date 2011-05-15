@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Service;
@@ -10,7 +8,7 @@ namespace CoverRetriever.Model
 	public class AudioFile : FileSystemItem
 	{
 		private readonly Lazy<IMetaProvider> _metaProvider;
-		private readonly IEnumerable<ICoverOrganizer> _coverOrganizer; 
+		private readonly DirectoryCoverOrganizer _directoryCoverOrganizer; 
 
 		public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider) 
 			: base(name, parent)
@@ -19,15 +17,12 @@ namespace CoverRetriever.Model
 			Require.NotNull(metaProvider, "metaProvider");
 			
 			_metaProvider = metaProvider;
-			_coverOrganizer = new List<ICoverOrganizer>();
 		}
 
-		public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider, IEnumerable<ICoverOrganizer> coverOrganizer)
+		public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider, DirectoryCoverOrganizer directoryCoverOrganizer)
 			: this(name, parent, metaProvider)
 		{
-			_coverOrganizer = coverOrganizer;
-
-			_coverOrganizer.ForEach(x => x.Init(this));
+			_directoryCoverOrganizer = directoryCoverOrganizer;
 		}
 
 		/// <summary>
@@ -35,7 +30,7 @@ namespace CoverRetriever.Model
 		/// </summary>
 		public ICoverOrganizer DirectoryCover
 		{
-			get { return _coverOrganizer.SingleOrDefault(x => x is DirectoryCoverOrganizer); }
+			get { return _directoryCoverOrganizer; }
 		}
 
 		public string Artist

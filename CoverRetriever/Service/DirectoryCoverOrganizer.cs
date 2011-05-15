@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Service
@@ -14,23 +15,28 @@ namespace CoverRetriever.Service
 	/// </summary>
 	[Export(typeof(ICoverOrganizer))]
 	[PartCreationPolicy(CreationPolicy.NonShared)]
-	public class DirectoryCoverOrganizer : ICoverOrganizer
+	public class DirectoryCoverOrganizer : ICoverOrganizer, IActivator
 	{
-		private AudioFile _audioFile;
+		private string _basePath;
 		private readonly IEnumerable<string> _supportedGraphicsFiles = new[] {".jpg", ".jpeg", ".png", ".bmp"};
 		private const string DefaultCoverName = "cover";
 		private const int BufferSize = 0x4000;
+
+		[Obsolete("Added for MEF compatibility")]
+		public DirectoryCoverOrganizer()
+		{
+		}
+
+		public DirectoryCoverOrganizer(string basePath)
+		{
+			_basePath = basePath;
+		}
 
 		/// <summary>
 		/// Get found cover name
 		/// </summary>
 		public string CoverName { get; private set; }
 		
-		public void Init(AudioFile relatedFile)
-		{
-			_audioFile = relatedFile;
-		}
-
 		public Cover GetCover()
 		{
 			if (IsCoverExists())
@@ -62,7 +68,7 @@ namespace CoverRetriever.Service
 
 			var ext = Path.GetExtension(cover.Name);
 			CoverName = DefaultCoverName + ext;
-			var newCoverPath = Path.Combine(GetBasePath(), CoverName);
+			var newCoverPath = Path.Combine(_basePath, CoverName);
 
 			var coverSaver = cover.CoverStream.Do(
 				stream =>
@@ -92,6 +98,19 @@ namespace CoverRetriever.Service
 		}
 
 		/// <summary>
+		/// Activate an object
+		/// </summary>
+		/// <param name="param"></param>
+		public void Activate(params object[] param)
+		{
+			if (param.Length != 1)
+			{
+				throw new ArgumentException("Base path of cover was not found", "param");
+			}
+			_basePath = (string) param[0];
+		}
+
+		/// <summary>
 		/// Get cover path
 		/// </summary>
 		/// <returns></returns>
@@ -99,7 +118,7 @@ namespace CoverRetriever.Service
 		{
 			if (String.IsNullOrEmpty(CoverName))
 			{
-				var imagesFilder = Directory.GetFiles(GetBasePath())
+				var imagesFilder = Directory.GetFiles(_basePath)
 					.Where(x => _supportedGraphicsFiles.Contains(Path.GetExtension(x).ToLower()));
 
 				var imageAsCoverFirst = imagesFilder.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == DefaultCoverName);
@@ -117,16 +136,7 @@ namespace CoverRetriever.Service
 //					}	
 //				}
 			}
-			return !String.IsNullOrEmpty(CoverName)? Path.Combine(GetBasePath(), CoverName):String.Empty;
-		}
-
-		/// <summary>
-		/// Get parent full path
-		/// </summary>
-		/// <returns></returns>
-		private string GetBasePath()
-		{
-			return FileSystemItem.GetBasePath(_audioFile.Parent);
+			return !String.IsNullOrEmpty(CoverName) ? Path.Combine(_basePath, CoverName) : String.Empty;
 		}
 
 		private Cover PrepareCover(string coverFullPath)

@@ -225,7 +225,6 @@
     <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
     <Compile Include="Interaction\WindowHandler.cs" />
     <Compile Include="Interaction\WindowTrigerAction.cs" />
-    <Compile Include="Model\Cover.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
     <Compile Include="Model\ProcessResult.cs" />
@@ -245,7 +244,6 @@
     <Compile Include="Resources\CoverRetrieverResourcesWrapper.cs" />
     <Compile Include="Service\DirectoryCoverOrganizer.cs" />
     <Compile Include="Service\GoogleCoverRetrieverService.cs" />
-    <Compile Include="Service\ICoverOrganizer.cs" />
     <Compile Include="Service\ICoverRetrieverService.cs" />
     <Compile Include="Service\FileSystemService.cs" />
     <Compile Include="Service\IFileSystemService.cs" />

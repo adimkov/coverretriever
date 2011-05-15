@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using CoverRetriever.AudioInfo;
 
 namespace CoverRetriever.Model
 {

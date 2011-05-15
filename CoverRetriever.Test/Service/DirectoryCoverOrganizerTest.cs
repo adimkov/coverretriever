@@ -1,11 +1,7 @@
 using System;
-using System.Linq;
 
-using CoverRetriever.AudioInfo;
-using CoverRetriever.Model;
 using CoverRetriever.Service;
 
-using Moq;
 
 using NUnit.Framework;
 
@@ -20,12 +16,8 @@ namespace CoverRetriever.Test.Service
 		[Test]
 		public void IsCoverExists_should_return_true()
 		{
-			var metaProviderMock = new Mock<IMetaProvider>();
-			var rootFolder = new RootFolder(PathToFolderWithCover);
-
-			var target = new DirectoryCoverOrganizer();
-			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
-
+			var target = new DirectoryCoverOrganizer(PathToFolderWithCover);
+			
 			Assert.IsTrue(target.IsCoverExists());
 			Assert.That(target.CoverName, Is.EqualTo("cover.jpg"));
 		}
@@ -33,24 +25,16 @@ namespace CoverRetriever.Test.Service
 		[Test]
 		public void IsCoverExists_should_return_false()
 		{
-			var metaProviderMock = new Mock<IMetaProvider>();
-			var rootFolder = new RootFolder(PathToFolderWithoutCover);
-
-			var target = new DirectoryCoverOrganizer();
-			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
-
+			var target = new DirectoryCoverOrganizer(PathToFolderWithoutCover);
+			
 			Assert.IsFalse(target.IsCoverExists());
 		}
 
 		[Test]
 		public void GetCoverFullPath_should_return_cofer_stream()
 		{
-			var metaProviderMock = new Mock<IMetaProvider>();
-			var rootFolder = new RootFolder(PathToFolderWithCover);
-
-			var target = new DirectoryCoverOrganizer();
-			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
-
+			var target = new DirectoryCoverOrganizer(PathToFolderWithCover);
+			
 			var cover = target.GetCover();
 			Assert.That(cover, Is.Not.Null);
 			Assert.That(cover.Name, Is.EqualTo("cover.jpg"));
@@ -63,14 +47,9 @@ namespace CoverRetriever.Test.Service
 		[Test]
 		public void GetCoverStream_should_throw_exception()
 		{
-			var metaProviderMock = new Mock<IMetaProvider>();
-			var rootFolder = new RootFolder(PathToFolderWithoutCover);
-
-			var target = new DirectoryCoverOrganizer();
-			var audioFile = new AudioFile("04 - Ветры.mp3", rootFolder, new Lazy<IMetaProvider>(() => metaProviderMock.Object), Enumerable.Repeat<ICoverOrganizer>(target, 1));
-
+			var target = new DirectoryCoverOrganizer(PathToFolderWithoutCover);
+			
 			Assert.Throws<InvalidOperationException>(() => target.GetCover());
-
 		}
 	}
 }

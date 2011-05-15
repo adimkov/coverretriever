@@ -213,7 +213,7 @@ namespace CoverRetriever.Test.ViewModel
 				"UnitTest", 
 				new FileSystemItem("Parent"), 
 				new Lazy<IMetaProvider>(() => new Mock<IMetaProvider>().Object),
-				Enumerable.Repeat(directoryCoverOrganizerMock.Object, 1));
+				(DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 		}
 
 		public AudioFile GetFailureAudioFileStub()
@@ -226,7 +226,7 @@ namespace CoverRetriever.Test.ViewModel
 				"UnitTest",
 				new FileSystemItem("Parent"),
 				new Lazy<IMetaProvider>(() => new Mock<IMetaProvider>().Object),
-				Enumerable.Repeat(directoryCoverOrganizerMock.Object, 1));
+				(DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 		}
 	}
 }

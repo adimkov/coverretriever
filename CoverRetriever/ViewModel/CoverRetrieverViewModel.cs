@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Threading;
+using CoverRetriever.AudioInfo;
 using CoverRetriever.Interaction;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;

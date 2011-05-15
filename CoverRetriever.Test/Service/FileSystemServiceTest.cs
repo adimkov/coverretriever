@@ -52,11 +52,11 @@ namespace CoverRetriever.Test.Service
 			var manualResetEvent = new ManualResetEvent(false);
 			var basePath = @"g:\Музыка\ДДТ\";
 			var rootFolder = new RootFolder(basePath);
-			var coverOrganizerMock = new Mock<ICoverOrganizer>();
+			var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
 			
 			var serviceLocatorMock = new Mock<IServiceLocator>();
-			serviceLocatorMock.Setup(x => x.GetAllInstances<ICoverOrganizer>())
-				.Returns(new[] {coverOrganizerMock.Object});
+			serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
+				.Returns(coverOrganizerMock.Object);
 
 			var target = new FileSystemService(serviceLocatorMock.Object);
 			target.FillRootFolderAsync(rootFolder, null, () => manualResetEvent.Set());
@@ -76,11 +76,11 @@ namespace CoverRetriever.Test.Service
 			var manuelResetEvent = new ManualResetEvent(false);
 			var basePath = @"g:\Музыка\ДДТ\";
 			var rootFolder = new RootFolder(basePath);
-			var coverOrganizerMock = new Mock<ICoverOrganizer>();
+			var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
 
 			var serviceLocatorMock = new Mock<IServiceLocator>();
-			serviceLocatorMock.Setup(x => x.GetAllInstances<ICoverOrganizer>())
-				.Returns(new[] { coverOrganizerMock.Object });
+			serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
+				.Returns(coverOrganizerMock.Object);
 
 			var target = new FileSystemService(serviceLocatorMock.Object);
 			target.FillRootFolderAsync(rootFolder, null, () => manuelResetEvent.Set());
