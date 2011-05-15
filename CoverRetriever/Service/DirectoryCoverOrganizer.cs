@@ -35,7 +35,19 @@ namespace CoverRetriever.Service
 		/// Get found cover name
 		/// </summary>
 		public string CoverName { get; private set; }
-		
+
+		/// <summary>
+		/// Indicate if can work with cover
+		/// </summary>
+		public bool IsCanProcessed
+		{
+			get
+			{
+				//todo: check for ability to read/write from disk
+				return true;
+			}
+		}
+
 		public Cover GetCover()
 		{
 			if (IsCoverExists())

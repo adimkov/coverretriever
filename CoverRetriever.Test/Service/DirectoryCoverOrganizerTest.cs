@@ -51,5 +51,13 @@ namespace CoverRetriever.Test.Service
 			
 			Assert.Throws<InvalidOperationException>(() => target.GetCover());
 		}
+
+		[Test]
+		public void Should_check_for_ability_work_with_cover_in_directory_return_true()
+		{
+			var target = new DirectoryCoverOrganizer(PathToFolderWithCover);
+			
+			Assert.IsTrue(target.IsCanProcessed);
+		}
 	}
 }

@@ -5,6 +5,11 @@ namespace CoverRetriever.AudioInfo
 	public interface ICoverOrganizer
 	{
 		/// <summary>
+		/// Indicate if can work with cover
+		/// </summary>
+		bool IsCanProcessed { get; }
+
+		/// <summary>
 		/// Indicate the cover existence
 		/// </summary>
 		/// <returns><see cref="True"/> if cover exists</returns>
