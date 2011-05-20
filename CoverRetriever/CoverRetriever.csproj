@@ -216,6 +216,7 @@
     <Compile Include="Converter\TreePathContructor.cs" />
     <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
+    <Compile Include="Helpers\DeferredCallEx.cs" />
     <Compile Include="Helpers\TreeViewExtensions.cs" />
     <Compile Include="Infrastructure\AudioFormat.cs" />
     <Compile Include="Infrastructure\ConfigurationKeys.cs" />

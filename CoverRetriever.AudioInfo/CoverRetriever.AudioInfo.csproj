@@ -32,11 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx">
       <HintPath>..\packages\Rx-Core.1.0.2838.0\lib\Net4\System.CoreEx.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\packages\Rx-Main.1.0.2838.0\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,6 +58,7 @@
     <Compile Include="Cover.cs" />
     <Compile Include="FlacMetaProvider.cs" />
     <Compile Include="AudioFileMetaProvider.cs" />
+    <Compile Include="Helper\PictureHelper.cs" />
     <Compile Include="IActivator.cs" />
     <Compile Include="ICoverOrganizer.cs" />
     <Compile Include="IMetaProvider.cs" />

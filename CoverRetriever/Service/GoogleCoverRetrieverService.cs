@@ -73,6 +73,7 @@ namespace CoverRetriever.Service
 		/// <returns></returns>
 		public IObservable<Stream> DownloadCover(Uri coverUri)
 		{
+			//todo: implement a caching
 			var downloader = new WebClient();
 			var downloadOpservable = Observable.FromEvent<OpenReadCompletedEventArgs>(downloader, "OpenReadCompleted")
 				.Select(
@@ -84,15 +85,10 @@ namespace CoverRetriever.Service
 					}
 					return x.EventArgs.Result;
 				})
+				.Defer(() => downloader.OpenReadAsync(coverUri))
 				.Take(1);
-
-			var defferCaller = Observable.Defer(() =>
-			{
-				downloader.OpenReadAsync(coverUri);
-				return downloadOpservable;
-			});
-
-			return defferCaller;
+			
+			return downloadOpservable;
 		}
 
 		private IEnumerable<RemoteCover> ParseGoogleImageResponce(string jsonResponce)

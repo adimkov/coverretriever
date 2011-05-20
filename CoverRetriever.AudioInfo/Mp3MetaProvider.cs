@@ -1,14 +1,17 @@
 using System;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
+using CoverRetriever.AudioInfo.Helper;
 using TagLib;
 using File = TagLib.File;
+
 
 namespace CoverRetriever.AudioInfo
 {
 	[Export("mp3", typeof(IMetaProvider))]
 	[PartCreationPolicy(CreationPolicy.NonShared)]	
-	public class Mp3MetaProvider : AudioFileMetaProvider, IDisposable, IActivator
+	public class Mp3MetaProvider : AudioFileMetaProvider, IActivator, ICoverOrganizer, IDisposable
 	{
 		private File _file;
 		private bool _initialized;
@@ -21,6 +24,7 @@ namespace CoverRetriever.AudioInfo
 			ByteVector.UseBrokenLatin1Behavior = true;
 		}
 
+		[Obsolete("Added for MEF compatibility")]
 		public Mp3MetaProvider()
 		{
 		}
@@ -88,6 +92,57 @@ namespace CoverRetriever.AudioInfo
 			EnsureInstanceWasNotDisposed();
 			var id3 = GetAudioTag(_file, x => x.Year > 0);
 			return id3.Year > 0 ? id3.Year.ToString() : base.GetYear();
+		}
+
+		/// <summary>
+		/// Is can save into file
+		/// </summary>
+		public bool IsCanProcessed
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// Indicate the cover existence
+		/// </summary>
+		/// <returns><see cref="True"/> if cover exists</returns>
+		public bool IsCoverExists()
+		{
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.GetCoverSafe(PictureType.FrontCover) != null;
+		}
+
+		/// <summary>
+		/// Get cover
+		/// </summary>
+		/// <returns>Cover info</returns>
+		public Cover GetCover()
+		{
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.GetCoverSafe(PictureType.FrontCover).PrepareCover();
+		}
+
+		/// <summary>
+		/// Save stream into cover
+		/// </summary>
+		/// <param name="cover">Cover to save</param>
+		public IObservable<Unit> SaveCover(Cover cover)
+		{
+			EnsureInstanceWasNotDisposed();
+			var saveResult = cover.CoverStream
+				.Do(
+					stream =>
+					{
+						_file.Tag.ReplacePictures(PictureHelper.PreparePicture(stream, cover.Name, PictureType.FrontCover));
+						_file.Save();
+					})
+				.Select(x => new Unit())
+				.Take(1);
+			
+			return saveResult;
 		}
 
 		public void Dispose()
