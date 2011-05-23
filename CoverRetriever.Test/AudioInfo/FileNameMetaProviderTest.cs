@@ -30,7 +30,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_and_title_from_file_name_by_Pattern1()
 		{
-			var target = new AudioFileMetaProvider(Pattern1);
+			var target = new FileNameMetaObtainer(Pattern1);
 			target.ParseFileName(FileName1);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -40,7 +40,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_and_title_from_file_name_by_Pattern1_with_Spaces()
 		{
-			var target = new AudioFileMetaProvider(Pattern1);
+			var target = new FileNameMetaObtainer(Pattern1);
 			target.ParseFileName(FileNameSpaces1);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -50,7 +50,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_title_from_file_name_by_Pattern12_without_artist()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2);
 			target.ParseFileName(FileName2);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));
@@ -59,7 +59,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_title_from_file_name_by_Pattern12_without_artist_with_spaces()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2);
 			target.ParseFileName(FileNameSpaces2);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));
@@ -68,7 +68,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern123_without_artist()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3);
 			target.ParseFileName(FileName3);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -78,7 +78,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern123_without_artist_with_spaces()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3);
 			target.ParseFileName(FileNameSpaces3);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -88,7 +88,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern1236()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern6);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern6);
 			target.ParseFileName(FileName4);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -98,7 +98,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern1236_spaces()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern6);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern6);
 			target.ParseFileName(FileNameSpaces4);
 
 			Assert.That("UArtist", Is.EqualTo(target.GetArtist()));
@@ -108,7 +108,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern1234_for_FileName5()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern4);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern4);
 			target.ParseFileName(FileName5);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));
@@ -117,7 +117,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern1234_for_FileNameSpaces5()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern4);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern4);
 			target.ParseFileName(FileNameSpaces5);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));
@@ -126,7 +126,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern12345_for_FileName6()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern4, Pattern5);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern4, Pattern5);
 			target.ParseFileName(FileName6);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));
@@ -135,7 +135,7 @@ namespace CoverRetriever.Test.AudioInfo
 		[Test]
 		public void Should_obtain_artist_title_from_file_name_by_Pattern123457_for_FileNameSpaces6()
 		{
-			var target = new AudioFileMetaProvider(Pattern1, Pattern2, Pattern3, Pattern4, Pattern5, Pattern7);
+			var target = new FileNameMetaObtainer(Pattern1, Pattern2, Pattern3, Pattern4, Pattern5, Pattern7);
 			target.ParseFileName(FileNameSpaces6);
 
 			Assert.That("UTitle", Is.EqualTo(target.GetTrackName()));

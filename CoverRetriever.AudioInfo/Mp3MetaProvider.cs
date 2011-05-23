@@ -1,8 +1,5 @@
 using System;
 using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using CoverRetriever.AudioInfo.Helper;
 using TagLib;
 using File = TagLib.File;
 
@@ -11,12 +8,8 @@ namespace CoverRetriever.AudioInfo
 {
 	[Export("mp3", typeof(IMetaProvider))]
 	[PartCreationPolicy(CreationPolicy.NonShared)]	
-	public class Mp3MetaProvider : AudioFileMetaProvider, IActivator, ICoverOrganizer, IDisposable
+	public class Mp3MetaProvider : AudioFileMetaProvider
 	{
-		private File _file;
-		private bool _initialized;
-		private bool _disposed;
-
 		static Mp3MetaProvider()
 		{
 			TagLib.Id3v1.Tag.DefaultStringHandler = new AutoStringHandler();
@@ -31,10 +24,7 @@ namespace CoverRetriever.AudioInfo
 
 		public Mp3MetaProvider(string fileName)
 		{
-			EnsureInstanceWasNotDisposed();
-			_file = File.Create(fileName, ReadStyle.None);
-			ParseFileName(Path.GetFileNameWithoutExtension(fileName));			
-			_initialized = true;
+			Activate(fileName);
 		}
 
 		/// <summary>
@@ -45,8 +35,8 @@ namespace CoverRetriever.AudioInfo
 			get
 			{
 				EnsureInstanceWasNotDisposed();
-				return _file.GetTag(TagTypes.Id3v2).IsEmpty &&
-					_file.GetTag(TagTypes.Id3v1).IsEmpty;
+				return File.GetTag(TagTypes.Id3v2).IsEmpty &&
+					File.GetTag(TagTypes.Id3v1).IsEmpty;
 			}
 		}
 
@@ -57,7 +47,7 @@ namespace CoverRetriever.AudioInfo
 		public override string GetAlbum()
 		{
 			EnsureInstanceWasNotDisposed();
-			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Album));
+			var id3 = GetAudioTag(File, x => !String.IsNullOrEmpty(x.Album));
 			return id3.Album ?? base.GetAlbum();
 		}
 
@@ -68,7 +58,7 @@ namespace CoverRetriever.AudioInfo
 		public override string GetArtist()
 		{
 			EnsureInstanceWasNotDisposed();
-			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.FirstArtist));
+			var id3 = GetAudioTag(File, x => !String.IsNullOrEmpty(x.FirstArtist));
 			return id3.FirstArtist ?? base.GetArtist();
 		}
 
@@ -79,7 +69,7 @@ namespace CoverRetriever.AudioInfo
 		public override string GetTrackName()
 		{
 			EnsureInstanceWasNotDisposed();
-			var id3 = GetAudioTag(_file, x => !String.IsNullOrEmpty(x.Title));
+			var id3 = GetAudioTag(File, x => !String.IsNullOrEmpty(x.Title));
 			return id3.Title ?? base.GetTrackName();
 		}
 
@@ -90,96 +80,8 @@ namespace CoverRetriever.AudioInfo
 		public override string GetYear()
 		{
 			EnsureInstanceWasNotDisposed();
-			var id3 = GetAudioTag(_file, x => x.Year > 0);
+			var id3 = GetAudioTag(File, x => x.Year > 0);
 			return id3.Year > 0 ? id3.Year.ToString() : base.GetYear();
-		}
-
-		/// <summary>
-		/// Is can save into file
-		/// </summary>
-		public bool IsCanProcessed
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Indicate the cover existence
-		/// </summary>
-		/// <returns><see cref="True"/> if cover exists</returns>
-		public bool IsCoverExists()
-		{
-			EnsureInstanceWasNotDisposed();
-			return _file.Tag.GetCoverSafe(PictureType.FrontCover) != null;
-		}
-
-		/// <summary>
-		/// Get cover
-		/// </summary>
-		/// <returns>Cover info</returns>
-		public Cover GetCover()
-		{
-			EnsureInstanceWasNotDisposed();
-			return _file.Tag.GetCoverSafe(PictureType.FrontCover).PrepareCover();
-		}
-
-		/// <summary>
-		/// Save stream into cover
-		/// </summary>
-		/// <param name="cover">Cover to save</param>
-		public IObservable<Unit> SaveCover(Cover cover)
-		{
-			EnsureInstanceWasNotDisposed();
-			var saveResult = cover.CoverStream
-				.Do(
-					stream =>
-					{
-						_file.Tag.ReplacePictures(PictureHelper.PreparePicture(stream, cover.Name, PictureType.FrontCover));
-						_file.Save();
-					})
-				.Select(x => new Unit())
-				.Take(1);
-			
-			return saveResult;
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		public void Activate(params object[] param)
-		{
-			if (!_initialized)
-			{
-				var filePath = (string) param[0];
-				_file = File.Create(filePath, ReadStyle.None);
-				ParseFileName(Path.GetFileNameWithoutExtension(filePath));
-				_initialized = true;
-			}
-			else
-			{
-				throw new MetaProviderException("Instance already has been initialized");
-			}
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!_disposed)
-			{
-				if (disposing)
-				{
-					if (_file != null)
-					{
-						_file.Dispose();
-					}
-				}
-				_file = null;
-				_disposed = true;
-			}
 		}
 
 		/// <summary>
@@ -199,14 +101,6 @@ namespace CoverRetriever.AudioInfo
 				return file.GetTag(TagTypes.Id3v2);
 			}
 			return file.GetTag(TagTypes.Id3v1);
-		}
-
-		private void EnsureInstanceWasNotDisposed()
-		{
-			if (_disposed)
-			{
-				throw new ObjectDisposedException("Meta provider was disposed"); 
-			}
 		}
 	}
 }

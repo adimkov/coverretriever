@@ -1,84 +1,25 @@
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using CoverRetriever.AudioInfo.Helper;
+using TagLib;
+using File = TagLib.File;
 
 namespace CoverRetriever.AudioInfo
 {
 	/// <summary>
 	/// Obtain Meta info from file name
 	/// </summary>
-	public class AudioFileMetaProvider : IMetaProvider
+	public abstract class AudioFileMetaProvider : IMetaProvider, IActivator, ICoverOrganizer, IDisposable
 	{
-		private const string ArtistBlock = "%artist%";
-		private const string TitleBlock = "%title%";
-		private const string TrackNumberBlock = "%track%";
-		private const string RegexGroup = @"(?<{0}>.+)";
-		private const string DigitGroup = @"(?<{0}>\d+)";
-
-		private IEnumerable<PrioritizedRegex> _fileNameParsers;
-
-		private string _album;
-		private string _artist;
-		private string _year;
-		private string _trackName;
-		private string _trackNumber;
+		private File _file;
+		private bool _initialized;
+		private bool _disposed;
 
 		public AudioFileMetaProvider()
 		{
-			ParsePatterns = new[]
-			                	{
-			                		"%artist%-%title%", 
-									"%title%", 
-									"%track%.%artist%-%title%", 
-									"%track% %artist%-%title%", 
-									"%track%.%title%",
-									"%track% - %title%",
-									"%track%-%title%",
-			                	};
-			PrepareRegexPatterns(ParsePatterns);
-		}
-
-		public AudioFileMetaProvider(params string[] parsePatterns)
-		{
-			ParsePatterns = parsePatterns;
-
-			PrepareRegexPatterns(ParsePatterns);
-		}
-
-		/// <summary>
-		/// Pattern list to parse a file to obtain info.
-		/// <remarks>
-		/// Search performing from first to last pattern in case pattern doesn't match
-		/// </remarks>
-		/// </summary>
-		public string[] ParsePatterns { get; private set; }
-
-		/// <summary>
-		/// Obtain Audio info from file name and set self state.
-		/// <remarks>
-		/// Will be used first pattern with maximum matches
-		/// </remarks>
-		/// </summary>
-		/// <param name="fileName"></param>
-		public void ParseFileName(string fileName)
-		{
-			var groupedRegexByMatches = _fileNameParsers
-				.Where(parser => parser.Regex.IsMatch(fileName))
-				.GroupBy(parser => parser.Regex.Match(fileName).Groups.Count);
-			
-			var maxMatches = groupedRegexByMatches.Max(x => x.Key);
-			var prioritizedRegexes = groupedRegexByMatches
-				.Single(x => x.Key == maxMatches)
-				.ToList();
-			prioritizedRegexes.Sort();
-			var regexWithMaxMatches = prioritizedRegexes.First();
-
-			var groups = regexWithMaxMatches.Regex.Match(fileName).Groups;
-			_artist = groups[TrimTemplateSymbol(ArtistBlock)].Value.Trim();
-			_trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
-			_trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
+			FileNameMetaObtainer = new FileNameMetaObtainer();
 		}
 
 		/// <summary>
@@ -88,8 +29,34 @@ namespace CoverRetriever.AudioInfo
 		{
 			get
 			{
-				return false;
+				EnsureInstanceWasNotDisposed();
+				return _file.Tag.IsEmpty;
 			}
+		}
+
+		/// <summary>
+		/// Indicate if can work with cover
+		/// </summary>
+		public virtual bool IsCanProcessed
+		{
+			get
+			{
+				EnsureInstanceWasNotDisposed();
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// Get FileNameMetaObtainer 
+		/// </summary>
+		protected FileNameMetaObtainer FileNameMetaObtainer { get; private set; }
+
+		/// <summary>
+		/// Get tag file
+		/// </summary>
+		protected File File
+		{
+			get { return _file; }
 		}
 
 		/// <summary>
@@ -98,7 +65,8 @@ namespace CoverRetriever.AudioInfo
 		/// <returns></returns>
 		public virtual string GetAlbum()
 		{
-			return _album;
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.Album ?? FileNameMetaObtainer.GetAlbum();
 		}
 
 		/// <summary>
@@ -107,7 +75,8 @@ namespace CoverRetriever.AudioInfo
 		/// <returns></returns>
 		public virtual string GetArtist()
 		{
-			return _artist;
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.FirstArtist ?? FileNameMetaObtainer.GetArtist();
 		}
 
 		/// <summary>
@@ -116,7 +85,8 @@ namespace CoverRetriever.AudioInfo
 		/// <returns></returns>
 		public virtual string GetYear()
 		{
-			return _year;
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.Year >= 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
 		}
 
 		/// <summary>
@@ -125,86 +95,107 @@ namespace CoverRetriever.AudioInfo
 		/// <returns></returns>
 		public virtual string GetTrackName()
 		{
-			return _trackName;
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.Title ?? FileNameMetaObtainer.GetTrackName();
 		}
 
-		private void PrepareRegexPatterns(string[] parsePatterns)
+		
+		/// <summary>
+		/// Indicate the cover existence
+		/// </summary>
+		/// <returns><see cref="True"/> if cover exists</returns>
+		public virtual bool IsCoverExists()
 		{
-			var regexList = new List<PrioritizedRegex>(parsePatterns.Length);
-			foreach (var pattern in parsePatterns)
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.GetCoverSafe(PictureType.FrontCover) != null;
+		}
+
+		/// <summary>
+		/// Get cover
+		/// </summary>
+		/// <returns>Cover info</returns>
+		public virtual Cover GetCover()
+		{
+			EnsureInstanceWasNotDisposed();
+			return _file.Tag.GetCoverSafe(PictureType.FrontCover).PrepareCover();
+		}
+
+		/// <summary>
+		/// Save stream into cover
+		/// </summary>
+		/// <param name="cover">Cover to save</param>
+		public virtual IObservable<Unit> SaveCover(Cover cover)
+		{
+			EnsureInstanceWasNotDisposed();
+			var saveResult = cover.CoverStream
+				.Do(
+					stream =>
+					{
+						_file.Tag.ReplacePictures(PictureHelper.PreparePicture(stream, cover.Name, PictureType.FrontCover));
+						_file.Save();
+					})
+				.Select(x => new Unit())
+				.Take(1);
+
+			return saveResult;
+		}
+
+		/// <summary>
+		/// Activate an object
+		/// </summary>
+		/// <param name="param"></param>
+		public void Activate(params object[] param)
+		{
+			if (!_initialized)
 			{
-				var prority = 0;
-				if (parsePatterns.Contains(TrackNumberBlock))
-				{
-					prority++;
-				}
-
-				regexList.Add(new PrioritizedRegex(
-					new Regex(BuildRegexp(pattern), RegexOptions.IgnoreCase), 
-					prority));
+				var filePath = (string)param[0];
+				_file = GetTagFile(filePath);
+				FileNameMetaObtainer.ParseFileName(Path.GetFileNameWithoutExtension(filePath));
+				_initialized = true;
 			}
-			_fileNameParsers = regexList;
-		}
-
-		private string BuildRegexp(string parsePattern)
-		{
-			var shieldSpecSymbols = parsePattern.Replace(".", @"\.");
-			var trackNumberGroup = String.Format(DigitGroup, TrimTemplateSymbol(TrackNumberBlock));
-			var titleGroup = String.Format(RegexGroup, TrimTemplateSymbol(TitleBlock));
-			var artistGroup = String.Format(RegexGroup, TrimTemplateSymbol(ArtistBlock));
-
-			return shieldSpecSymbols
-				.Replace(TrackNumberBlock, trackNumberGroup)
-				.Replace(ArtistBlock, artistGroup)
-				.Replace(TitleBlock, titleGroup);
-		}
-
-		private static string TrimTemplateSymbol(string input)
-		{
-			return input.Trim('%');
-		}
-	}
-
-	internal struct PrioritizedRegex : IComparable<PrioritizedRegex>, IComparable
-	{
-		public PrioritizedRegex(Regex regex) : this()
-		{
-			Regex = regex;
-			Priority = 0;
-		}
-
-		public PrioritizedRegex(Regex regex, int priority) 
-			: this()
-		{
-			Regex = regex;
-			Priority = priority;
-		}
-
-		public Regex Regex { get; set; }
-		public int Priority { get; set; }
-
-		/// <summary>
-		/// Compares the current object with another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public int CompareTo(PrioritizedRegex other)
-		{
-			return Priority.CompareTo(other.Priority);
+			else
+			{
+				throw new MetaProviderException("Instance already has been initialized");
+			}
 		}
 
 		/// <summary>
-		/// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		/// <returns>
-		/// A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance is less than <paramref name="obj"/>. Zero This instance is equal to <paramref name="obj"/>. Greater than zero This instance is greater than <paramref name="obj"/>. 
-		/// </returns>
-		/// <param name="obj">An object to compare with this instance. </param><exception cref="T:System.ArgumentException"><paramref name="obj"/> is not the same type as this instance. </exception><filterpriority>2</filterpriority>
-		public int CompareTo(object obj)
+		/// <filterpriority>2</filterpriority>
+		public virtual void Dispose()
 		{
-			return CompareTo((PrioritizedRegex) obj);
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					if (_file != null)
+					{
+						_file.Dispose();
+					}
+				}
+				_file = null;
+				_disposed = true;
+			}
+		}
+
+		protected virtual File GetTagFile(string fileName)
+		{
+			return File.Create(fileName, ReadStyle.None);
+		}
+
+		protected void EnsureInstanceWasNotDisposed()
+		{
+			if (_disposed)
+			{
+				throw new ObjectDisposedException("Meta provider was disposed");
+			}
 		}
 	}
 }

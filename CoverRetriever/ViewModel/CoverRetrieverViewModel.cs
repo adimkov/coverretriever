@@ -367,10 +367,10 @@ namespace CoverRetriever.ViewModel
 			_suggestedCovers.Clear();
 			var albumCondition = fileDetails.Album;
 
-			if (String.IsNullOrEmpty(albumCondition) && !String.IsNullOrEmpty(fileDetails.TrackName))
-			{
-				albumCondition = fileDetails.TrackName;
-			}
+//			if (String.IsNullOrEmpty(albumCondition) && !String.IsNullOrEmpty(fileDetails.TrackName))
+//			{
+//				albumCondition = fileDetails.TrackName;
+//			}
 
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
 				.Finally(EndOperation)

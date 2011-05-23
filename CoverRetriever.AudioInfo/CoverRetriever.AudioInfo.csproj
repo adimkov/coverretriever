@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AutoStringHandler.cs" />
     <Compile Include="Cover.cs" />
+    <Compile Include="FileNameMetaObtainer.cs" />
     <Compile Include="FlacMetaProvider.cs" />
     <Compile Include="AudioFileMetaProvider.cs" />
     <Compile Include="Helper\PictureHelper.cs" />
