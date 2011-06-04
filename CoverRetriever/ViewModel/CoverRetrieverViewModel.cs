@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Concurrency;
 using System.Linq;
 using System.Windows.Threading;
 using CoverRetriever.AudioInfo;
@@ -382,12 +383,9 @@ namespace CoverRetriever.ViewModel
 			_suggestedCovers.Clear();
 			var albumCondition = fileDetails.Album;
 
-//			if (String.IsNullOrEmpty(albumCondition) && !String.IsNullOrEmpty(fileDetails.TrackName))
-//			{
-//				albumCondition = fileDetails.TrackName;
-//			}
-
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
+				.SubscribeOn(Scheduler.TaskPool)
+				.ObserveOnDispatcher()
 				.Finally(EndOperation)
 				.Subscribe(
 				x =>

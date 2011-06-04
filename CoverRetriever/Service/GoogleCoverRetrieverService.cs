@@ -51,9 +51,8 @@ namespace CoverRetriever.Service
 			var observableJson = Observable.FromEvent<DownloadStringCompletedEventArgs>(googleClient, "DownloadStringCompleted");
 
 			var requestedUri = _baseAddress.FormatString(_googleKey, coverCount, _searchPattern.FormatString(artist, album));
-			googleClient.DownloadStringAsync(new Uri(requestedUri));
+			
 			return observableJson
-				.Take(1)
 				.Finally(googleClient.Dispose)
 				.Select(
 					jsonResponce =>
@@ -63,7 +62,9 @@ namespace CoverRetriever.Service
 							throw new CoverSearchException("Unable to get response from google", jsonResponce.EventArgs.Error);
 						}
 						return ParseGoogleImageResponce(jsonResponce.EventArgs.Result).Take(coverCount);
-					});
+					})
+					.Defer(() => googleClient.DownloadStringAsync(new Uri(requestedUri)))
+					.Take(1);
 		}
 
 		/// <summary>
