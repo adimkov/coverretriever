@@ -76,7 +76,7 @@ namespace CoverRetriever.Service
 		{
 			//todo: implement a caching
 			var downloader = new WebClient();
-			var downloadOpservable = Observable.FromEvent<OpenReadCompletedEventArgs>(downloader, "OpenReadCompleted")
+			var downloadOpservable = Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
 				.Select(
 				x => 
 				{
@@ -84,9 +84,9 @@ namespace CoverRetriever.Service
 					{
 						throw new CoverSearchException(x.EventArgs.Error.Message, x.EventArgs.Error);
 					}
-					return x.EventArgs.Result;
+					return new MemoryStream(x.EventArgs.Result);
 				})
-				.Defer(() => downloader.OpenReadAsync(coverUri))
+				.Defer(() => downloader.DownloadDataAsync(coverUri))
 				.Take(1);
 			
 			return downloadOpservable;

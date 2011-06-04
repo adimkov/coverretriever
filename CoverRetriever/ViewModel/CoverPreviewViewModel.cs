@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media.Imaging;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
 using Microsoft.Practices.Prism.Commands;
@@ -12,10 +12,10 @@ namespace CoverRetriever.ViewModel
 	public class CoverPreviewViewModel : ViewModelBase
 	{
 		private readonly RemoteCover _remoteCover;
+		private IObservable<Stream> _previewCoverSource;
 		private readonly Subject<RemoteCover> _saveCoverSubject = new Subject<RemoteCover>();
 		private string _errorMessage;
 		private double _downloadProgress;
-		private BitmapImage _coverImage;
 
 		public CoverPreviewViewModel(RemoteCover remoteCover)
 		{
@@ -23,26 +23,21 @@ namespace CoverRetriever.ViewModel
 			StartOperation(CoverRetrieverResources.MessageCoverPreview);
 			SaveCoverCommand = new DelegateCommand(SaveCoverCommandExecute, () => String.IsNullOrEmpty(ErrorMessage));
 			CloseCommand = new DelegateCommand(CloseCommandExecute);
-			
-			remoteCover.CoverStream
+
+			CoverAsyncSource = remoteCover.CoverStream
 				.Finally(EndOperation)
-				.Subscribe(
-					stream =>
-					{
-						var coverImage = new BitmapImage();
-						coverImage.BeginInit();
-						coverImage.StreamSource = stream;
-						coverImage.EndInit();
-						CoverImage = coverImage;
-					},
+				.Do(
+					x => { },
+					
 					ex =>
-					{
-						ErrorMessage = ex.Message;
-					},
+						{
+							ErrorMessage = ex.Message;
+						},
+					
 					() =>
-					{
-						ErrorMessage = null;
-					});
+						{
+							ErrorMessage = null;
+						});
 		}
 
 		/// <summary>
@@ -59,17 +54,18 @@ namespace CoverRetriever.ViewModel
 		/// <summary>
 		/// Get cover Image
 		/// </summary>
-		public BitmapImage CoverImage
+		public IObservable<Stream> CoverAsyncSource
 		{
 			get
 			{
-				return _coverImage;
+				return _previewCoverSource;
 			}
 			private set
 			{
-				_coverImage = value;
-				RaisePropertyChanged("CoverImage");
+				_previewCoverSource = value;
+				RaisePropertyChanged("CoverAsyncSource");
 			}
+
 		}
 
 		/// <summary>

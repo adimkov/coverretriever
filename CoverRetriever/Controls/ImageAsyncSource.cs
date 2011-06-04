@@ -38,6 +38,7 @@ namespace CoverRetriever.Controls
 			source.Subscribe(stream =>
 			                 	{
 			                 		var bitmapImage = new BitmapImage();
+									bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
 									bitmapImage.BeginInit();
 			                 		bitmapImage.StreamSource = stream;
 			                 		bitmapImage.EndInit();

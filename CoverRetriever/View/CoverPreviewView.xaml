@@ -30,8 +30,8 @@
 				</Border.Background>
 				<Grid Margin="4,4,4,8">
 					<controls:ErrorIndicator ErrorContent="{Binding ErrorMessage}" OverlayBrush="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-						<Image x:Name="image" 
-						Source="{Binding CoverImage, Mode=OneWay}"  >
+						<Image x:Name="image"
+							   controls:ImageAsyncSource.AsyncSource="{Binding CoverAsyncSource, Mode=OneWay}">
 							<Image.Effect>
 								<DropShadowEffect ShadowDepth="0" BlurRadius="20"/>
 							</Image.Effect>
