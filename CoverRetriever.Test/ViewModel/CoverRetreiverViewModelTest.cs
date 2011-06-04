@@ -176,6 +176,60 @@ namespace CoverRetriever.Test.ViewModel
 			Assert.That(target.Object.CoverRetrieveErrorMessage, Is.EqualTo("FailureSaveFile"));
 		}
 
+		[Test]
+		public void Should_save_cover_into_directory()
+		{
+			var fileSystemService = GetFileSystemServiceMock();
+			var coverRetrieverService = GetCoverRetrieverServiceMock();
+			var directoryCoverOrganizerMock = new Mock<DirectoryCoverOrganizer>().As<ICoverOrganizer>();
+			directoryCoverOrganizerMock.Setup(x => x.SaveCover(It.IsAny<Cover>())).Returns(Observable.Empty<Unit>());
+			var metaProviderMock = new Mock<IMetaProvider>();
+			var coverOrganizer = metaProviderMock.As<ICoverOrganizer>();
+			coverOrganizer.Setup(x => x.SaveCover(It.IsAny<Cover>())).Returns(Observable.Empty<Unit>());
+			
+			var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
+			var audioFile = new AudioFile(
+				"foo",
+				new FileSystemItem("Parent"), 
+				lazyMetaProvider, 
+				(DirectoryCoverOrganizer) directoryCoverOrganizerMock.Object);
+
+			var target = new Mock<CoverRetrieverViewModel>(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
+			target.SetupGet(x => x.FileDetails).Returns(audioFile);
+			target.Object.Recipient = CoverRecipient.Folder;
+			target.Object.SaveCoverCommand.Execute(GetMockRemoteCover());
+			
+			directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
+			coverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
+		}
+
+		[Test]
+		public void Should_save_cover_into_audio_frame()
+		{
+			var fileSystemService = GetFileSystemServiceMock();
+			var coverRetrieverService = GetCoverRetrieverServiceMock();
+			var directoryCoverOrganizerMock = new Mock<DirectoryCoverOrganizer>().As<ICoverOrganizer>();
+			directoryCoverOrganizerMock.Setup(x => x.SaveCover(It.IsAny<Cover>())).Returns(Observable.Empty<Unit>());
+			var metaProviderMock = new Mock<IMetaProvider>();
+			var coverOrganizer = metaProviderMock.As<ICoverOrganizer>();
+			coverOrganizer.Setup(x => x.SaveCover(It.IsAny<Cover>())).Returns(Observable.Empty<Unit>());
+
+			var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
+			var audioFile = new AudioFile(
+				"foo",
+				new FileSystemItem("Parent"),
+				lazyMetaProvider,
+				(DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
+
+			var target = new Mock<CoverRetrieverViewModel>(fileSystemService.Object, coverRetrieverService.Object, GetRootFolderViewModelMock().Object);
+			target.SetupGet(x => x.FileDetails).Returns(audioFile);
+			target.Object.Recipient = CoverRecipient.Frame;
+			target.Object.SaveCoverCommand.Execute(GetMockRemoteCover());
+
+			directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
+			coverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
+		}
+
 		private Mock<IFileSystemService> GetFileSystemServiceMock()
 		{
 			return new Mock<IFileSystemService>();

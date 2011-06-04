@@ -121,6 +121,10 @@
     <value>Close</value>
     <comment>About</comment>
   </data>
+  <data name="FlagPutInCover" xml:space="preserve">
+    <value>Put into audio file</value>
+    <comment>Shell</comment>
+  </data>
   <data name="MessageCoverPreview" xml:space="preserve">
     <value>Loading Cover...</value>
     <comment>Preview operation</comment>

@@ -70,6 +70,15 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Put into audio file.
+        /// </summary>
+        public static string FlagPutInCover {
+            get {
+                return ResourceManager.GetString("FlagPutInCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading Cover....
         /// </summary>
         public static string MessageCoverPreview {

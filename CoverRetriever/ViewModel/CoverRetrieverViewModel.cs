@@ -31,6 +31,7 @@ namespace CoverRetriever.ViewModel
 		private FileSystemItem _selectedFileSystemItem;
 		private string _coverRetrieveErrorMessage;
 		private Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
+		private CoverRecipient _recipient;
 
 		[ImportingConstructor]
 		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService, OpenFolderViewModel openFolderViewModel)
@@ -53,8 +54,6 @@ namespace CoverRetriever.ViewModel
 			SelectRootFolderRequest = new InteractionRequest<Notification>();
 			AboutRequest = new InteractionRequest<Notification>();
 		}
-
-		
 
 		/// <summary>
 		/// Loaded window Command
@@ -212,6 +211,22 @@ namespace CoverRetriever.ViewModel
 			
 		}
 
+		/// <summary>
+		/// Get or set <see cref="CoverRecipient">Recipient</see> to save <see cref="Cover"/>
+		/// </summary>
+		public CoverRecipient Recipient
+		{
+			get
+			{
+				return _recipient;
+			}
+			set
+			{
+				_recipient = value;
+				RaisePropertyChanged("Recipient");
+			}
+		}
+
 		[Import(typeof(AboutViewModel))]
 		private Lazy<AboutViewModel> AboutViewModel { get; set; }
 
@@ -263,9 +278,9 @@ namespace CoverRetriever.ViewModel
 				x =>
 				{
 					viewModel.SetBusy(true, CoverRetrieverResources.MessageSaveCover);
+
 					SaveRemoteCover(
 						x, 
-						FileDetails.DirectoryCover,
 						() => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover));
 				});
 
@@ -282,7 +297,6 @@ namespace CoverRetriever.ViewModel
 			_savingCoverResult.OnNext(ProcessResult.Begin);
 			SaveRemoteCover(
 				remoteCover,
-				FileDetails.DirectoryCover,
 				() =>
 				{
 					_savingCoverResult.OnNext(ProcessResult.Done);
@@ -339,9 +353,10 @@ namespace CoverRetriever.ViewModel
 		/// </summary>
 		/// <param name="remoteCover"></param>
 		/// <param name="onCompllete"></param>
-		private void SaveRemoteCover(RemoteCover remoteCover, ICoverOrganizer destination, Action onCompllete)
+		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
 		{
-			destination
+			var recipient = Recipient == CoverRecipient.Folder ? FileDetails.DirectoryCover : FileDetails.FrameCover;
+			recipient
 				.SaveCover(remoteCover)
 				.Finally(
 					() =>

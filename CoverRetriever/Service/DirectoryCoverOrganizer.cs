@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using CoverRetriever.AudioInfo;
+using Size = System.Windows.Size;
 
 namespace CoverRetriever.Service
 {
@@ -152,9 +152,13 @@ namespace CoverRetriever.Service
 
 		private Cover PrepareCover(string coverFullPath)
 		{
-			var bitmapImage = new BitmapImage(new Uri(coverFullPath, UriKind.Relative));
 			var ms = new MemoryStream();
-			
+			Size size;
+			using (var bitmap = new Bitmap(coverFullPath))
+			{
+				size = new Size(bitmap.Width, bitmap.Height);
+			}
+
 			using (var coverStream = File.OpenRead(coverFullPath))
 			{
 				ms.SetLength(coverStream.Length);
@@ -164,7 +168,7 @@ namespace CoverRetriever.Service
 
 			return new Cover(
 				Path.GetFileName(coverFullPath),
-				new Size(bitmapImage.PixelWidth, bitmapImage.PixelHeight), 
+				size, 
 				ms.Length,
 				Observable.Return(ms));
 		}

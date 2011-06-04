@@ -73,10 +73,17 @@ namespace CoverRetriever.AudioInfo.Helper
 		/// <returns></returns>
 		public static IPicture PreparePicture(Stream coverStream, string name, PictureType pictureType)
 		{
-			var buffer = new byte[coverStream.Length];
-			coverStream.Read(buffer, 0, (int)coverStream.Length);
+			var buffer = new byte[1024 * 10];
+			var read = 0;
+			var downloadedCover = new MemoryStream();
 
-			var frontCover = new Picture(new ByteVector(buffer, buffer.Length));
+			do
+			{
+				read = coverStream.Read(buffer, 0, buffer.Length);
+				downloadedCover.Write(buffer, 0, read);
+			} while (read != 0);
+			
+			var frontCover = new Picture(new ByteVector(downloadedCover.ToArray(), (int)downloadedCover.Length));
 			frontCover.Type = pictureType;
 			frontCover.MimeType = GetMimeTipeFromFileExtension(Path.GetExtension(name));
 
@@ -102,7 +109,7 @@ namespace CoverRetriever.AudioInfo.Helper
 			{
 				size = new Size(bitmap.Width, bitmap.Height);
 			}
-
+			coverStream.Position = 0;
 			var cover = new Cover(name, size, coverStream.Length, Observable.Return(coverStream));
 			return cover;	
 		}

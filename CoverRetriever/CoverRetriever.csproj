@@ -126,6 +126,7 @@
       <HintPath>..\packages\Rx-Core.1.0.2838.0\lib\Net4\System.CoreEx.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Interactive, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-Interactive.1.0.2838.0\lib\Net4\System.Interactive.dll</HintPath>
@@ -226,6 +227,7 @@
     <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
     <Compile Include="Interaction\WindowHandler.cs" />
     <Compile Include="Interaction\WindowTrigerAction.cs" />
+    <Compile Include="Model\CoverRecipient.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
     <Compile Include="Model\ProcessResult.cs" />

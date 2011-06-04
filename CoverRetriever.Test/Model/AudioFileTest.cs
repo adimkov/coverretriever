@@ -40,7 +40,7 @@ namespace CoverRetriever.Test.Model
 		}
 
 		[Test]
-		public void GetAlbuum_should_create_mett_provider_and_return_album_info()
+		public void GetAlbuum_should_create_meta_provider_and_return_album_info()
 		{
 			var metaProviderMock = new Mock<IMetaProvider>();
 			metaProviderMock.Setup(x => x.GetAlbum()).Returns("Это_все");
@@ -56,7 +56,7 @@ namespace CoverRetriever.Test.Model
 		}
 
 		[Test]
-		public void GetAlbuum_should_create_mett_provider_and_return_artist_info()
+		public void GetAlbuum_should_create_meta_provider_and_return_artist_info()
 		{
 			var metaProviderMock = new Mock<IMetaProvider>();
 			metaProviderMock.Setup(x => x.GetArtist()).Returns("DDT");
@@ -72,7 +72,7 @@ namespace CoverRetriever.Test.Model
 		}
 
 		[Test]
-		public void GetAlbuum_should_create_mett_provider_and_return_year()
+		public void GetAlbuum_should_create_meta_provider_and_return_year()
 		{
 			var metaProviderMock = new Mock<IMetaProvider>();
 			metaProviderMock.Setup(x => x.GetYear()).Returns("1995");
@@ -88,7 +88,7 @@ namespace CoverRetriever.Test.Model
 		}
 
 		[Test]
-		public void GetAlbuum_should_create_mett_provider_and_return_track_name()
+		public void GetAlbuum_should_create_meta_provider_and_return_track_name()
 		{
 			var metaProviderMock = new Mock<IMetaProvider>();
 			metaProviderMock.Setup(x => x.GetTrackName()).Returns("Aktrisa_vesna");
@@ -103,5 +103,28 @@ namespace CoverRetriever.Test.Model
 			Assert.That(lazyMetaProvider.IsValueCreated, Is.True);
 		}
 
+		[Test]
+		public void Should_return_directori_cover_organizer()
+		{
+			var metaProviderMock = new Mock<IMetaProvider>().As<ICoverOrganizer>();
+			var lazyMetaProvider = new Lazy<IMetaProvider>(() => (IMetaProvider)metaProviderMock.Object);
+			var directoryCoverMock = new Mock<DirectoryCoverOrganizer>().As<ICoverOrganizer>();
+
+			var target = new AudioFile("unit", RootFolder, lazyMetaProvider, (DirectoryCoverOrganizer)directoryCoverMock.Object);
+
+			Assert.That(target.DirectoryCover, Is.EqualTo(directoryCoverMock.Object));
+		}
+
+		[Test]
+		public void Should_return_audio_frame_cover_organizer()
+		{
+			var metaProviderMock = new Mock<IMetaProvider>().As<ICoverOrganizer>();
+			var lazyMetaProvider = new Lazy<IMetaProvider>(() => (IMetaProvider)metaProviderMock.Object);
+			var directoryCoverMock = new Mock<DirectoryCoverOrganizer>().As<ICoverOrganizer>();
+
+			var target = new AudioFile("unit", RootFolder, lazyMetaProvider, (DirectoryCoverOrganizer)directoryCoverMock.Object);
+
+			Assert.That(target.FrameCover, Is.EqualTo(metaProviderMock.Object));
+		}
 	}
 }

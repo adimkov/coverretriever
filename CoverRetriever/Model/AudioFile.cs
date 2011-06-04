@@ -26,13 +26,24 @@ namespace CoverRetriever.Model
 		}
 
 		/// <summary>
-		/// Get Directory cover organizer
+		/// Get CoverOrganizer for save in folder
 		/// </summary>
 		public ICoverOrganizer DirectoryCover
 		{
 			get { return _directoryCoverOrganizer; }
 		}
 
+		/// <summary>
+		/// Get CoverOrganizer for save in Audio frame
+		/// </summary>
+		public ICoverOrganizer FrameCover
+		{
+			get{ return  _metaProvider.Value as ICoverOrganizer;}
+		}
+
+		/// <summary>
+		/// Get Artist from composition
+		/// </summary>
 		public string Artist
 		{
 			get
@@ -41,6 +52,9 @@ namespace CoverRetriever.Model
 			}
 		}
 
+		/// <summary>
+		/// Get album of composition
+		/// </summary>
 		public string Album
 		{
 			get
@@ -49,11 +63,17 @@ namespace CoverRetriever.Model
 			}
 		}
 
+		/// <summary>
+		/// Get year of composition
+		/// </summary>
 		public string Year
 		{
 			get { return _metaProvider.Value.GetYear(); }
 		}
 
+		/// <summary>
+		/// Get name of composition
+		/// </summary>
 		public string TrackName
 		{
 			get
