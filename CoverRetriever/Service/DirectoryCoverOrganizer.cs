@@ -132,7 +132,7 @@ namespace CoverRetriever.Service
 				var imagesFilder = Directory.GetFiles(_basePath)
 					.Where(x => _supportedGraphicsFiles.Contains(Path.GetExtension(x).ToLower()));
 
-				var imageAsCoverFirst = imagesFilder.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == DefaultCoverName);
+				var imageAsCoverFirst = imagesFilder.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x).Equals(DefaultCoverName, StringComparison.InvariantCultureIgnoreCase));
 
 				if (imageAsCoverFirst != null)
 				{
