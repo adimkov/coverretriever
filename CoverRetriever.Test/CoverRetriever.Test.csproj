@@ -109,9 +109,11 @@
     <Compile Include="Service\VersionControlServiceTest.cs" />
     <Compile Include="ViewModel\CoverPreviewViewModelTest.cs" />
     <Compile Include="ViewModel\CoverRetreiverViewModelTest.cs" />
+    <Compile Include="ViewModel\FileConductorViewModelTest.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
     <Compile Include="ViewModel\OpenFolderViewModelTest.cs" />
     <Compile Include="ViewModel\ViewModelBaseTest.cs" />
+    <Compile Include="ViewModel\ViewModelMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Input.AudioInfo\1.flac">

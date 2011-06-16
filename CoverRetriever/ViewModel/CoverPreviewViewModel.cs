@@ -28,16 +28,14 @@ namespace CoverRetriever.ViewModel
 				.Finally(EndOperation)
 				.Do(
 					x => { },
-					
 					ex =>
-						{
-							ErrorMessage = ex.Message;
-						},
-					
+					{
+						ErrorMessage = ex.Message;
+					},
 					() =>
-						{
-							ErrorMessage = null;
-						});
+					{
+						ErrorMessage = null;
+					});
 		}
 
 		/// <summary>

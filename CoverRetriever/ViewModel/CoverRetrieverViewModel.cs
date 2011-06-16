@@ -5,7 +5,6 @@ using System.ComponentModel.Composition;
 using System.Concurrency;
 using System.Linq;
 using System.Windows.Threading;
-using CoverRetriever.AudioInfo;
 using CoverRetriever.Interaction;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
@@ -26,20 +25,23 @@ namespace CoverRetriever.ViewModel
 		private readonly ICoverRetrieverService _coverRetrieverService;
 		private readonly OpenFolderViewModel _openFolderViewModel;
 		private Folder _rootFolder;
-		private AudioFile _fileDetails;
 		private ObservableCollection<RemoteCover> _suggestedCovers = new ObservableCollection<RemoteCover>();
 		private RemoteCover _selectedSuggestedCover;
 		private FileSystemItem _selectedFileSystemItem;
 		private string _coverRetrieveErrorMessage;
 		private Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
-		private CoverRecipient _recipient;
 
 		[ImportingConstructor]
-		public CoverRetrieverViewModel(IFileSystemService fileSystemService, ICoverRetrieverService coverRetrieverService, OpenFolderViewModel openFolderViewModel)
+		public CoverRetrieverViewModel(
+			IFileSystemService fileSystemService, 
+			ICoverRetrieverService coverRetrieverService, 
+			OpenFolderViewModel openFolderViewModel,
+			FileConductorViewModel fileConductorViewModel)
 		{
 			_fileSystemService = fileSystemService;
 			_coverRetrieverService = coverRetrieverService;
 			_openFolderViewModel = openFolderViewModel;
+			FileConductorViewModel = fileConductorViewModel;
 
 			openFolderViewModel.PushRootFolder.Subscribe(OnNext_PushRootFolder);
 			LoadedCommand = new DelegateCommand(LoadedCommandExecute);
@@ -139,20 +141,9 @@ namespace CoverRetriever.ViewModel
 		}
 
 		/// <summary>
-		/// Get audio file details
+		/// Get file interactions view model
 		/// </summary>
-		public virtual AudioFile FileDetails
-		{
-			get
-			{
-				return _fileDetails;
-			}
-			private set
-			{
-				_fileDetails = value;
-				RaisePropertyChanged("FileDetails");
-			}
-		}
+		public FileConductorViewModel FileConductorViewModel { get; private set; }
 
 		/// <summary>
 		/// Get collection of found covers
@@ -212,22 +203,6 @@ namespace CoverRetriever.ViewModel
 			
 		}
 
-		/// <summary>
-		/// Get or set <see cref="CoverRecipient">Recipient</see> to save <see cref="Cover"/>
-		/// </summary>
-		public CoverRecipient Recipient
-		{
-			get
-			{
-				return _recipient;
-			}
-			set
-			{
-				_recipient = value;
-				RaisePropertyChanged("Recipient");
-			}
-		}
-
 		[Import(typeof(AboutViewModel))]
 		private Lazy<AboutViewModel> AboutViewModel { get; set; }
 
@@ -258,16 +233,16 @@ namespace CoverRetriever.ViewModel
 			var folder = file as Folder;
 			if (folder != null)
 			{
-				FileDetails = (AudioFile)folder.Children.FirstOrDefault(x => x is AudioFile);
+				FileConductorViewModel.SelectedAudio = (AudioFile)folder.Children.FirstOrDefault(x => x is AudioFile);
 			}
 			else
 			{
-				FileDetails = file as AudioFile;
+				FileConductorViewModel.SelectedAudio = file as AudioFile;
 			}
 
-			if (FileDetails != null)
+			if (FileConductorViewModel.SelectedAudio != null)
 			{
-				FindRemoteCovers(FileDetails);
+				FindRemoteCovers(FileConductorViewModel.SelectedAudio);
 			}
 		}
 		
@@ -280,14 +255,16 @@ namespace CoverRetriever.ViewModel
 				{
 					viewModel.SetBusy(true, CoverRetrieverResources.MessageSaveCover);
 
-					SaveRemoteCover(
-						x, 
-						() => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover));
+					SaveRemoteCover(x)
+						.Finally(() => viewModel.SetBusy(false, CoverRetrieverResources.MessageSaveCover))
+						.Subscribe();
 				});
 
 			PreviewCoverRequest.Raise(new Notification
 			{
-				Title = "Cover of album {0} - {1}".FormatUIString(FileDetails.Artist, FileDetails.Album),
+				Title = "Cover of album {0} - {1}".FormatUIString(
+				FileConductorViewModel.SelectedAudio.Artist, 
+				FileConductorViewModel.SelectedAudio.Album),
 				Content = viewModel 
 			});
 		}
@@ -296,13 +273,13 @@ namespace CoverRetriever.ViewModel
 		{
 			StartOperation(CoverRetrieverResources.MessageSaveCover);
 			_savingCoverResult.OnNext(ProcessResult.Begin);
-			SaveRemoteCover(
-				remoteCover,
-				() =>
+			SaveRemoteCover(remoteCover)
+				.Finally(() =>
 				{
 					_savingCoverResult.OnNext(ProcessResult.Done);
-					EndOperation();
-				});
+					EndOperation();     		
+				})
+				.Subscribe();
 		}
 
 		private void SelectFolderCommandExecute()
@@ -354,22 +331,11 @@ namespace CoverRetriever.ViewModel
 		/// </summary>
 		/// <param name="remoteCover"></param>
 		/// <param name="onCompllete"></param>
-		private void SaveRemoteCover(RemoteCover remoteCover, Action onCompllete)
+		private IObservable<Unit> SaveRemoteCover(RemoteCover remoteCover)
 		{
-			var recipient = Recipient == CoverRecipient.Folder ? FileDetails.DirectoryCover : FileDetails.FrameCover;
-			recipient
-				.SaveCover(remoteCover)
-				.Finally(
-					() =>
-						{
-							var swapFileDetails = FileDetails;
-							FileDetails = null;
-							FileDetails = swapFileDetails;
-							onCompllete();
-						})
-				.Subscribe(
-					x => { },
-					ex => { CoverRetrieveErrorMessage = ex.Message; });
+			return FileConductorViewModel.SaveCover(remoteCover)
+				.Do(x => { }, ex => { CoverRetrieveErrorMessage = ex.Message; })
+				.OnErrorResumeNext(Observable.Empty<Unit>());
 		}
 
 		/// <summary>
@@ -384,7 +350,7 @@ namespace CoverRetriever.ViewModel
 			var albumCondition = fileDetails.Album;
 
 			_coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
-				.SubscribeOn(Scheduler.TaskPool)
+				.SubscribeOn(Scheduler.ThreadPool)
 				.ObserveOnDispatcher()
 				.Finally(EndOperation)
 				.Subscribe(

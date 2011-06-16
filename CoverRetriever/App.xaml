@@ -150,6 +150,11 @@
 				<Setter Property="IsBusy" Value="False"/>
 				<Setter Property="OverlayStyle" Value="{DynamicResource OverlayRectangleStyle}"/>
 			</Style>
+
+			<Style x:Key="AudioFileMetaTextBox" TargetType="{x:Type TextBox}">
+				<Setter Property="IsReadOnly" Value="True"/>
+				<Setter Property="VerticalAlignment" Value="Top"/>
+			</Style>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

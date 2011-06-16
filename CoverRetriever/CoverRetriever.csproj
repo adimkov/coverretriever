@@ -257,6 +257,7 @@
     <Compile Include="ViewModel\AboutViewModel.stub.cs" />
     <Compile Include="ViewModel\CoverPreviewViewModel.cs" />
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
+    <Compile Include="ViewModel\FileConductorViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\OpenFolderViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -265,6 +266,9 @@
     </Compile>
     <Compile Include="View\CoverPreviewView.xaml.cs">
       <DependentUpon>CoverPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FileConductorView.xaml.cs">
+      <DependentUpon>FileConductorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\OpenFolderView.xaml.cs">
       <DependentUpon>OpenFolderView.xaml</DependentUpon>
@@ -338,6 +342,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CoverPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FileConductorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
