@@ -138,14 +138,6 @@ namespace CoverRetriever.Service
 				{
 					CoverName = Path.GetFileName(imageAsCoverFirst);
 				}
-//				else
-//				{
-//					var firstImage = imagesFilder.FirstOrDefault();
-//					if (firstImage != null)
-//					{
-//						CoverName = Path.GetFileName(firstImage);
-//					}	
-//				}
 			}
 			return !String.IsNullOrEmpty(CoverName) ? Path.Combine(_basePath, CoverName) : String.Empty;
 		}
