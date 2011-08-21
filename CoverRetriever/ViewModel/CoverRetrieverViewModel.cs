@@ -327,7 +327,7 @@ namespace CoverRetriever.ViewModel
 		}
 
 		/// <summary>
-		/// Save image of caver at disc
+		/// Save image of caver onto disc
 		/// </summary>
 		/// <param name="remoteCover"></param>
 		/// <param name="onCompllete"></param>

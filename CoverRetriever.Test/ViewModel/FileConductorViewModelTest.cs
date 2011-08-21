@@ -21,12 +21,11 @@ namespace CoverRetriever.Test.ViewModel
             directoryCoverOrganizerMock.Setup(x => x.IsCoverExists()).Returns(true);
             var frameCoverOrganizer = GetFrameCoverOrganizerMock();
             frameCoverOrganizer.Setup(x => x.IsCoverExists()).Returns(true);
-            
             target.Recipient = CoverRecipient.Directory;
             target.SelectedAudio = GetAudioMockedFile(frameCoverOrganizer.As<IMetaProvider>().Object,
                                             (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            target.SaveCover(GetRemoteCoverStub());
+            target.SaveCover(GetRemoteCoverStub()).Run();
 
             directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
             frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
@@ -41,37 +40,56 @@ namespace CoverRetriever.Test.ViewModel
             directoryCoverOrganizerMock.Setup(x => x.IsCoverExists()).Returns(true);
             var frameCoverOrganizer = GetFrameCoverOrganizerMock();
             frameCoverOrganizer.Setup(x => x.IsCoverExists()).Returns(true);
-
             target.Recipient = CoverRecipient.Frame;
-            target.SelectedAudio = GetAudioMockedFile(frameCoverOrganizer.As<IMetaProvider>().Object,
-                                            (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
+            target.SelectedAudio = GetAudioMockedFile(
+                frameCoverOrganizer.As<IMetaProvider>().Object,
+                (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            target.SaveCover(GetRemoteCoverStub());
+            target.SaveCover(GetRemoteCoverStub()).Run();
 
             directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
             frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
         }
 
         [Test]
+        public void Should_save_cover_in_all_frames_in_the_current_directory()
+        {
+            var target = new FileConductorViewModel();
+            var directoryCoverOrganizerMock = GetDirectoryCoverOrganizerMock();
+            directoryCoverOrganizerMock.Setup(x => x.IsCoverExists()).Returns(true);
+            var frameCoverOrganizer = GetFrameCoverOrganizerMock();
+            frameCoverOrganizer.Setup(x => x.IsCoverExists()).Returns(true);
+            target.Recipient = CoverRecipient.Frame;
+            target.ApplyToAllFiles = true;
+
+            target.SelectedAudio = GetMockedFolderWithAudioFile(frameCoverOrganizer.As<IMetaProvider>().Object,
+                                            (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
+
+            target.SaveCover(GetRemoteCoverStub()).Run();
+
+            directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
+            frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Exactly(4));
+        }
+
+        [Test]
         public void Should_set_SelectedAudioCover_regarding_recipient_as_Directory()
         {
             var cover = new Cover();
-            var fileConductorViewModel = new FileConductorViewModel();
+            var target = new FileConductorViewModel();
             var directoryCoverOrganizerMock = GetDirectoryCoverOrganizerMock();
             directoryCoverOrganizerMock.Setup(x => x.IsCoverExists()).Returns(true);
             directoryCoverOrganizerMock.Setup(x => x.GetCover()).Returns(cover);
             var frameCoverOrganizer = GetFrameCoverOrganizerMock();
             frameCoverOrganizer.Setup(x => x.IsCoverExists()).Returns(true);
             
-            fileConductorViewModel.SelectedAudio = GetAudioMockedFile(
+            target.SelectedAudio = GetAudioMockedFile(
                 frameCoverOrganizer.As<IMetaProvider>().Object,
                 (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            fileConductorViewModel.Recipient = CoverRecipient.Directory;
-
+            target.Recipient = CoverRecipient.Directory;
+            
             directoryCoverOrganizerMock.Verify(x => x.GetCover(), Times.Once());
             frameCoverOrganizer.Verify(x => x.GetCover(), Times.Never());
-
         }
 
         [Test]

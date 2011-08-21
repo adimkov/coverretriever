@@ -209,6 +209,7 @@
     <Compile Include="Controls\ErrorIndicator.cs" />
     <Compile Include="Controls\ImageAsyncSource.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converter\CoverRecipientToBoolConverter.cs" />
     <Compile Include="Converter\CoverToImageConverter.cs" />
     <Compile Include="Converter\FolderImageConverter.cs" />
     <Compile Include="Converter\NullToBoolConverter.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Model\CoverRecipient.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
+    <Compile Include="Model\ModelInvalidStateException.cs" />
     <Compile Include="Model\ProcessResult.cs" />
     <Compile Include="Model\RemoteCover.cs" />
     <Compile Include="Model\RevisionVersion.cs" />

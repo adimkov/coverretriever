@@ -5,10 +5,16 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:controls="clr-namespace:CoverRetriever.Controls" 
 			 xmlns:resources="clr-namespace:CoverRetriever.Resources" xmlns:converter="clr-namespace:CoverRetriever.Converter" mc:Ignorable="d" 
-			 d:DesignHeight="180" d:DesignWidth="405" >
+			 MinHeight="190" d:DesignWidth="405" >
 	<UserControl.Resources>
 		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
 		<converter:CoverToImageConverter x:Key="coverToImageConverter"/>
+		<converter:CoverRecipientToBoolConverter x:Key="coverRecipientToBoolConverter"/>
+		
+		<Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,0,4,0"/>
+		</Style>
 	</UserControl.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -18,7 +24,7 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="25" />
+			<RowDefinition Height="35" />
 			<RowDefinition Height="25" />
 			<RowDefinition Height="25" />
 			<RowDefinition Height="25" />
@@ -26,7 +32,13 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<TextBlock Text="{Binding CoverRetrieverResources.TextFileDetails, Source={StaticResource coverRetrieverResources}}" Grid.ColumnSpan="3" Margin="0,0,-37,0" />
+        <CheckBox x:Name="embedCheckBox" IsChecked="{Binding Path=Recipient, Mode=TwoWay, Converter={StaticResource coverRecipientToBoolConverter}}" 
+                  Content="Embed in the file" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Center"/>
+        <StackPanel Visibility="{Binding ElementName=embedCheckBox, Path=IsChecked, Converter={StaticResource boolToVisibilityConverter}}" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <CheckBox IsChecked="{Binding Path=ApplyToAllFiles, Mode=TwoWay}" Content="Apply to all" VerticalAlignment="Center"/>
+		</StackPanel>
 		<TextBlock Text="{Binding CoverRetrieverResources.TextTrackName, Source={StaticResource coverRetrieverResources}}" Grid.Row="1" Grid.Column="1"/>
 		<TextBox x:Name="textBox" Text="{Binding Path=SelectedAudio.TrackName, Mode=OneWay}" 
 						 Style="{StaticResource AudioFileMetaTextBox}" 
@@ -56,7 +68,7 @@
 							Visibility="{Binding Path=SelectedAudioCover, Converter={StaticResource notNullToVisibilityConverter}}" Margin="0,-1,0,1" />
 			</Grid>
 		</Border>
-		<StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" 
+		<StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,6,0,0"
 					Visibility="{Binding Path=SelectedAudioCover, Converter={StaticResource notNullToVisibilityConverter}}">
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}"/>

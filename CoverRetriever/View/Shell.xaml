@@ -180,10 +180,10 @@
 				</LinearGradientBrush>
 			</GridSplitter.Background>
 		</GridSplitter>
-		<Border x:Name="FileInfoBorder" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="4,0,0,0" Grid.Row="1">
+		<Border x:Name="FileInfoBorder" Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="4,0,0,0" Grid.Row="1">
 			<Grid>
 				<view:FileConductorView DataContext="{Binding FileConductorViewModel}"/>
-				<Grid x:Name="AnimationGrid" Width="130" Height="130" Margin="0,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Grid x:Name="AnimationGrid" Width="130" Height="130" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 					<Image x:Name="AnimatedImage" Source="{Binding ThumbUri}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 						<i:Interaction.Behaviors>
 							<ei:FluidMoveBehavior InitialTag="DataContext" Duration="0:0:0.5" >
