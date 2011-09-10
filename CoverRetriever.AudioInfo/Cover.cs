@@ -27,6 +27,6 @@ namespace CoverRetriever.AudioInfo
 		public string Name { get; protected set; }
 		public Size CoverSize { get; protected set; }
 		public long Length { get; protected set; }
-		public IObservable<Stream> CoverStream { get; protected set; }
+		public virtual IObservable<Stream> CoverStream { get; protected set; }
 	}
 }
