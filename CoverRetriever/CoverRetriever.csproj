@@ -103,6 +103,9 @@
     <Reference Include="FluidKit">
       <HintPath>..\packages\FluidKit.51170\FluidKit.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -148,6 +151,9 @@
       <HintPath>..\packages\Rx-Testing.1.0.2838.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -185,13 +191,6 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Windows.Interactivity" />
-    <Reference Include="Microsoft.Expression.Interactions" />
-    <Reference Include="Microsoft.Expression.Prototyping.Interactivity" />
-    <Reference Include="Microsoft.Expression.Prototyping.Runtime" />
-    <Reference Include="Microsoft.Expression.Prototyping.SketchControls" />
-  </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
