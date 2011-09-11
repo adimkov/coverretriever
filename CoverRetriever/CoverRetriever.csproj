@@ -227,7 +227,7 @@
     <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
     <Compile Include="Interaction\WindowHandler.cs" />
     <Compile Include="Interaction\WindowTrigerAction.cs" />
-    <Compile Include="Model\CachedRemoteCover.cs" />
+    <Compile Include="Model\CachedCover.cs" />
     <Compile Include="Model\CoverRecipient.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />

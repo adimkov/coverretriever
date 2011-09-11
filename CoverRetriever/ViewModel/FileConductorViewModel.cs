@@ -138,7 +138,7 @@ namespace CoverRetriever.ViewModel
             
             if (Recipient == CoverRecipient.Frame)
             {
-                var cachedCover = new CachedRemoteCover(remoteCover);
+                var cachedCover = new CachedCover(remoteCover);
 
                 return GrabCoverOrganizerInCurrentFolder()
                     .Select(x => x.SaveCover(cachedCover))

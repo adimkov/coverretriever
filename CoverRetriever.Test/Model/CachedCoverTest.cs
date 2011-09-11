@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CachedRemoteCoverTest.cs" author="Anton Dimkov">
+// <copyright file="CachedCoverTest.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
-// Tests for CachedRemoteCover class
+// Tests for CachedCover class
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,14 +24,14 @@ namespace CoverRetriever.Test.Model
     using NUnit.Framework;
 
     [TestFixture]
-    public class CachedRemoteCoverTest
+    public class CachedCoverTest
     {
         [Test]
         public void Should_create_cached_cover()
         {
             var coverStream = Observable.Return(new Mock<Stream>().Object);
             var source = this.GenerateCoverStub(coverStream);
-            var target = new CachedRemoteCover(source);
+            var target = new CachedCover(source);
 
             Assert.AreEqual(source.Name, target.Name);
             Assert.AreEqual(source.CoverSize, target.CoverSize);
@@ -55,7 +55,7 @@ namespace CoverRetriever.Test.Model
             var mockObserver1 = new MockObserver<Stream>(scheduler);
             var mockObserver2 = new MockObserver<Stream>(scheduler);
 
-            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
+            var target = new CachedCover(GenerateCoverStub(coverStream));
            
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);
@@ -81,7 +81,7 @@ namespace CoverRetriever.Test.Model
             var mockObserver1 = new MockObserver<Stream>(scheduler);
             var mockObserver2 = new MockObserver<Stream>(scheduler);
 
-            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
+            var target = new CachedCover(GenerateCoverStub(coverStream));
 
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);
@@ -111,7 +111,7 @@ namespace CoverRetriever.Test.Model
             var mockObserver1 = new MockObserver<Stream>(scheduler);
             var mockObserver2 = new MockObserver<Stream>(scheduler);
 
-            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
+            var target = new CachedCover(GenerateCoverStub(coverStream));
            
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);

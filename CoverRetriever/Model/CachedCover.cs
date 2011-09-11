@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CachedRemoteCover.cs" author="Anton Dimkov">
+// <copyright file="CachedCover.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
@@ -24,7 +24,7 @@ namespace CoverRetriever.Model
     /// If cache does not used for some time, cache will be removed and downloaded again.
     /// Class thread safe.
     /// </remarks>
-    public class CachedRemoteCover : Cover
+    public class CachedCover : Cover
     {
         /// <summary>
         /// Subject for listeners of remote cover.
@@ -52,10 +52,10 @@ namespace CoverRetriever.Model
         private Exception _lastException;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedRemoteCover"/> class.
+        /// Initializes a new instance of the <see cref="CachedCover"/> class.
         /// </summary>
         /// <param name="sourceCover">The source cover.</param>
-        public CachedRemoteCover(Cover sourceCover)
+        public CachedCover(Cover sourceCover)
         {
             _sourceStream = sourceCover.CoverStream;
             Name = sourceCover.Name;
