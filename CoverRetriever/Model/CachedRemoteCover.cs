@@ -15,24 +15,24 @@
     public class CachedRemoteCover : RemoteCover
     {
         /// <summary>
-        /// indicating is cover in progress of downloading
+        /// Subject for listeners of remote cover.
         /// </summary>
-        private bool _isDownloading;
-        
+        private readonly List<Subject<Stream>> _coverStreamListeners = new List<Subject<Stream>>();
+
         /// <summary>
         /// The source stream of cover.
         /// </summary>
-        private IObservable<Stream> _sourceStream;
+        private readonly IObservable<Stream> _sourceStream;
+
+        /// <summary>
+        /// indicating is cover in progress of downloading
+        /// </summary>
+        private bool _isDownloading;
 
         /// <summary>
         /// Cached cover.
         /// </summary>
         private byte[] _downloadedCover;
-
-        /// <summary>
-        /// Subject for listeners of remote cover.
-        /// </summary>
-        private Subject<Stream> _coverStreamSubject = new Subject<Stream>();
 
         /// <summary>
         /// Download cover exception
@@ -56,38 +56,43 @@
         {
             get
             {
-                if (!_isDownloading && _downloadedCover == null && _lastException == null)
+                if (_downloadedCover != null)
+                {
+                    return Observable.Return(ProduceCoverStream());
+                }
+
+                if (_lastException != null)
+                {
+                    return Observable.Throw<Stream>(_lastException);
+                }
+
+                if (!_isDownloading)
                 {
                     _isDownloading = true;
-
-                    _sourceStream.Do(
-                        stream =>
+                        
+                    return _sourceStream.Do(
+                        x =>
                         {
-                            _downloadedCover = new byte[stream.Length];
-                            stream.Read(_downloadedCover, 0, _downloadedCover.Length);
+                            _downloadedCover = new byte[x.Length];
+                            x.Read(_downloadedCover, 0, _downloadedCover.Length);
 
-                            RaiseCoverDownloaded();
+                            _coverStreamListeners.ForEach(s => s.OnNext(ProduceCoverStream()));
                         },
                         ex =>
                         {
                             _lastException = ex;
-                            RaiseErrorDownload();
-                        },
-                        () => _isDownloading = false).Subscribe();
+                            _coverStreamListeners.ForEach(s => s.OnError(ex));
+                        }).Finally(
+                            () =>
+                            {
+                                _isDownloading = false;
+                                _coverStreamListeners.Clear();
+                            });
                 }
-                else
-                {
-                    if (_downloadedCover != null)
-                    {
-                        DeferedRaiseCoverDownloaded();
-                    }
-                    else if (_lastException != null)
-                    {
-                        DeferedRaiseErrorDownload();
-                    }
-                }
-
-                return _coverStreamSubject;
+                
+                var listener = new Subject<Stream>();
+                _coverStreamListeners.Add(listener);
+                return listener;    
             }
         }
 
@@ -97,40 +102,7 @@
         /// <returns>New stream of cover.</returns>
         private MemoryStream ProduceCoverStream()
         {
-            return new MemoryStream(this._downloadedCover);
-        }
-
-        /// <summary>
-        /// Raises the cover downloaded.
-        /// </summary>
-        private void RaiseCoverDownloaded()
-        {
-            _coverStreamSubject.OnNext(ProduceCoverStream());
-            _coverStreamSubject.OnCompleted();
-        }
-
-        /// <summary>
-        /// Defer raises cover downloaded.
-        /// </summary>
-        private void DeferedRaiseCoverDownloaded()
-        {
-            _coverStreamSubject.Defer(RaiseCoverDownloaded);
-        }
-
-        /// <summary>
-        /// Raises the error download.
-        /// </summary>
-        private void RaiseErrorDownload()
-        {
-            _coverStreamSubject.OnError(_lastException);
-        }
-
-        /// <summary>
-        /// Defer raises cover download error.
-        /// </summary>
-        private void DeferedRaiseErrorDownload()
-        {
-            _coverStreamSubject.Defer(RaiseErrorDownload);
+            return new MemoryStream(_downloadedCover);
         }
     }
 }
