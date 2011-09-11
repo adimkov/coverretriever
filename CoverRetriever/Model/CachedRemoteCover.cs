@@ -1,18 +1,30 @@
-﻿namespace CoverRetriever.Model
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CachedRemoteCover.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2011. All rights reserved.  
+// </copyright>
+// <summary>
+//  Cache service for cover.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CoverRetriever.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
+    using CoverRetriever.AudioInfo;
+
     /// <summary>
-    /// Remote cover that cache downloaded result in memory
+    /// Cover that cache downloaded result in memory.
     /// </summary>
     /// <remarks>
     /// If cache does not used for some time, cache will be removed and downloaded again.
-    /// Class thread safe
+    /// Class thread safe.
     /// </remarks>
-    public class CachedRemoteCover : RemoteCover
+    public class CachedRemoteCover : Cover
     {
         /// <summary>
         /// Subject for listeners of remote cover.
@@ -25,7 +37,7 @@
         private readonly IObservable<Stream> _sourceStream;
 
         /// <summary>
-        /// indicating is cover in progress of downloading
+        /// Indicating is cover in progress of downloading.
         /// </summary>
         private bool _isDownloading;
 
@@ -35,51 +47,60 @@
         private byte[] _downloadedCover;
 
         /// <summary>
-        /// Download cover exception
+        /// Download cover exception.
         /// </summary>
         private Exception _lastException;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedRemoteCover"/> class.
         /// </summary>
-        /// <param name="coverStream">The cover stream.</param>
-        public CachedRemoteCover(IObservable<Stream> coverStream)
+        /// <param name="sourceCover">The source cover.</param>
+        public CachedRemoteCover(Cover sourceCover)
         {
-            _sourceStream = coverStream;
+            _sourceStream = sourceCover.CoverStream;
+            Name = sourceCover.Name;
+            CoverSize = sourceCover.CoverSize;
+            Length = sourceCover.Length;
         }
 
         /// <summary>
         /// Gets cached cover stream.
         /// </summary>
-        /// <remarks>Creates new stream every time</remarks>
+        /// <remarks>Creates new stream every time.</remarks>
         public override IObservable<Stream> CoverStream
         {
             get
             {
                 if (_downloadedCover != null)
                 {
+                    Debug.WriteLine("Return cached cover");
                     return Observable.Return(ProduceCoverStream());
                 }
 
                 if (_lastException != null)
                 {
+                    Debug.WriteLine("Return cached error");
                     return Observable.Throw<Stream>(_lastException);
                 }
 
                 if (!_isDownloading)
                 {
+                    Debug.WriteLine("Perform first download cover");
                     _isDownloading = true;
                         
                     return _sourceStream.Do(
                         x =>
                         {
+                            Debug.WriteLine("Cover successfully downloaded");
                             _downloadedCover = new byte[x.Length];
                             x.Read(_downloadedCover, 0, _downloadedCover.Length);
+                            x.Seek(0, SeekOrigin.Begin); // Return start position back for read by listeners
 
                             _coverStreamListeners.ForEach(s => s.OnNext(ProduceCoverStream()));
                         },
                         ex =>
                         {
+                            Debug.WriteLine("Cover was nod downloaded due error");
                             _lastException = ex;
                             _coverStreamListeners.ForEach(s => s.OnError(ex));
                         }).Finally(

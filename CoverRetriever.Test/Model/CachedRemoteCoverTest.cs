@@ -3,7 +3,7 @@
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
-// Tests for CachedRemoteCover calss
+// Tests for CachedRemoteCover class
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,9 @@ namespace CoverRetriever.Test.Model
     using System.IO;
     using System.Linq;
     using System.Reactive.Testing.Mocks;
+    using System.Windows;
 
+    using CoverRetriever.AudioInfo;
     using CoverRetriever.Model;
 
     using Moq;
@@ -24,6 +26,19 @@ namespace CoverRetriever.Test.Model
     [TestFixture]
     public class CachedRemoteCoverTest
     {
+        [Test]
+        public void Should_create_cached_cover()
+        {
+            var coverStream = Observable.Return(new Mock<Stream>().Object);
+            var source = this.GenerateCoverStub(coverStream);
+            var target = new CachedRemoteCover(source);
+
+            Assert.AreEqual(source.Name, target.Name);
+            Assert.AreEqual(source.CoverSize, target.CoverSize);
+            Assert.AreEqual(source.Length, target.Length);
+            Assert.NotNull(target.CoverStream);
+        }
+
         [Test]
         public void Should_perform_download_one_time_on_two_subscribtion_with_same_result()
         {
@@ -40,7 +55,7 @@ namespace CoverRetriever.Test.Model
             var mockObserver1 = new MockObserver<Stream>(scheduler);
             var mockObserver2 = new MockObserver<Stream>(scheduler);
 
-            var target = new CachedRemoteCover(coverStream);
+            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
            
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);
@@ -66,7 +81,7 @@ namespace CoverRetriever.Test.Model
             var mockObserver1 = new MockObserver<Stream>(scheduler);
             var mockObserver2 = new MockObserver<Stream>(scheduler);
 
-            var target = new CachedRemoteCover(coverStream);
+            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
 
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);
@@ -76,6 +91,34 @@ namespace CoverRetriever.Test.Model
             Assert.NotNull(mockObserver2[0].Value.Exception);
             Assert.AreEqual(mockObserver1[0].Value.Exception, mockObserver2[0].Value.Exception);
     
+        }
+
+        [Test]
+        public void Should_pass_downloaded_cover_to_each_listener()
+        {
+            var testBytes = new byte[2];
+            testBytes[0] = 1;
+            testBytes[1] = 2;
+
+            var coverStream = Observable.Create<Stream>(observer =>
+            {
+                observer.OnNext(new MemoryStream(testBytes));
+                observer.OnCompleted();
+                return () => {};
+            });
+
+            var scheduler = new TestScheduler();
+            var mockObserver1 = new MockObserver<Stream>(scheduler);
+            var mockObserver2 = new MockObserver<Stream>(scheduler);
+
+            var target = new CachedRemoteCover(GenerateCoverStub(coverStream));
+           
+            target.CoverStream.Subscribe(mockObserver1);
+            target.CoverStream.Subscribe(mockObserver2);
+
+            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver1[0].Value.Value));
+            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver2[0].Value.Value));
+               
         }
 
         /// <summary>
@@ -91,6 +134,16 @@ namespace CoverRetriever.Test.Model
             stream.Read(streamContent, 0, streamContent.Length);
 
             return streamContent;
+        }
+
+        /// <summary>
+        /// Generates the cover stub.
+        /// </summary>
+        /// <param name="coverStream">The cover stream.</param>
+        /// <returns>The stub</returns>
+        private Cover GenerateCoverStub(IObservable<Stream> coverStream)
+        {
+            return new Cover("TestCover", new Size(300, 300), 1024, coverStream);
         }
     }
 }

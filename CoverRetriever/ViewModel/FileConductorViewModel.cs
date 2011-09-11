@@ -1,25 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using CoverRetriever.AudioInfo;
-using CoverRetriever.Model;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FileConductorViewModel.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2011. All rights reserved.  
+// </copyright>
+// <summary>
+//  File conductor view model
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace CoverRetriever.ViewModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.Linq;
+
+    using CoverRetriever.AudioInfo;
+    using CoverRetriever.Model;
+
     /// <summary>
-    /// View model of selected audio file conductor 
+    /// View model of selected audio file conductor. 
     /// </summary>
     [Export]
     public class FileConductorViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Backing field for SelectedAudio property.
+        /// </summary>
         private AudioFile _selectedAudio;
+
+        /// <summary>
+        /// Backing field for Recipient property.
+        /// </summary>
         private CoverRecipient _recipient;
+
+        /// <summary>
+        /// Backing field for SelectedAudioCover property.
+        /// </summary>
         private Cover _selectedAudioCover;
+
+        /// <summary>
+        /// Backing field for ApplyToAllFiles property.
+        /// </summary>
         private bool _applyToAllFiles;
 
         /// <summary>
-        /// Get or set SelectedAudio 
+        /// Gets or sets selected audio. 
         /// </summary>
         public virtual AudioFile SelectedAudio
         {
@@ -27,6 +52,7 @@ namespace CoverRetriever.ViewModel
             {
                 return _selectedAudio;
             }
+
             set
             {
                 _selectedAudio = value;
@@ -36,7 +62,7 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Get <see cref="CoverRecipient">cover</see> from audio by selected <see cref="CoverRecipient">recipient</see>
+        /// Gets <see cref="CoverRecipient">cover</see> from audio by selected <see cref="CoverRecipient">recipient</see>.
         /// </summary>
         public Cover SelectedAudioCover
         {
@@ -44,6 +70,7 @@ namespace CoverRetriever.ViewModel
             {
                 return _selectedAudioCover;
             }
+
             private set
             {
                 _selectedAudioCover = value;
@@ -52,7 +79,7 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Gets or sets a value indicating is apply cover to current audio or to all in folder
+        /// Gets or sets a value indicating whether apply cover to current audio or to all in folder.
         /// </summary>
         public bool ApplyToAllFiles
         {
@@ -60,6 +87,7 @@ namespace CoverRetriever.ViewModel
             {
                 return _applyToAllFiles;
             }
+
             set
             {
                 _applyToAllFiles = value;
@@ -68,14 +96,16 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Get or set recipient of cover
+        /// Gets or sets the recipient.
         /// </summary>
+        /// <value>The recipient.</value>
         public CoverRecipient Recipient
         {
             get
             {
                 return _recipient;
             }
+
             set
             {
                 if (_recipient != value)
@@ -85,16 +115,17 @@ namespace CoverRetriever.ViewModel
                     {
                         SetSelectedAudioCoverIfPosible();
                     }
+
                     RaisePropertyChanged("Recipient");
                 }
             }
         }
 
         /// <summary>
-        /// perform save cover
+        /// Saves the selected cover onto disk.
         /// </summary>
-        /// <param name="remoteCover"></param>
-        /// <returns></returns>
+        /// <param name="remoteCover">The remote cover.</param>
+        /// <returns>Save cover operation indicator.</returns>
         public virtual IObservable<Unit> SaveCover(RemoteCover remoteCover)
         {
             if (!ApplyToAllFiles)
@@ -102,35 +133,36 @@ namespace CoverRetriever.ViewModel
                 var recipient = GrabCoverOrganizer(SelectedAudio);
                 return recipient
                     .SaveCover(remoteCover)
-                    .Finally(() => SetSelectedAudioCoverIfPosible());
+                    .Finally(SetSelectedAudioCoverIfPosible);
             }
             
             if (Recipient == CoverRecipient.Frame)
             {
-                // todo: replace to Merge
-                return Observable.Concat(
-                    GrabCoverOrganizerInCurrentFolder()
-                        .Select(x => x.SaveCover(remoteCover)))      
-                        .Finally(() => SetSelectedAudioCoverIfPosible());
+                var cachedCover = new CachedRemoteCover(remoteCover);
+
+                return GrabCoverOrganizerInCurrentFolder()
+                    .Select(x => x.SaveCover(cachedCover))
+                    .Merge()
+                    .Finally(SetSelectedAudioCoverIfPosible);
             }
 
             throw new ModelInvalidStateException("Attempt to save covers in {0} and apply to all", Recipient);
         }
 
         /// <summary>
-        /// Get cover from audio by recipient
+        /// Get cover from audio by recipient.
         /// </summary>
-        /// <param name="audio">Audio file to retrieve cover organizer</param>
-        /// <returns>Cover organizer</returns>
+        /// <param name="audio">Audio file to retrieve cover organizer.</param>
+        /// <returns>Cover organizer.</returns>
         private ICoverOrganizer GrabCoverOrganizer(AudioFile audio)
         {
             return Recipient == CoverRecipient.Directory ? audio.DirectoryCover : audio.FrameCover;
         }
 
         /// <summary>
-        /// Get covers from audio by recipient
+        /// Get covers from audio by recipient.
         /// </summary>
-        /// <returns>Covers collection</returns>
+        /// <returns>Covers collection.</returns>
         private IEnumerable<ICoverOrganizer> GrabCoverOrganizerInCurrentFolder()
         {
             var recipients = Enumerable.Empty<ICoverOrganizer>();
@@ -141,14 +173,14 @@ namespace CoverRetriever.ViewModel
                 recipients = parentFolder.Children
                     .OfType<AudioFile>()
                     .Select(GrabCoverOrganizer)
-                    .ToArray();//copy data in memory
+                    .ToArray(); // copy data in memory
             }
 
             return recipients;
         }
 
         /// <summary>
-        /// Get a cover if it exists. Otherwise set null
+        /// Get a cover if it exists. Otherwise set null.
         /// </summary>
         private void SetSelectedAudioCoverIfPosible()
         {
