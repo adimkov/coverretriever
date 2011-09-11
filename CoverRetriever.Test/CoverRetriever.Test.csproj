@@ -99,6 +99,7 @@
     <Compile Include="Controls\ImageAsyncSourceTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
+    <Compile Include="Model\CachedRemoteCoverTest.cs" />
     <Compile Include="Model\FileSystemItemBaseTest.cs" />
     <Compile Include="Model\FileSystemItemTest.cs" />
     <Compile Include="Model\FolderTest.cs" />
