@@ -146,7 +146,7 @@ namespace CoverRetriever.ViewModel
                     .Finally(SetSelectedAudioCoverIfPosible);
             }
 
-            throw new ModelInvalidStateException("Attempt to save covers in {0} and apply to all", Recipient);
+            throw new InvariantException("Attempt to save covers in {0} and apply to all", Recipient);
         }
 
         /// <summary>

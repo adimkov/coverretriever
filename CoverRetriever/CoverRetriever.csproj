@@ -231,7 +231,7 @@
     <Compile Include="Model\CoverRecipient.cs" />
     <Compile Include="Model\CoverSearchException.cs" />
     <Compile Include="Model\FileSystemServiceException.cs" />
-    <Compile Include="Model\ModelInvalidStateException.cs" />
+    <Compile Include="Model\InvariantException.cs" />
     <Compile Include="Model\ProcessResult.cs" />
     <Compile Include="Model\RemoteCover.cs" />
     <Compile Include="Model\RevisionVersion.cs" />
