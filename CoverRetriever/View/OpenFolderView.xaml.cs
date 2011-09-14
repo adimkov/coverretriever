@@ -66,7 +66,7 @@ namespace CoverRetriever.View
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			base.OnClosing(e);
-			if (ViewModel != null && !ViewModel.IsCloseEnable)
+			if (ViewModel != null && !ViewModel.IsCloseEnabled)
 			{
 				Application.Current.Shutdown(0);
 			}

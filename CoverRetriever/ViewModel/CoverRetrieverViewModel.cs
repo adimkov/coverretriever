@@ -210,7 +210,7 @@ namespace CoverRetriever.ViewModel
 		{
 			if (_rootFolder == null)
 			{
-				_openFolderViewModel.IsCloseEnable = false;
+				_openFolderViewModel.IsCloseEnabled = false;
 				SelectFolderCommand.Execute();
 			}
 		}

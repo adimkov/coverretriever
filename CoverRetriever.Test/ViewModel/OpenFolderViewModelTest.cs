@@ -40,7 +40,7 @@ namespace CoverRetriever.Test.ViewModel
 			target.ConfirmCommand.Execute("TestPath");
 
 			Assert.That(isPushed, Is.True);
-			Assert.That(target.IsCloseEnable, Is.True);
+			Assert.That(target.IsCloseEnabled, Is.True);
 		}
 	}
 }
