@@ -121,34 +121,16 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.1\lib\40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.CoreEx, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-Core.1.0.2838.0\lib\Net4\System.CoreEx.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Interactive, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx-Interactive.1.0.2838.0\lib\Net4\System.Interactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Linq.Async">
-      <HintPath>..\packages\Rx-AsyncLinq.1.0.2838.0\lib\Net4\System.Linq.Async.dll</HintPath>
-    </Reference>
     <Reference Include="System.Reactive, Version=1.0.2838.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-Main.1.0.2838.0\lib\Net4\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.ClientProfile">
-      <HintPath>..\packages\Rx-ClientProfile.1.0.2838.0\lib\Net4\System.Reactive.ClientProfile.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.ExtendedProfile">
-      <HintPath>..\packages\Rx-ExtendedProfile.1.0.2838.0\lib\Net4\System.Reactive.ExtendedProfile.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing.1.0.2838.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -158,7 +140,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
