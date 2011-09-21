@@ -1,95 +1,110 @@
-using System;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.Windows;
-using CoverRetriever.AudioInfo;
-using CoverRetriever.Infrastructure;
-using CoverRetriever.View;
-
-using Microsoft.Practices.Prism.MefExtensions;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CoverRetrieverBootstrapper.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2011. All rights reserved.  
+// </copyright>
+// <summary>
+//  Class initializer of cover retriever application
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace CoverRetriever
 {
-	/// <summary>
-	/// Install cover retriever to start
-	/// </summary>
-	public class CoverRetrieverBootstrapper : MefBootstrapper
-	{
-		public CoverRetrieverBootstrapper()
-		{
-			VersionControlConnectionString = "http://adimkov.users.sourceforge.net/CoverRetrieverAssets/Versions.xml";
-			ProjectHomeUri = new Uri("http://sourceforge.net/p/coverretriever/home/");
-			BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
-			GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
-		}
+    using System;
+    using System.ComponentModel.Composition;
+    using System.ComponentModel.Composition.Hosting;
+    using System.Windows;
 
-		/// <summary>
-		/// Get uri to file that describe versions history
-		/// </summary>
-		[Export(ConfigurationKeys.VersionControlConnectionString)]
-		public string VersionControlConnectionString { get; private set; }
+    using CoverRetriever.AudioInfo;
+    using CoverRetriever.Infrastructure;
+    using CoverRetriever.View;
 
-		/// <summary>
-		/// Get address of project home
-		/// </summary>
-		[Export(ConfigurationKeys.ProjectHomeUri)]
-		public Uri ProjectHomeUri { get; private set; }
+    using Microsoft.Practices.Prism.MefExtensions;
 
-		/// <summary>
-		/// Get address of my blog
-		/// </summary>
-		[Export(ConfigurationKeys.BlogUri)]
-		public Uri BlogUri { get; private set; }
+    /// <summary>
+    /// Class initializer of cover retriever application.
+    /// </summary>
+    public class CoverRetrieverBootstrapper : MefBootstrapper
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoverRetrieverBootstrapper"/> class.
+        /// </summary>
+        public CoverRetrieverBootstrapper()
+        {
+            VersionControlConnectionString = "http://adimkov.users.sourceforge.net/CoverRetrieverAssets/Versions.xml";
+            ProjectHomeUri = new Uri("http://sourceforge.net/p/coverretriever/home/");
+            BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
+            GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
+        }
 
-		/// <summary>
-		/// Get address where available new product version
-		/// </summary>
-		[Export(ConfigurationKeys.GetNewVersionUri)]
-		public Uri GetNewVersionUri { get; private set; }
+        /// <summary>
+        /// Gets uri to file that describe versions history.
+        /// </summary>
+        [Export(ConfigurationKeys.VersionControlConnectionString)]
+        public string VersionControlConnectionString { get; private set; }
 
-		/// <summary>
-		/// Creates the shell or main window of the application.
-		/// </summary>
-		/// <returns>The shell of the application.</returns>
-		/// <remarks>
-		/// If the returned instance is a <see cref="DependencyObject"/>, the
-		/// <see cref="MefBootstrapper"/> will attach the default <seealso cref="Microsoft.Practices.Composite.Regions.IRegionManager"/> of
-		/// the application in its <see cref="Microsoft.Practices.Composite.Presentation.Regions.RegionManager.RegionManagerProperty"/> attached property
-		/// in order to be able to add regions by using the <seealso cref=""Microsoft.Practices.Composite.Presentation.Regions.RegionManager.RegionNameProperty"/>
-		/// attached property from XAML.
-		/// </remarks>
-		protected override DependencyObject CreateShell()
-		{
-			return Container.GetExportedValue<Shell>();
-		}
+        /// <summary>
+        /// Gets address of project home.
+        /// </summary>
+        [Export(ConfigurationKeys.ProjectHomeUri)]
+        public Uri ProjectHomeUri { get; private set; }
 
-		/// <summary>
-		/// Initializes the shell.
-		/// </summary>
-		/// <remarks>
-		/// The base implemention ensures the shell is composed in the container.
-		/// </remarks>
-		protected override void InitializeShell()
-		{
-			base.InitializeShell();
+        /// <summary>
+        /// Gets address of my blog.
+        /// </summary>
+        [Export(ConfigurationKeys.BlogUri)]
+        public Uri BlogUri { get; private set; }
 
-			Application.Current.MainWindow = (Shell)Shell;
-			Application.Current.MainWindow.Show();
-		}
+        /// <summary>
+        /// Gets address where available new product version.
+        /// </summary>
+        [Export(ConfigurationKeys.GetNewVersionUri)]
+        public Uri GetNewVersionUri { get; private set; }
 
-		/// <summary>
-		/// Configures the <see cref="AggregateCatalog"/> used by MEF.
-		/// </summary>
-		/// <remarks>
-		/// The base implementation does nothing.
-		/// </remarks>
-		protected override void ConfigureAggregateCatalog()
-		{
-			base.ConfigureAggregateCatalog();
+        /// <summary>
+        /// Creates the shell or main window of the application.
+        /// </summary>
+        /// <remarks>
+        /// If the returned instance is a <see cref="DependencyObject"/>, the
+        /// <see cref="MefBootstrapper"/> will attach the default <seealso cref="Microsoft.Practices.Prism.Regions.IRegionManager"/> of
+        /// the application in its <see cref="Microsoft.Practices.Prism.Regions.RegionManager.RegionManagerProperty"/> attached property
+        /// in order to be able to add regions by using the <seealso cref="Microsoft.Practices.Prism.Regions.RegionManager.RegionNameProperty"/>
+        /// attached property from XAML.
+        /// </remarks>
+        /// <returns>
+        /// The shell of the application.
+        /// </returns>
+        protected override DependencyObject CreateShell()
+        {
+            return Container.GetExportedValue<Shell>();
+        }
 
-			// Add this assembly to export ModuleTracker
-			AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
-			AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
-		}
-	}
+        /// <summary>
+        /// Initializes the shell.
+        /// </summary>
+        /// <remarks>
+        /// The base implemention ensures the shell is composed in the container.
+        /// </remarks>
+        protected override void InitializeShell()
+        {
+            base.InitializeShell();
+
+            Application.Current.MainWindow = (Shell)Shell;
+            Application.Current.MainWindow.Show();
+        }
+
+        /// <summary>
+        /// Configures the <see cref="AggregateCatalog"/> used by MEF.
+        /// </summary>
+        /// <remarks>
+        /// The base implementation does nothing.
+        /// </remarks>
+        protected override void ConfigureAggregateCatalog()
+        {
+            base.ConfigureAggregateCatalog();
+
+            // Add this assembly to export ModuleTracker
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
+        }
+    }
 }
