@@ -34,7 +34,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"{0}\" - \"{1}\"&imgtype=photo&imgsz=large")]
+        [global::System.Configuration.DefaultSettingValueAttribute("{0} - {1}&imgtype=photo")]
         public string SearhGooglePattern {
             get {
                 return ((string)(this["SearhGooglePattern"]));
