@@ -19,7 +19,7 @@ namespace CoverRetriever.ViewModel
 	[Export]
 	public class CoverRetrieverViewModel : ViewModelBase
 	{
-		private const int SuggestedCountOfCovers = 5;
+		private const int SuggestedCountOfCovers = 6;
 
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ICoverRetrieverService _coverRetrieverService;
