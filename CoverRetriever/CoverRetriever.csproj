@@ -20,7 +20,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
     <Utf8Output>true</Utf8Output>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\Olga\Desktop\CoverRetreiver\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>

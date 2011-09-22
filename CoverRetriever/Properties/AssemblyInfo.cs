@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -40,6 +40,5 @@ using System.Resources;
                              //(used if a resource is not found in the page, 
                              // app, or any theme specific resource dictionaries)
 )]
-[assembly: AssemblyVersionAttribute("0.4.0.0")]
-[assembly: AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: AssemblyVersionAttribute("0.6.0.*")]
 [assembly: NeutralResourcesLanguageAttribute("")]
