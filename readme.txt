@@ -13,3 +13,8 @@ At this moment mp3 files.
 	*Update Checker
 	*Animation during saving a cover
 	*Bug fixing
+0.6.0.0 (2011-09-23)
+	*Support of .flac files
+	*Saving cover into frame of audio file (embed cover in audio file)
+	*Obtain info from file name
+	*Bug fixing
