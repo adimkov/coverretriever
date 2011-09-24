@@ -1,75 +1,116 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using CoverRetriever.AudioInfo;
-using Size = System.Windows.Size;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DirectoryCoverOrganizer.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2011. All rights reserved.  
+// </copyright>
+// <summary>
+//  Manage cover in the parent folder of audio file
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace CoverRetriever.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+
+    using CoverRetriever.AudioInfo;
+
+    using Size = System.Windows.Size;
+
     /// <summary>
-    /// Manage cover in the parent folder of audio file
+    /// Manage cover in the parent folder of audio file.
     /// </summary>
     [Export(typeof(DirectoryCoverOrganizer))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DirectoryCoverOrganizer : ICoverOrganizer, IActivator
     {
-        private string _basePath;
-        private readonly IEnumerable<string> _supportedGraphicsFiles = new[] {".jpg", ".jpeg", ".png", ".bmp"};
+        /// <summary>
+        /// Default name of cover.
+        /// </summary>
         private const string DefaultCoverName = "cover";
+
+        /// <summary>
+        /// Buffer size.
+        /// </summary>
         private const int BufferSize = 0x4000;
 
+        /// <summary>
+        /// List of supported images format.
+        /// </summary>
+        private readonly IEnumerable<string> _supportedGraphicsFiles = new[] { ".jpg", ".jpeg", ".png", ".bmp" };
+
+        /// <summary>
+        /// The base path.
+        /// </summary>
+        private string _basePath;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryCoverOrganizer"/> class.
+        /// </summary>
         [Obsolete("Added for MEF compatibility")]
         public DirectoryCoverOrganizer()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryCoverOrganizer"/> class.
+        /// </summary>
+        /// <param name="basePath">The base path.</param>
         public DirectoryCoverOrganizer(string basePath)
         {
             _basePath = basePath;
         }
 
         /// <summary>
-        /// Get found cover name
+        /// Gets found cover name.
         /// </summary>
         public string CoverName { get; private set; }
 
         /// <summary>
-        /// Indicate if can work with cover
+        /// Gets a value indicating whether can work with cover.
         /// </summary>
         public bool IsCanProcessed
         {
             get
             {
-                //todo: check for ability to read/write from disk
+                //// todo: check for ability to read/write from disk
                 return true;
             }
         }
 
+        /// <summary>
+        /// Gets cover.
+        /// </summary>
+        /// <returns>
+        /// Cover info.
+        /// </returns>
         public Cover GetCover()
         {
             if (IsCoverExists())
             {
                 return PrepareCover(GetCoverPath());
             }
+
             throw new InvalidOperationException("File of cover doesn't exists");
         }
 
         /// <summary>
-        /// Indicate the cover existence
+        ///  Gets a value indicating whether the cover existence.
         /// </summary>
-        /// <returns><see cref="True"/> if cover exists</returns>
+        /// <returns><c>True</c> if cover exists.</returns>
         public bool IsCoverExists()
         {
             return File.Exists(GetCoverPath());
         }
 
         /// <summary>
-        /// Save stream into cover
+        /// Saves stream into cover.
         /// </summary>
-        /// <param name="cover">Cover to save</param>
+        /// <param name="cover">Cover to save.</param>
+        /// <returns>Operation observable.</returns>
         public IObservable<Unit> SaveCover(Cover cover)
         {
             if (IsCoverExists())
@@ -95,7 +136,8 @@ namespace CoverRetriever.Service
                             {
                                 readed = stream.Read(buffer, 0, BufferSize);
                                 newCoverStream.Write(buffer, 0, readed);
-                            } while (readed != 0);
+                            } 
+                            while (readed != 0);
                             newCoverStream.Flush();
                         }
                     }
@@ -109,22 +151,23 @@ namespace CoverRetriever.Service
         }
 
         /// <summary>
-        /// Activate an object
+        /// Activate an object.
         /// </summary>
-        /// <param name="param"></param>
+        /// <param name="param">Parameters to activate object.</param>
         public void Activate(params object[] param)
         {
             if (param.Length != 1)
             {
                 throw new ArgumentException("Base path of cover was not found", "param");
             }
-            _basePath = (string) param[0];
+
+            _basePath = (string)param[0];
         }
 
         /// <summary>
-        /// Get cover path
+        /// Gets cover path.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Path to cover.</returns>
         private string GetCoverPath()
         {
             if (String.IsNullOrEmpty(CoverName))
@@ -139,9 +182,15 @@ namespace CoverRetriever.Service
                     CoverName = Path.GetFileName(imageAsCoverFirst);
                 }
             }
+
             return !String.IsNullOrEmpty(CoverName) ? Path.Combine(_basePath, CoverName) : String.Empty;
         }
 
+        /// <summary>
+        /// Prepares the cover.
+        /// </summary>
+        /// <param name="coverFullPath">The cover full path.</param>
+        /// <returns>Prepared cover.</returns>
         private Cover PrepareCover(string coverFullPath)
         {
             var ms = new MemoryStream();
@@ -155,7 +204,7 @@ namespace CoverRetriever.Service
             {
                 ms.SetLength(coverStream.Length);
                 coverStream.Read(ms.GetBuffer(), 0, (int)coverStream.Length);
-                ms.Flush();	
+                ms.Flush();
             }
 
             return new Cover(
