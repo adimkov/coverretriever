@@ -106,6 +106,10 @@
                 <Setter Property="FontFamily" Value="Tahoma"/>
             </Style>
 
+            <Style x:Key="TextLinkStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="13.333"/>
+            </Style>
+            
             <Style TargetType="{x:Type Button}">
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>

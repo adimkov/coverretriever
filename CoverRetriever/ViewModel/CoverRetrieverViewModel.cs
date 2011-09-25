@@ -15,6 +15,7 @@ namespace CoverRetriever.ViewModel
     using System.ComponentModel.Composition;
     using System.Concurrency;
     using System.Linq;
+    using System.Reflection;
     using System.Windows.Threading;
 
     using CoverRetriever.Interaction;
@@ -37,6 +38,11 @@ namespace CoverRetriever.ViewModel
         /// Count of suggested covers.
         /// </summary>
         private const int SuggestedCountOfCovers = 6;
+
+        /// <summary>
+        /// Delay time to check updates in sec.
+        /// </summary>
+        private const int DelayToCheckUpdate = 10;
 
         /// <summary>
         /// Service to access to at file system.
@@ -82,6 +88,11 @@ namespace CoverRetriever.ViewModel
         /// Error message.
         /// </summary>
         private string _coverRetrieveErrorMessage;
+
+        /// <summary>
+        /// New version of application.
+        /// </summary>
+        private string _newVersion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CoverRetrieverViewModel"/> class.
@@ -261,6 +272,26 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
+        /// Gets the new version.
+        /// </summary>
+        /// <remarks>
+        /// If new version does not available - field will be as Empty string.
+        /// </remarks>
+        public string NewVersion
+        {
+            get
+            {
+                return _newVersion;
+            }
+
+            private set
+            {
+                _newVersion = value;
+                this.RaisePropertyChanged("NewVersion");
+            }
+        }
+
+        /// <summary>
         /// Gets the saving cover result.
         /// </summary>
         public IObservable<ProcessResult> SavingCoverResult
@@ -278,6 +309,15 @@ namespace CoverRetriever.ViewModel
         private Lazy<AboutViewModel> AboutViewModel { get; set; }
 
         /// <summary>
+        /// Gets or sets the version control service.
+        /// </summary>
+        /// <value>
+        /// The version control.
+        /// </value>
+        [Import(typeof(IVersionControlService))]
+        private Lazy<IVersionControlService> VersionControl { get; set; }
+
+        /// <summary>
         /// Loadeds the command execute.
         /// </summary>
         private void LoadedCommandExecute()
@@ -286,6 +326,10 @@ namespace CoverRetriever.ViewModel
             {
                 _openFolderViewModel.IsCloseEnabled = false;
                 SelectFolderCommand.Execute();
+                VersionControl.Value
+                    .GetLatestVersion()
+                    .Delay(TimeSpan.FromSeconds(DelayToCheckUpdate))
+                    .Subscribe(GetLatestApplicatioVersion);
             }
         }
 
@@ -494,6 +538,18 @@ namespace CoverRetriever.ViewModel
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Called when the latest version of application available.
+        /// </summary>
+        /// <param name="revisionVersion">The revision version.</param>
+        private void GetLatestApplicatioVersion(RevisionVersion revisionVersion)
+        {
+            if (Assembly.GetExecutingAssembly().GetName().Version < revisionVersion.Version)
+            {
+                NewVersion = CoverRetrieverResources.TextNewVersion.FormatUIString(revisionVersion.Version);
+            }
         }
     }
 }

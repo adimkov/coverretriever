@@ -1,259 +1,264 @@
 ﻿<Window
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-		xmlns:cmd="clr-namespace:Microsoft.Practices.Prism.Commands" 
-		xmlns:converter="clr-namespace:CoverRetriever.Converter" 
-		xmlns:resources="clr-namespace:CoverRetriever.Resources" 
-		xmlns:fluid="clr-namespace:FluidKit.Controls;assembly=FluidKit" 
-		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-		xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-		xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity" 
-		xmlns:interaction="clr-namespace:CoverRetriever.Interaction" 
-		xmlns:view="clr-namespace:CoverRetriever.View" 
-		xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended" 
-		xmlns:helper="clr-namespace:CoverRetriever.Helpers"
-		xmlns:controls="clr-namespace:CoverRetriever.Controls"
-		xmlns:model="clr-namespace:CoverRetriever.Model" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="CoverRetriever.View.Shell"
-		mc:Ignorable="d" 
-		cmd:Loaded.Command="{Binding LoadedCommand}"
-		cmd:Closing.Command="{Binding FinishCommand}"
-		Title="Shell" Width="760" Height="560" Background="{DynamicResource Backround}" MinWidth="760" MinHeight="560">
-	<Window.Resources>
-		<converter:TreePathContructor x:Key="treePathContructor"/>
-		<converter:SelectedFileSystemItemConverter x:Key="selectedFileSystemItemConverter"/>
-		<converter:FolderImageConverter x:Key="folderImageConverter"/>
-		
-		<resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:cmd="clr-namespace:Microsoft.Practices.Prism.Commands" 
+        xmlns:converter="clr-namespace:CoverRetriever.Converter" 
+        xmlns:resources="clr-namespace:CoverRetriever.Resources" 
+        xmlns:fluid="clr-namespace:FluidKit.Controls;assembly=FluidKit" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity" 
+        xmlns:interaction="clr-namespace:CoverRetriever.Interaction" 
+        xmlns:view="clr-namespace:CoverRetriever.View" 
+        xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended" 
+        xmlns:helper="clr-namespace:CoverRetriever.Helpers"
+        xmlns:controls="clr-namespace:CoverRetriever.Controls"
+        xmlns:model="clr-namespace:CoverRetriever.Model" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="CoverRetriever.View.Shell"
+        mc:Ignorable="d" 
+        cmd:Loaded.Command="{Binding LoadedCommand}"
+        cmd:Closing.Command="{Binding FinishCommand}"
+        Title="Shell" Width="760" Height="560" Background="{DynamicResource Backround}" MinWidth="760" MinHeight="560">
+    <Window.Resources>
+        <converter:TreePathContructor x:Key="treePathContructor"/>
+        <converter:SelectedFileSystemItemConverter x:Key="selectedFileSystemItemConverter"/>
+        <converter:FolderImageConverter x:Key="folderImageConverter"/>
+        
+        <resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources"/>
 
-		<HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Children}">
-			<StackPanel Orientation="Horizontal">
-				<Image Width="18" Height="18" Source="{Binding ., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
-				<TextBlock Text="{Binding Name}"/>
-			</StackPanel>
-		</HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="18" Height="18" Source="{Binding ., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
 
-		<HierarchicalDataTemplate DataType="{x:Type model:RootFolder}" ItemsSource="{Binding Children}">
-			<StackPanel Orientation="Horizontal">
-				<Image Width="18" Height="18" Source="{Binding ., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
-				<TextBlock Text="{Binding Name}" FontStyle="Italic"/>
-			</StackPanel>
-		</HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type model:RootFolder}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="18" Height="18" Source="{Binding ., Converter={StaticResource folderImageConverter}}" Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding Name}" FontStyle="Italic"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
 
-		<HierarchicalDataTemplate DataType="{x:Type model:AudioFile}">
-			<StackPanel Orientation="Horizontal">
-				<Image Width="18" Height="18" Source="/CoverRetriever;component/Assets/Shell_File.png" Margin="0,0,4,0"/>
-				<TextBlock Text="{Binding Name}"/>
-			</StackPanel>
-		</HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type model:AudioFile}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="18" Height="18" Source="/CoverRetriever;component/Assets/Shell_File.png" Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
 
-		<DataTemplate x:Key="SuggestedCoverDataTemplate_Reflection">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="0.5*"/>
-					<RowDefinition Height="0.5*"/>
-				</Grid.RowDefinitions>
-				<Border x:Name="ElementVisual"
-						BorderThickness="2"
-						BorderBrush="LightYellow"
-						Background="Black"
-						Padding="2"
-						>
-					<Image Source="{Binding ThumbUri}" Stretch="Uniform">
-						<i:Interaction.Behaviors>
-							<ei:FluidMoveSetTagBehavior Tag="DataContext"/>
-						</i:Interaction.Behaviors>
-					</Image>
-				</Border>
-				<Rectangle OpacityMask="{StaticResource ReflectionBrush}"
-						   Grid.Row="1">
-					<Rectangle.Fill>
-						<VisualBrush Visual="{Binding ElementName=ElementVisual}">
-							<VisualBrush.RelativeTransform>
-								<ScaleTransform ScaleX="1"
-												ScaleY="-1"
-												CenterX="0.5"
-												CenterY="0.5" />
-							</VisualBrush.RelativeTransform>
-						</VisualBrush>
-					</Rectangle.Fill>
-				</Rectangle>
-			</Grid>
-		</DataTemplate>
-		<DataTemplate x:Key="ErrorIndicatorErrorTemplate">
-			<Border Padding="4" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="3">
-				<Grid d:DesignWidth="160" d:DesignHeight="64" Height="Auto" Width="Auto">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition MinWidth="16" Width="Auto"/>
-						<ColumnDefinition MinWidth="40" Width="*"/>
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition/>
-					</Grid.RowDefinitions>
-					<Image Source="/CoverRetriever;component/Assets/Alert.png" Width="32"/>
-					<ContentPresenter Content="{Binding ''}" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0"/>
-					<Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource coverRetrieverResources}}" 
-							Command="{Binding Path=DataContext.CloseErrorMessage, ElementName=LayoutRoot}"
-							Grid.Row="1" 
-							Grid.ColumnSpan="2" 
-							Width="75" 
-							HorizontalAlignment="Center" 
-							VerticalAlignment="Top" 
-							Margin="0,4,0,0"/>
-				</Grid>
-			</Border>
-		</DataTemplate>
-		
-		<Style x:Key="GridSplitterPreviewStyle">
-			<Setter Property="Control.Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Rectangle Fill="#80000000"/>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<Style x:Key="GridSplitterStyle" TargetType="{x:Type GridSplitter}">
-			<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-			<Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type GridSplitter}">
-						<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-							<Grid/>
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		
-	</Window.Resources>
-	<i:Interaction.Triggers>
-		<prism:InteractionRequestTrigger SourceObject="{Binding PreviewCoverRequest}">
-			<interaction:WindowTrigerAction>
-				<view:CoverPreviewView/>
-			</interaction:WindowTrigerAction>
-		</prism:InteractionRequestTrigger>
-		<prism:InteractionRequestTrigger SourceObject="{Binding SelectRootFolderRequest}">
-			<interaction:WindowTrigerAction>
-				<view:OpenFolderView/>
-			</interaction:WindowTrigerAction>
-		</prism:InteractionRequestTrigger>
-		<prism:InteractionRequestTrigger SourceObject="{Binding AboutRequest}">
-			<interaction:WindowTrigerAction>
-				<view:AboutView/>
-			</interaction:WindowTrigerAction>
-		</prism:InteractionRequestTrigger>
-	</i:Interaction.Triggers>
-	<toolkit:BusyIndicator  IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Margin="{DynamicResource LayoutRootMargin}">
-	    <Grid x:Name="LayoutRoot">
-		    <Grid.RowDefinitions>
-			    <RowDefinition Height="Auto" />
-			    <RowDefinition Height="170"/>
-			    <RowDefinition />
-			    <RowDefinition Height="38" />
-		    </Grid.RowDefinitions>
-		    <Grid.ColumnDefinitions>
-			    <ColumnDefinition Width="30*" MinWidth="200"/>
-			    <ColumnDefinition Width="6" />
-			    <ColumnDefinition Width="70*" MinWidth="400"/>
-		    </Grid.ColumnDefinitions>
-		    <Menu Grid.ColumnSpan="3" Margin="-4,-4,-4,2" Height="25" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1">
-			    <MenuItem Header="File" Padding="7,5,8,3">
-				    <MenuItem Header="Open Folder" Command="{Binding SelectFolderCommand}"/>
-			    </MenuItem>
-			    <MenuItem Header="About" Padding="7,5,8,3" Command="{Binding AboutCommand}"/>
-		    </Menu>
-		    <Border x:Name="FileSystemBorder" Grid.RowSpan="3" Grid.Row="1" >
-				<TreeView ItemsSource="{Binding FileSystem}" 
-					  cmd:SelectedItemChanged.Command="{Binding FileSystemSelectedItemChangedCommand}" 
-					  cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, Converter={StaticResource selectedFileSystemItemConverter}, RelativeSource={RelativeSource Self}}"
-					  helper:TreeViewExtensions.SelectedItem="{Binding SelectedFileSystemItem, Converter={StaticResource treePathContructor}}" Margin="2,0.667,-2,-0.667"/>
-		    </Border>
-		    <GridSplitter Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" Grid.Row="1" Style="{DynamicResource GridSplitterStyle}" >
-			    <GridSplitter.Background>
-				    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-					    <GradientStop Color="#F7EFEFEF"/>
-					    <GradientStop Offset="0.875" Color="#FFEFEFEF"/>
-					    <GradientStop Color="#FFABABAB" Offset="0.5"/>
-				    </LinearGradientBrush>
-			    </GridSplitter.Background>
-		    </GridSplitter>
-		    <Border x:Name="FileInfoBorder" Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="4,0,0,0" Grid.Row="1">
-			    <Grid>
-				    <view:FileConductorView DataContext="{Binding FileConductorViewModel}"/>
-				    <Grid x:Name="AnimationGrid" Width="130" Height="130" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-					    <Image x:Name="AnimatedImage" Source="{Binding ThumbUri}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						    <i:Interaction.Behaviors>
-							    <ei:FluidMoveBehavior InitialTag="DataContext" Duration="0:0:0.5" >
-								    <ei:FluidMoveBehavior.EaseY>
-									    <QuinticEase EasingMode="EaseOut"/>
-								    </ei:FluidMoveBehavior.EaseY>
-								    <ei:FluidMoveBehavior.EaseX>
-									    <QuinticEase EasingMode="EaseOut"/>
-								    </ei:FluidMoveBehavior.EaseX>
-							    </ei:FluidMoveBehavior>
-						    </i:Interaction.Behaviors>
-					    </Image>
-				    </Grid>
-				</Grid>
-		    </Border>
-		    <Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
-				<Grid>
-					<controls:ErrorIndicator ErrorContent="{Binding CoverRetrieveErrorMessage}" 
-											 ErrorContentTemplate="{StaticResource ErrorIndicatorErrorTemplate}"
-											 OverlayBrush="#E4EFEFEF" 
-											 HorizontalAlignment="Stretch" 
-											 VerticalAlignment="Stretch" 
-											 HorizontalContentAlignment="Stretch"
-											 VerticalContentAlignment="Stretch">
-						<fluid:ElementFlow x:Name="elementFlow"
-										   ItemsSource="{Binding SuggestedCovers}" 
-										   SelectedItem="{Binding SelectedSuggestedCover}"
-										   ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
-										   cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
-										   cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
-										   Cursor="Hand" 
-										   ToolTip="{Binding Path=CoverRetrieverResources.TooltipPreviewAction, Source={StaticResource coverRetrieverResources}}"
-										   ItemGap="0.5"
-										   FrontItemGap="0"
-										   PopoutDistance="1"
-										   ElementHeight="700" TiltAngle="50">
-							<fluid:ElementFlow.Layout>
-								<fluid:CoverFlow />
-							</fluid:ElementFlow.Layout>
-							<fluid:ElementFlow.Camera>
-								<PerspectiveCamera FieldOfView="27"
-										   Position="0,0,5" 
-										   LookDirection="-5.32689704113657E-06,0.0660727483790081,-0.997814808415504" />
-							</fluid:ElementFlow.Camera>
-						</fluid:ElementFlow>
-					</controls:ErrorIndicator>
-				</Grid>
-		    </Border>
-		    <Border x:Name="CommandBorder" 
-				Grid.Row="3"
-				Grid.Column="2" d:LayoutOverrides="GridBox" Background="{DynamicResource BottomBrush}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="-4,0,-4,-4">
-				<Grid Margin="{DynamicResource LayoutRootMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-					<StackPanel DataContext="{Binding SelectedSuggestedCover}" 
-								Visibility="{Binding ., Converter={StaticResource notNullToVisibilityConverter}}"
-								Orientation="Horizontal" 
-								HorizontalAlignment="Left" 
-								VerticalAlignment="Center" 
-								Margin="16,0,0,0">
-						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" Margin="0,0,2,0"/>
-						<TextBlock Text="{Binding CoverSize.Width}" Margin="0,0,8,0"/>
-						<TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}"  Margin="0,0,2,0"/>
-						<TextBlock Text="{Binding CoverSize.Height}"/>
-					</StackPanel>
-					<Button Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
-							Command="{Binding SaveCoverCommand}"
-							CommandParameter="{Binding SelectedItem, ElementName=elementFlow}" 
-							Height="25"
-							HorizontalAlignment="Right"/>
-				</Grid>
-		    </Border>
-	    </Grid>
-	</toolkit:BusyIndicator>
+        <DataTemplate x:Key="SuggestedCoverDataTemplate_Reflection">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="ElementVisual"
+                        BorderThickness="2"
+                        BorderBrush="LightYellow"
+                        Background="Black"
+                        Padding="2"
+                        >
+                    <Image Source="{Binding ThumbUri}" Stretch="Uniform">
+                        <i:Interaction.Behaviors>
+                            <ei:FluidMoveSetTagBehavior Tag="DataContext"/>
+                        </i:Interaction.Behaviors>
+                    </Image>
+                </Border>
+                <Rectangle OpacityMask="{StaticResource ReflectionBrush}"
+                           Grid.Row="1">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{Binding ElementName=ElementVisual}">
+                            <VisualBrush.RelativeTransform>
+                                <ScaleTransform ScaleX="1"
+                                                ScaleY="-1"
+                                                CenterX="0.5"
+                                                CenterY="0.5" />
+                            </VisualBrush.RelativeTransform>
+                        </VisualBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ErrorIndicatorErrorTemplate">
+            <Border Padding="4" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="3">
+                <Grid d:DesignWidth="160" d:DesignHeight="64" Height="Auto" Width="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="16" Width="Auto"/>
+                        <ColumnDefinition MinWidth="40" Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Image Source="/CoverRetriever;component/Assets/Alert.png" Width="32"/>
+                    <ContentPresenter Content="{Binding ''}" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0"/>
+                    <Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource coverRetrieverResources}}" 
+                            Command="{Binding Path=DataContext.CloseErrorMessage, ElementName=LayoutRoot}"
+                            Grid.Row="1" 
+                            Grid.ColumnSpan="2" 
+                            Width="75" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Top" 
+                            Margin="0,4,0,0"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        
+        <Style x:Key="GridSplitterPreviewStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Fill="#80000000"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="GridSplitterStyle" TargetType="{x:Type GridSplitter}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Grid/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding PreviewCoverRequest}">
+            <interaction:WindowTrigerAction>
+                <view:CoverPreviewView/>
+            </interaction:WindowTrigerAction>
+        </prism:InteractionRequestTrigger>
+        <prism:InteractionRequestTrigger SourceObject="{Binding SelectRootFolderRequest}">
+            <interaction:WindowTrigerAction>
+                <view:OpenFolderView/>
+            </interaction:WindowTrigerAction>
+        </prism:InteractionRequestTrigger>
+        <prism:InteractionRequestTrigger SourceObject="{Binding AboutRequest}">
+            <interaction:WindowTrigerAction>
+                <view:AboutView/>
+            </interaction:WindowTrigerAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+    <toolkit:BusyIndicator  IsBusy="{Binding IsBusy}" BusyContent="{Binding OperationName}" Margin="{DynamicResource LayoutRootMargin}">
+        <Grid x:Name="LayoutRoot">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="170"/>
+                <RowDefinition />
+                <RowDefinition Height="38" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*" MinWidth="200"/>
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="70*" MinWidth="400"/>
+            </Grid.ColumnDefinitions>
+            <Menu Grid.ColumnSpan="3" Margin="-4,-4,-4,2" Height="25" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1">
+                <MenuItem Header="File" Padding="7,5,8,3">
+                    <MenuItem Header="Open Folder" Command="{Binding SelectFolderCommand}"/>
+                </MenuItem>
+                <MenuItem Header="About" Padding="7,5,8,3" Command="{Binding AboutCommand}"/>
+            </Menu>
+            <Border x:Name="FileSystemBorder" Grid.RowSpan="3" Grid.Row="1" >
+                <TreeView ItemsSource="{Binding FileSystem}" 
+                      cmd:SelectedItemChanged.Command="{Binding FileSystemSelectedItemChangedCommand}" 
+                      cmd:SelectedItemChanged.CommandParameter="{Binding SelectedItem, Converter={StaticResource selectedFileSystemItemConverter}, RelativeSource={RelativeSource Self}}"
+                      helper:TreeViewExtensions.SelectedItem="{Binding SelectedFileSystemItem, Converter={StaticResource treePathContructor}}" Margin="2,0.667,-2,-0.667"/>
+            </Border>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" Grid.Row="1" Style="{DynamicResource GridSplitterStyle}" >
+                <GridSplitter.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#F7EFEFEF"/>
+                        <GradientStop Offset="0.875" Color="#FFEFEFEF"/>
+                        <GradientStop Color="#FFABABAB" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </GridSplitter.Background>
+            </GridSplitter>
+            <Border x:Name="FileInfoBorder" Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="4,0,0,0" Grid.Row="1">
+                <Grid>
+                    <view:FileConductorView DataContext="{Binding FileConductorViewModel}"/>
+                    <Grid x:Name="AnimationGrid" Width="130" Height="130" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Image x:Name="AnimatedImage" Source="{Binding ThumbUri}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <i:Interaction.Behaviors>
+                                <ei:FluidMoveBehavior InitialTag="DataContext" Duration="0:0:0.5" >
+                                    <ei:FluidMoveBehavior.EaseY>
+                                        <QuinticEase EasingMode="EaseOut"/>
+                                    </ei:FluidMoveBehavior.EaseY>
+                                    <ei:FluidMoveBehavior.EaseX>
+                                        <QuinticEase EasingMode="EaseOut"/>
+                                    </ei:FluidMoveBehavior.EaseX>
+                                </ei:FluidMoveBehavior>
+                            </i:Interaction.Behaviors>
+                        </Image>
+                    </Grid>
+                </Grid>
+            </Border>
+            <Border x:Name="SuggestedCoversBorder" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="1" Margin="0,0 ,0,0">
+                <Grid>
+                    <controls:ErrorIndicator ErrorContent="{Binding CoverRetrieveErrorMessage}" 
+                                             ErrorContentTemplate="{StaticResource ErrorIndicatorErrorTemplate}"
+                                             OverlayBrush="#E4EFEFEF" 
+                                             HorizontalAlignment="Stretch" 
+                                             VerticalAlignment="Stretch" 
+                                             HorizontalContentAlignment="Stretch"
+                                             VerticalContentAlignment="Stretch">
+                        <fluid:ElementFlow x:Name="elementFlow"
+                                           ItemsSource="{Binding SuggestedCovers}" 
+                                           SelectedItem="{Binding SelectedSuggestedCover}"
+                                           ItemTemplate="{StaticResource SuggestedCoverDataTemplate_Reflection}"
+                                           cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
+                                           cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+                                           Cursor="Hand" 
+                                           ToolTip="{Binding Path=CoverRetrieverResources.TooltipPreviewAction, Source={StaticResource coverRetrieverResources}}"
+                                           ItemGap="0.5"
+                                           FrontItemGap="0"
+                                           PopoutDistance="1"
+                                           ElementHeight="700" TiltAngle="50">
+                            <fluid:ElementFlow.Layout>
+                                <fluid:CoverFlow />
+                            </fluid:ElementFlow.Layout>
+                            <fluid:ElementFlow.Camera>
+                                <PerspectiveCamera FieldOfView="27"
+                                           Position="0,0,5" 
+                                           LookDirection="-5.32689704113657E-06,0.0660727483790081,-0.997814808415504" />
+                            </fluid:ElementFlow.Camera>
+                        </fluid:ElementFlow>
+                    </controls:ErrorIndicator>
+                    <TextBlock Style="{StaticResource TextLinkStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <Hyperlink NavigateUri="{Binding DownloadNewVersionUri}" Command="{Binding AboutCommand}">
+                            <TextBlock Text="{Binding NewVersion}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+            </Border>
+            <Border x:Name="CommandBorder" 
+                Grid.Row="3"
+                Grid.Column="2" d:LayoutOverrides="GridBox" Background="{DynamicResource BottomBrush}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="-4,0,-4,-4">
+                <Grid Margin="{DynamicResource LayoutRootMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <StackPanel DataContext="{Binding SelectedSuggestedCover}" 
+                                Visibility="{Binding ., Converter={StaticResource notNullToVisibilityConverter}}"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Center" 
+                                Margin="16,0,0,0">
+                        <TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" Margin="0,0,2,0"/>
+                        <TextBlock Text="{Binding CoverSize.Width}" Margin="0,0,8,0"/>
+                        <TextBlock Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}"  Margin="0,0,2,0"/>
+                        <TextBlock Text="{Binding CoverSize.Height}"/>
+                    </StackPanel>
+                    <Button Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory, Source={StaticResource coverRetrieverResources}}"
+                            Command="{Binding SaveCoverCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=elementFlow}" 
+                            Height="25"
+                            HorizontalAlignment="Right"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </toolkit:BusyIndicator>
 </Window>
