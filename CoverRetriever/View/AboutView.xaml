@@ -106,9 +106,13 @@
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 				<TextBlock Text="{Binding CoverRetrieverResources.TextProduct, Source={StaticResource CoverRetrieverResources}}" FontSize="26.667" d:LayoutOverrides="Width" Grid.ColumnSpan="2" Margin="20,0,0,0" Style="{DynamicResource HeaderTextStyle}" />
-				<TextBlock Grid.Column="1" d:LayoutOverrides="Width" Grid.Row="1" Margin="0,4,0,0"><Hyperlink NavigateUri="{Binding BlogUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+				<TextBlock Grid.Column="1" d:LayoutOverrides="Width" Grid.Row="1" Margin="0,4,0,0">
+					<Hyperlink NavigateUri="{Binding BlogUri}" RequestNavigate="Hyperlink_RequestNavigate">
+						<InlineUIContainer>
 							<TextBlock Text="{Binding CoverRetrieverResources.TextAuthor, Source={StaticResource CoverRetrieverResources}}" />
-						</InlineUIContainer></Hyperlink></TextBlock>
+						</InlineUIContainer>
+					</Hyperlink>
+				</TextBlock>
             
             
 				<StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="15" VerticalAlignment="Top">
@@ -135,15 +139,23 @@
 				</StackPanel>
 			</Grid>
 			<StackPanel Grid.Row="1" Visibility="{Binding IsNewVersionAvailable, Converter={StaticResource boolToVisibilityConverter}}">
-				<TextBlock><Hyperlink NavigateUri="{Binding DownloadNewVersionUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+				<TextBlock>
+					<Hyperlink NavigateUri="{Binding DownloadNewVersionUri}" RequestNavigate="Hyperlink_RequestNavigate">
+						<InlineUIContainer>
 							<TextBlock Text="{Binding NewVersionText}"/>
-						</InlineUIContainer></Hyperlink></TextBlock>
+						</InlineUIContainer>
+					</Hyperlink>
+				</TextBlock>
 				<ListBox ItemsSource="{Binding ChangesInNewVersion}" Margin="0,4,0,0" ItemTemplate="{DynamicResource ChangeItemDataTemplate}" MaxHeight="80" ItemContainerStyle="{DynamicResource ChangesListBoxItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
 			</StackPanel>
 
-			<TextBlock Grid.Row="2" VerticalAlignment="Center"><Hyperlink NavigateUri="{Binding ProjectHomeUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+			<TextBlock Grid.Row="2" VerticalAlignment="Center">
+				<Hyperlink NavigateUri="{Binding ProjectHomeUri}" RequestNavigate="Hyperlink_RequestNavigate">
+					<InlineUIContainer>
 						<TextBlock Text="{Binding CoverRetrieverResources.TextProjectHome, Source={StaticResource CoverRetrieverResources}}" />
-					</InlineUIContainer></Hyperlink></TextBlock>
+					</InlineUIContainer>
+				</Hyperlink>
+			</TextBlock>
 			<Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource CoverRetrieverResources}}" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" IsCancel="True" Margin="0,8,0,4" Width="100"/>
 		</Grid>
 	</Border>
