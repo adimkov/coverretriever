@@ -58,6 +58,7 @@
                     <Setter Property="Height" Value="10" />
                     <Setter Property="IsIndeterminate" Value="True" />
                     <Setter Property="IsTabStop" Value="False" />
+					<Setter Property="MaxWidth" Value="150" />
                     <Setter Property="Margin" Value="0,12,0,0" />
                     <Setter Property="Template" Value="{StaticResource ProgressBarTemplate}" />
                 </Style>
@@ -136,6 +137,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="IsBusy" Value="True"/>
     </Style>
         </ResourceDictionary>
     </Application.Resources>
