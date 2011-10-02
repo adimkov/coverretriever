@@ -6,6 +6,8 @@
 		<ResourceDictionary Source="/CoverRetriever;component/Assets/CoreStyles.xaml"/>
 		<ResourceDictionary Source="/CoverRetriever;component/Assets/SDKStyles.xaml"/>
 		<ResourceDictionary Source="/CoverRetriever;component/Assets/Styles.xaml"/>
+		<ResourceDictionary Source="/CoverRetriever;component/Assets/Converter.xaml"/>
+		<ResourceDictionary Source="/CoverRetriever;component/Assets/Toolkit.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 	<!-- Resource dictionary entries should be defined here. -->
 </ResourceDictionary>

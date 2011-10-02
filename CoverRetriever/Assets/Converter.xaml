@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converter="clr-namespace:CoverRetriever.Converter">
+    <converter:NullToVisibilityConverter x:Key="notNullToVisibilityConverter"
+                                         FalseValue="Collapsed"
+                                         TrueValue="Visible" />
+    <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter"
+                                         FalseValue="Visible"
+                                         TrueValue="Collapsed" />
+    <converter:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+</ResourceDictionary>
