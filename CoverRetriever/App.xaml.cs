@@ -12,7 +12,7 @@ namespace CoverRetriever
 			base.OnStartup(e);
 
 			// The boostrapper will create the Shell instance, so the App.xaml does not have a StartupUri.
-			CoverRetrieverBootstrapper bootstrapper = new CoverRetrieverBootstrapper();
+			Bootstrapper bootstrapper = new Bootstrapper();
 			bootstrapper.Run();
 		}
 	}

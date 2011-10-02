@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CoverRetrieverBootstrapper.cs" author="Anton Dimkov">
+// <copyright file="Bootstrapper.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
@@ -23,12 +23,12 @@ namespace CoverRetriever
     /// <summary>
     /// Class initializer of cover retriever application.
     /// </summary>
-    public class CoverRetrieverBootstrapper : MefBootstrapper
+    public class Bootstrapper : MefBootstrapper
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CoverRetrieverBootstrapper"/> class.
+        /// Initializes a new instance of the <see cref="Bootstrapper"/> class.
         /// </summary>
-        public CoverRetrieverBootstrapper()
+        public Bootstrapper()
         {
             VersionControlConnectionString = "http://adimkov.users.sourceforge.net/CoverRetrieverAssets/Versions_test.xml";
             ProjectHomeUri = new Uri("http://sourceforge.net/projects/coverretriever/");
@@ -103,7 +103,7 @@ namespace CoverRetriever
             base.ConfigureAggregateCatalog();
 
             // Add this assembly to export ModuleTracker
-            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(CoverRetrieverBootstrapper).Assembly));
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Bootstrapper).Assembly));
             AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(Mp3MetaProvider).Assembly));
         }
     }

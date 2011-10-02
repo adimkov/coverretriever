@@ -181,6 +181,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\Command.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -196,7 +197,6 @@
     <Compile Include="Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Converter\SelectedFileSystemItemConverter.cs" />
     <Compile Include="Converter\TreePathContructor.cs" />
-    <Compile Include="CoverRetrieverBootstrapper.cs" />
     <Compile Include="Helpers\CollectionEx.cs" />
     <Compile Include="Helpers\DeferredCallEx.cs" />
     <Compile Include="Helpers\TreeViewExtensions.cs" />
