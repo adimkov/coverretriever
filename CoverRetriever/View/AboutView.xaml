@@ -12,7 +12,7 @@
         WindowStyle="ThreeDBorderWindow" 
         interact:WindowExtensions.HideOnClose="True" 
         Title="Cover Retriever" 
-        Background="{DynamicResource Backround}" 
+        Background="{DynamicResource Background}" 
         cmd:Loaded.Command="{Binding LoadedCommand}">
     <Window.Resources>
         <viewModel:AboutViewModel x:Key="AboutViewModelDataSource" d:IsDataSource="True"/>
@@ -88,67 +88,63 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Margin="4" d:DataContext="{StaticResource AboutViewModelDataSource}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="176"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding CoverRetrieverResources.TextProduct, Source={StaticResource CoverRetrieverResources}}" FontSize="26.667" d:LayoutOverrides="Width" Grid.ColumnSpan="2" Margin="20,0,0,0" Style="{DynamicResource H1TextBlock}" />
-            <TextBlock Grid.Column="1" d:LayoutOverrides="Width" Grid.Row="1" Margin="0,4,0,0">
-                <Hyperlink NavigateUri="{Binding BlogUri}" RequestNavigate="Hyperlink_RequestNavigate">
-                    <TextBlock Text="{Binding CoverRetrieverResources.TextAuthor, Source={StaticResource CoverRetrieverResources}}" />
-                </Hyperlink>
-            </TextBlock>
+    <Border Style="{DynamicResource BackgroundBorderStyle}" >
+		<Grid d:DataContext="{StaticResource AboutViewModelDataSource}" Margin="4">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="176"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="{Binding CoverRetrieverResources.TextProduct, Source={StaticResource CoverRetrieverResources}}" FontSize="26.667" d:LayoutOverrides="Width" Grid.ColumnSpan="2" Margin="20,0,0,0" Style="{DynamicResource HeaderTextStyle}" />
+				<TextBlock Grid.Column="1" d:LayoutOverrides="Width" Grid.Row="1" Margin="0,4,0,0"><Hyperlink NavigateUri="{Binding BlogUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+							<TextBlock Text="{Binding CoverRetrieverResources.TextAuthor, Source={StaticResource CoverRetrieverResources}}" />
+						</InlineUIContainer></Hyperlink></TextBlock>
             
             
-            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="15" VerticalAlignment="Top">
-                <TextBlock x:Name="DescriptionTextBlock" Text="{Binding CoverRetrieverResources.TextAppicationDescription, Source={StaticResource CoverRetrieverResources}}" FontSize="10.667" />
-                <Rectangle
-                           Grid.Row="1" Height="30" Margin="0,3,0,0">
-                    <Rectangle.OpacityMask>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#6E000000"/>
-                            <GradientStop Offset="0.968"/>
-                        </LinearGradientBrush>
-                    </Rectangle.OpacityMask>
-                    <Rectangle.Fill>
-                        <VisualBrush Visual="{Binding ElementName=DescriptionTextBlock}">
-                            <VisualBrush.RelativeTransform>
-                                <ScaleTransform ScaleX="1"
-                                                ScaleY="-1"
-                                                CenterX="0.5"
-                                                CenterY="0.5" />
-                            </VisualBrush.RelativeTransform>
-                        </VisualBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-            </StackPanel>
-        </Grid>
-        <StackPanel Grid.Row="1" Visibility="{Binding IsNewVersionAvailable, Converter={StaticResource boolToVisibilityConverter}}">
-            <TextBlock Style="{StaticResource TextLinkStyle}">
-                <Hyperlink NavigateUri="{Binding DownloadNewVersionUri}" RequestNavigate="Hyperlink_RequestNavigate">
-                        <TextBlock Text="{Binding NewVersionText}"/>
-                </Hyperlink>
-            </TextBlock>
-            <ListBox ItemsSource="{Binding ChangesInNewVersion}" Margin="0,4,0,0" ItemTemplate="{DynamicResource ChangeItemDataTemplate}" MaxHeight="80" ItemContainerStyle="{DynamicResource ChangesListBoxItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-        </StackPanel>
+				<StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="15" VerticalAlignment="Top">
+					<TextBlock x:Name="DescriptionTextBlock" Text="{Binding CoverRetrieverResources.TextAppicationDescription, Source={StaticResource CoverRetrieverResources}}" FontSize="10.667" Style="{DynamicResource ContentTextStyle}" />
+					<Rectangle
+						Grid.Row="1" Height="30" Margin="0,3,0,0">
+						<Rectangle.OpacityMask>
+							<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+								<GradientStop Color="#6E000000"/>
+								<GradientStop Offset="0.968"/>
+							</LinearGradientBrush>
+						</Rectangle.OpacityMask>
+						<Rectangle.Fill>
+							<VisualBrush Visual="{Binding ElementName=DescriptionTextBlock}">
+								<VisualBrush.RelativeTransform>
+									<ScaleTransform ScaleX="1"
+										ScaleY="-1"
+										CenterX="0.5"
+										CenterY="0.5" />
+								</VisualBrush.RelativeTransform>
+							</VisualBrush>
+						</Rectangle.Fill>
+					</Rectangle>
+				</StackPanel>
+			</Grid>
+			<StackPanel Grid.Row="1" Visibility="{Binding IsNewVersionAvailable, Converter={StaticResource boolToVisibilityConverter}}">
+				<TextBlock><Hyperlink NavigateUri="{Binding DownloadNewVersionUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+							<TextBlock Text="{Binding NewVersionText}"/>
+						</InlineUIContainer></Hyperlink></TextBlock>
+				<ListBox ItemsSource="{Binding ChangesInNewVersion}" Margin="0,4,0,0" ItemTemplate="{DynamicResource ChangeItemDataTemplate}" MaxHeight="80" ItemContainerStyle="{DynamicResource ChangesListBoxItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+			</StackPanel>
 
-        <TextBlock Grid.Row="2" VerticalAlignment="Center">
-            <Hyperlink NavigateUri="{Binding ProjectHomeUri}" RequestNavigate="Hyperlink_RequestNavigate">
-                <TextBlock Text="{Binding CoverRetrieverResources.TextProjectHome, Source={StaticResource CoverRetrieverResources}}" />
-            </Hyperlink>
-        </TextBlock>
-        <Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource CoverRetrieverResources}}" Grid.Row="2" Width="100" VerticalAlignment="Center" HorizontalAlignment="Right" IsCancel="True"/>
-    </Grid>
+			<TextBlock Grid.Row="2" VerticalAlignment="Center"><Hyperlink NavigateUri="{Binding ProjectHomeUri}" RequestNavigate="Hyperlink_RequestNavigate"><InlineUIContainer>
+						<TextBlock Text="{Binding CoverRetrieverResources.TextProjectHome, Source={StaticResource CoverRetrieverResources}}" />
+					</InlineUIContainer></Hyperlink></TextBlock>
+			<Button Content="{Binding CoverRetrieverResources.ButtonClose, Source={StaticResource CoverRetrieverResources}}" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" IsCancel="True" Margin="0,8,0,4" Width="100"/>
+		</Grid>
+	</Border>
 </Window>

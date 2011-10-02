@@ -3,9 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:converter="clr-namespace:CoverRetriever.Converter" 
     xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
-    x:Class="CoverRetriever.App">
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+	x:Class="CoverRetriever.App">
     <Application.Resources>
         <ResourceDictionary>
+        	<ResourceDictionary.MergedDictionaries>
+        		<ResourceDictionary Source="Assets/SDKStyles.xaml"/>
+        		<ResourceDictionary Source="Assets/Brushes.xaml"/>
+        		<ResourceDictionary Source="Assets/CoreStyles.xaml"/>
+        		<ResourceDictionary Source="Assets/Styles.xaml"/>
+        	</ResourceDictionary.MergedDictionaries>
             <converter:NullToVisibilityConverter x:Key="notNullToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed"/>
             <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible"/>
             <converter:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
@@ -19,244 +26,117 @@
                           Color="Transparent" />
             </LinearGradientBrush>
             
-            <LinearGradientBrush x:Key="BottomBrush" EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="WhiteSmoke" Offset="0"/>
-                <GradientStop Color="#FFCBCCCE" Offset="1"/>
-                <GradientStop Color="#FFE6E6E8" Offset="0.49"/>
-                <GradientStop Color="#FFBABABC" Offset="0.51"/>
-            </LinearGradientBrush>
-            
-            <LinearGradientBrush x:Key="TopBrush" EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFBABABC" Offset="0"/>
-                <GradientStop Color="#FFE6E6E8" Offset="1"/>
-                <GradientStop Color="#FFCBCCCE" Offset="0.49"/>
-                <GradientStop Color="WhiteSmoke" Offset="0.51"/>
-            </LinearGradientBrush>
+            <!-- 
+    ***************************************************************************
+    BusyIndicator
+    ***************************************************************************
+    -->
 
-            <!-- Fill Brushes -->
-            <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0"/>
-                        <GradientStop Color="#CCC" Offset="1.0"/>
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="NormalBorderBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#CCC" Offset="0.0"/>
-                        <GradientStop Color="#444" Offset="1.0"/>
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
-
-            <SolidColorBrush x:Key="Backround" Color="#FFEFEFEF"/>
-            
-            <SolidColorBrush x:Key="BorderColor" Color="#FF888888"/>
-            
-            <Thickness x:Key="LayoutRootMargin" Left="4" Right="4" Top="4" Bottom="4"/>
-
-            <Style x:Key="CheckBoxFocusVisual">
-              <Setter Property="Control.Template">
-                <Setter.Value>
-                  <ControlTemplate>
-                    <Border>
-                      <Rectangle Margin="15,0,0,0" StrokeThickness="1" Stroke="#60000000"
-                                 StrokeDashArray="1 2" />
-                    </Border>
-                  </ControlTemplate>
-                </Setter.Value>
-              </Setter>
-            </Style>
-
-            <LinearGradientBrush x:Key="DarkBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0"/>
-                        <GradientStop Color="#AAA" Offset="1.0"/>
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#BBB" Offset="0.0"/>
-                        <GradientStop Color="#EEE" Offset="0.1"/>
-                        <GradientStop Color="#EEE" Offset="0.9"/>
-                        <GradientStop Color="#FFF" Offset="1.0"/>
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
-
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="Tahoma"/>
-                <Setter Property="TextWrapping" Value="Wrap"/>
-            </Style>
-            
-            <Style x:Key="H1TextBlock" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="#FF606060"/>
-                <Setter Property="FontFamily" Value="Tahoma"/>
-            </Style>
-
-            <Style x:Key="TextLinkStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="13.333"/>
-            </Style>
-            
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="Padding" Value="1,0,1,1"/>
-                <Setter Property="Foreground" Value="#FF4C4C4C"/>
-                <Setter Property="FontWeight" Value="Normal"/>
-                <Setter Property="FontSize" Value="12"/>
-                <Setter Property="MinWidth" Value="75"/>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FFF7F7F7" Offset="0"/>
-                            <GradientStop Color="#FFE5E5E5" Offset="1"/>
-                            <GradientStop Color="#FFF1F1F1" Offset="0.5"/>
-                            <GradientStop Color="#FFE6E6E6" Offset="0.51"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF919191" Offset="0"/>
-                            <GradientStop Color="#FFBABABA" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Grid>
-                                <Grid.Resources>
-                                    <CornerRadius x:Key="CornerRadius">4</CornerRadius>
-                                    <SolidColorBrush x:Key="PressedBrush" Color="#FF888888"/>
-                                </Grid.Resources>
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal">
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MouseOverBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressedBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DisabledBorder">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="MouseOver">
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MouseOverBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.2"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressedBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Pressed">
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MouseOverBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressedBorder">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.4"/>
-                                                </DoubleAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DisabledBorder">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <Border BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{DynamicResource CornerRadius}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-                                    <ContentPresenter RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                </Border>
-                                <Border x:Name="MouseOverBorder" BorderThickness="1" Opacity="0" CornerRadius="{DynamicResource CornerRadius}" Background="{DynamicResource PressedBrush}"/>
-                                <Border x:Name="PressedBorder" BorderThickness="1" Opacity="0" CornerRadius="{DynamicResource CornerRadius}" Background="{DynamicResource PressedBrush}"/>
-                                <Border x:Name="DisabledBorder" BorderThickness="1" Opacity="1" CornerRadius="{DynamicResource CornerRadius}" Background="#7EFFFFFF" Visibility="Collapsed"/>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="MinHeight" Value="22"/>
-                <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
-            </Style>
-            
-            <Style x:Key="OverlayRectangleStyle" TargetType="{x:Type Rectangle}">
-                <Setter Property="Fill" Value="White"/>
-                <Setter Property="Opacity" Value="0.045"/>
-            </Style>
-            
-            <Style TargetType="toolkit:BusyIndicator">
-                <Setter Property="IsBusy" Value="False"/>
-                <Setter Property="OverlayStyle" Value="{DynamicResource OverlayRectangleStyle}"/>
-            </Style>
-
-            <Style x:Key="AudioFileMetaTextBox" TargetType="{x:Type TextBox}">
-                <Setter Property="IsReadOnly" Value="True"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
-            </Style>
-
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="SnapsToDevicePixels" Value="true" />
-                <Setter Property="OverridesDefaultStyle" Value="true" />
-                <Setter Property="FocusVisualStyle" Value="{StaticResource CheckBoxFocusVisual}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type CheckBox}">
-                            <BulletDecorator Background="Transparent">
-                                <BulletDecorator.Bullet>
-                                    <Grid Width="13" Height="13">
-                                        <Ellipse x:Name="Border" Fill="{StaticResource NormalBrush}" StrokeThickness="1" Stroke="{StaticResource NormalBorderBrush}" />
-                                        <Path Height="8" x:Name="CheckMark" Width="8" Opacity="1" Fill="{StaticResource GlyphBrush}" Stretch="Fill"
-                                              Data="M102.03442,598.79645 L105.22962,597.78918 L106.78825,600.42358 C106.78825,600.42358 108.51028,595.74304 110.21724,593.60419 C112.00967,591.35822 114.89314,591.42316 114.89314,591.42316 C114.89314,591.42316 112.67844,593.42645 111.93174,594.44464 C110.7449,596.06293 107.15683,604.13837 107.15683,604.13837 z"
-                                              Canvas.ZIndex="1" />
-                                    </Grid>
-                                </BulletDecorator.Bullet>
-                                <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True" />
-                            </BulletDecorator>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="false">
-                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="Fill" Value="{StaticResource DarkBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="true">
-                                    <Setter TargetName="Border" Property="Fill" Value="{StaticResource PressedBrush}" />
-                                <Setter TargetName="Border" Property="Stroke" Value="{StaticResource GlyphBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="false">
-                                    <Setter TargetName="Border" Property="Fill" Value="{StaticResource DisabledBackgroundBrush}" />
-                                    <Setter TargetName="Border" Property="Stroke" Value="#40000000" />
-                                    <Setter Property="Foreground" Value="#80000000" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+    <Style TargetType="toolkit:BusyIndicator">
+        <Setter Property="Background" Value="#FFF0F0F0" />
+        <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BusyContent" Value="Please wait..." />
+        <Setter Property="DisplayAfter" Value="00:00:00.1" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="OverlayStyle">
+            <Setter.Value>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Fill" Value="#60000000" />
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ProgressBarStyle">
+            <Setter.Value>
+                <Style TargetType="ProgressBar">
+                    <Setter Property="Background" Value="{StaticResource ControlBackgroundAltBrush}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Foreground" Value="{StaticResource ColorAccentBrush}" />
+                    <Setter Property="Height" Value="10" />
+                    <Setter Property="IsIndeterminate" Value="True" />
+                    <Setter Property="IsTabStop" Value="False" />
+                    <Setter Property="Margin" Value="0,12,0,0" />
+                    <Setter Property="Template" Value="{StaticResource ProgressBarTemplate}" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="toolkit:BusyIndicator">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="VisibilityStates">
+                                <VisualState x:Name="Hidden">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="busycontent">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="overlay">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Visible">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="busycontent">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="overlay">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="BusyStatusStates">
+                                <VisualState x:Name="Idle">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(Control.IsEnabled)" Storyboard.TargetName="content">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <System:Boolean>True</System:Boolean>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Busy">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.001" Storyboard.TargetProperty="(Control.IsEnabled)" Storyboard.TargetName="content">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <System:Boolean>False</System:Boolean>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentControl x:Name="content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Rectangle x:Name="overlay" Style="{TemplateBinding OverlayStyle}" />
+                        <ContentControl x:Name="busycontent">
+                            <Border CornerRadius="4" Background="{TemplateBinding Background}" BorderBrush="{StaticResource DarkBorder}" BorderThickness="1" MinWidth="160" MinHeight="60" Margin="10" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.4" ShadowDepth="20" BlurRadius="20" />
+                                </Border.Effect>
+                                <Grid Margin="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}" Content="{TemplateBinding BusyContent}" VerticalAlignment="Center" />
+                                    <ProgressBar Grid.Row="1" Style="{TemplateBinding ProgressBarStyle}" />
+                                </Grid>
+                            </Border>
+                        </ContentControl>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
