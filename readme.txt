@@ -18,3 +18,5 @@ At this moment mp3 files.
 	*Saving cover into frame of audio file (embed cover in audio file)
 	*Obtain info from file name
 	*Bug fixing
+0.6.1.0 (2011-09-25)
+	*Improvement of Update Checker
