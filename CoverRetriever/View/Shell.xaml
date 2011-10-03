@@ -188,6 +188,7 @@
                                            ItemGap="0.5"
                                            FrontItemGap="0"
                                            PopoutDistance="1"
+                                           IsTabStop="False"
                                            ElementHeight="700" TiltAngle="50">
                             <fluid:ElementFlow.Layout>
                                 <fluid:CoverFlow />

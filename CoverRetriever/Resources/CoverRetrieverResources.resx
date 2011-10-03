@@ -146,7 +146,7 @@
     <comment>File сonductor view</comment>
   </data>
   <data name="TextAppicationDescription" xml:space="preserve">
-    <value>The tool gets album covers from the internet using the meta tags from the MP3 file and stores found covers locally on your computer's hard drive.</value>
+    <value>Cover Retriever is a small, simple, easy to use application specially designed to help you find covers for compositions in "MP3/FLAC" formats and saving them onto disk or in audio file.</value>
     <comment>About</comment>
   </data>
   <data name="TextArtist" xml:space="preserve">
