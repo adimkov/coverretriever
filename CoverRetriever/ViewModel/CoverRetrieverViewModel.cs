@@ -14,6 +14,7 @@ namespace CoverRetriever.ViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Concurrency;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Windows.Threading;
@@ -341,7 +342,10 @@ namespace CoverRetriever.ViewModel
         {
             _rootFolder = new RootFolder(rootFolderResult.RootFolder);
             RaisePropertyChanged("FileSystem");
-            _fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher, this.SelectFirstAudioFile);
+            _fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher)
+                .Subscribe(
+                x => Debug.WriteLine(x),
+                SelectFirstAudioFile);
             SelectRootFolderRequest.Raise(new CloseNotification());
         }
 

@@ -67,25 +67,6 @@ namespace CoverRetriever.Service
         private delegate void AddItemsToFolderDelegate(Folder parent, IEnumerable<FileSystemItem> children);
 
         /// <summary>
-        /// Recursive loads audio files and catalog list into parent <see cref="Folder"/>.
-        /// <remarks>
-        /// IF dispatcher is null, fill folder in current thread.
-        /// </remarks>
-        /// </summary>
-        /// <param name="parent">Parent directory of file system items.</param>
-        /// <param name="dispatcher">Syncronization context.</param>
-        /// <param name="onComplete">Complete operation notify.</param>
-        public void FillRootFolderAsync(Folder parent, Dispatcher dispatcher, Action onComplete)
-        {
-            ThreadPool.QueueUserWorkItem(
-                state => 
-                {
-                    _onComplete = onComplete;
-                    GetFileSystemItems(parent, dispatcher, true);
-                });
-        }
-
-        /// <summary>
         /// Fills the root folder with subfolders and audio files async.
         /// </summary>
         /// <param name="parent">The root folder.</param>
@@ -123,7 +104,8 @@ namespace CoverRetriever.Service
         /// <param name="isRoot">Flag indicating that current folder is root.</param>
         private void GetFileSystemItems(Folder parent, Dispatcher dispatcher, bool isRoot)
         {
-            _fillRootSubject.OnNext(parent.GetFileSystemItemFullPath());
+            var parentFullPath = parent.GetFileSystemItemFullPath();
+            _fillRootSubject.OnNext(parentFullPath);
 
             var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
                 .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
@@ -131,7 +113,7 @@ namespace CoverRetriever.Service
             AddFileSystemSafe(parent, dispatcher, directories);
 
             var files =
-                Directory.GetFiles(parent.GetFileSystemItemFullPath())
+                Directory.GetFiles(parentFullPath)
                 .Where(file => AudioFormat.AudioFileExtensions.Any(ext => file.ToLower().EndsWith(ext)))
                 .Select(name =>
                     new AudioFile(
