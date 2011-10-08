@@ -31,6 +31,14 @@ namespace CoverRetriever.Service
         void FillRootFolderAsync(Folder parent, Dispatcher dispatcher, Action onComplete);
 
         /// <summary>
+        /// Fills the root folder with subfolders and audio files async.
+        /// </summary>
+        /// <param name="parent">The root folder.</param>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <returns></returns>
+        IObservable<string> FillRootFolderAsync(Folder parent, Dispatcher dispatcher);
+
+        /// <summary>
         /// Check for directory existence on client machine.
         /// </summary>
         /// <param name="directoryPath">The full path.</param>

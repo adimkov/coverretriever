@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 using CoverRetriever.Model;
 using CoverRetriever.Service;
@@ -13,7 +12,9 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.Service
 {
+    using System.Concurrency;
     using System.Configuration;
+    using System.Reactive.Testing.Mocks;
 
     [TestFixture]
     public class FileSystemServiceTest
@@ -22,29 +23,29 @@ namespace CoverRetriever.Test.Service
 
         IEnumerable<string> _catalogContent = new[]
         {
-            "[1982] - Свинья на радуге", "[1983] - Компромисс",
-            "[1984] - Переферия",
-            "[1985] - Время",
-            "[1988] - Я получил эту роль",
-            "[1990] - Оттепель",
-            "[1991] - Пластун",
-            "[1992] - Актриса весна",
-            "[1993] - Черный пёс Петербург",
-            "[1994] - Это все",
-            "[1996] - Любовь",
-            "[1997] - Рождённый в СССР",
-            "[1999] - Мир номер ноль",
-            "[1999] - Просвистела",
-            "[2000] - Метель Августа",
-            "[2001] - Два концерта. Аккустика. Ю. Шевчук",
-            "[2003] - Единочество",
-            "[2005] - Пропавший Без Вести",
-            "[2006] - Family CD1",
-            "[2006] - Family CD2",
-            "[2007] - Прекрасная любовь",
-            "Юрий Шевчук & Константин Казански - L'Echoppe",
-            "2. Попса.mp3",
-            "putin.mp3"
+            "AcDc - 1975 - High Voltage (Australia Only)",
+            "AcDc - 1976 - Dirty Deeds Done Dirt Cheap",
+            "AcDc - 1976 - High Voltage",
+            "AcDc - 1976 - T.N.T. (Australia only)",
+            "AcDc - 1976-Dirty Deeds Done Dirt Cheap (Australia Only)",
+            "AcDc - 1977 - Let There Be Rock",
+            "AcDc - 1977-Let There Be Rock (Australia Only)",
+            "AcDc - 1978 - If You Want Blood You've Got It",
+            "AcDc - 1978 - Powerage",
+            "AcDc - 1979 - Highway To Hell",
+            "AcDc - 1980 - Back In Black",
+            "AcDc - 1981 - For Those About To Rock We Salute You",
+            "AcDc - 1983 - Flick Of The Switch",
+            "AcDc - 1984 - '74 Jailbreak",
+            "AcDc - 1985 - Fly On The Wall",
+            "AcDc - 1986 - Who Made Who",
+            "AcDc - 1988 - Blow Up Your Video",
+            "AcDc - 1990 - The Razors Edge",
+            "AcDc - 1992 - Live",
+            "AcDc - 1992 - Live (Special Collector's Edition)",
+            "AcDc - 1995 - Ballbreaker",
+            "AcDc - 1997 - Bonfire",
+            "AcDc - 2000 - Stiff Upper Lip"
         };
 
         /// <summary>
@@ -61,7 +62,6 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void GetFileSystemItems_should_return_tree_of_file_system_items()
         {
-            var manualResetEvent = new ManualResetEvent(false);
             var rootFolder = new RootFolder(_ddtFolder);
             var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
             
@@ -70,12 +70,10 @@ namespace CoverRetriever.Test.Service
                 .Returns(coverOrganizerMock.Object);
 
             var target = new FileSystemService(serviceLocatorMock.Object);
-            target.FillRootFolderAsync(rootFolder, null, () => manualResetEvent.Set());
+            target.FillRootFolderAsync(rootFolder, null).Run();
 
-            manualResetEvent.WaitOne();
-            Assert.That(rootFolder.Children.Select(x => x.Name), Is.SubsetOf(_catalogContent));
-            rootFolder.Children.Take(22).ForEach(x => Assert.That(x, Is.InstanceOf<Folder>()));
-            rootFolder.Children.Skip(22).ForEach(x => Assert.That(x, Is.InstanceOf<AudioFile>()));
+            Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
+            rootFolder.Children.Take(23).ForEach(x => Assert.That(x, Is.InstanceOf<Folder>()));
         }
 
         /// <summary>
@@ -84,7 +82,6 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void GetFileSystemItems_recursive_load_all_items_and_subfolders()
         {
-            var manuelResetEvent = new ManualResetEvent(false);
             var rootFolder = new RootFolder(_ddtFolder);
             var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
 
@@ -93,14 +90,44 @@ namespace CoverRetriever.Test.Service
                 .Returns(coverOrganizerMock.Object);
 
             var target = new FileSystemService(serviceLocatorMock.Object);
-            target.FillRootFolderAsync(rootFolder, null, () => manuelResetEvent.Set());
+            target.FillRootFolderAsync(rootFolder, null).Run();
 
-            manuelResetEvent.WaitOne();
-            Assert.That(rootFolder.Children.Select(x => x.Name), Is.SubsetOf(_catalogContent));
-            Assert.That(((Folder)rootFolder.Children[0]).Children.Count, Is.EqualTo(15));
+            Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
+            Assert.That(((Folder)rootFolder.Children[0]).Children.Count, Is.EqualTo(8));
             Assert.That(((Folder)rootFolder.Children[1]).Children.Count, Is.EqualTo(9));
-            Assert.That(((Folder)rootFolder.Children[2]).Children.Count, Is.EqualTo(8));
-            Assert.That(((Folder)rootFolder.Children[3]).Children.Count, Is.EqualTo(8));
+            Assert.That(((Folder)rootFolder.Children[2]).Children.Count, Is.EqualTo(9));
+            Assert.That(((Folder)rootFolder.Children[3]).Children.Count, Is.EqualTo(9));
+            Assert.That(((Folder)rootFolder.Children[4]).Children.Count, Is.EqualTo(10));
+            Assert.That(((Folder)rootFolder.Children[5]).Children.Count, Is.EqualTo(8));
+            Assert.That(((Folder)rootFolder.Children[6]).Children.Count, Is.EqualTo(8));
+            Assert.That(((Folder)rootFolder.Children[7]).Children.Count, Is.EqualTo(10));
+            Assert.That(((Folder)rootFolder.Children[8]).Children.Count, Is.EqualTo(9));
+            Assert.That(((Folder)rootFolder.Children[9]).Children.Count, Is.EqualTo(10));
+        }
+
+        [Test]
+        public void Should_push_32_folders_in_operation_progress_and_one_complete()
+        {
+            var rootFolder = new RootFolder(_ddtFolder);
+            var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
+            var scheduler = new TestScheduler();
+            var testObserver = new MockObserver<string>(scheduler);
+
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+            serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
+                .Returns(coverOrganizerMock.Object);
+
+            var target = new FileSystemService(serviceLocatorMock.Object);
+            target.FillRootFolderAsync(rootFolder, null).Run(testObserver);
+
+            var countOfOnNextMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnNext);
+            var countOfOnCompleteMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
+            var countOfOnErrorMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnError);
+            
+            Assert.That(testObserver.Count, Is.EqualTo(32));
+            Assert.That(countOfOnNextMessages, Is.EqualTo(31));
+            Assert.That(countOfOnCompleteMessages, Is.EqualTo(1));
+            Assert.That(countOfOnErrorMessages, Is.EqualTo(0));
         }
     }
 }

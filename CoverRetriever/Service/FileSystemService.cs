@@ -35,16 +35,16 @@ namespace CoverRetriever.Service
         private readonly IServiceLocator _serviceLocator;
 
         /// <summary>
-        /// Count request of add items.
-        /// </summary>
-        private int _countRequestOfAddItems;
-
-        /// <summary>
         /// Hold reference on complete action.
         /// </summary>
         private Action _onComplete;
 
         /// <summary>
+        /// Fill root folder observer.
+        /// </summary>
+        private Subject<string> _fillRootSubject;
+
+            /// <summary>
         /// Initializes a new instance of the <see cref="FileSystemService"/> class.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
@@ -52,6 +52,7 @@ namespace CoverRetriever.Service
         public FileSystemService(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
+            _fillRootSubject = new Subject<string>();
         }
 
         /// <summary>
@@ -80,8 +81,24 @@ namespace CoverRetriever.Service
                 state => 
                 {
                     _onComplete = onComplete;
-                    GetFileSystemItems(parent, dispatcher);
+                    GetFileSystemItems(parent, dispatcher, true);
                 });
+        }
+
+        /// <summary>
+        /// Fills the root folder with subfolders and audio files async.
+        /// </summary>
+        /// <param name="parent">The root folder.</param>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <returns>Observer of operation.</returns>
+        public IObservable<string> FillRootFolderAsync(Folder parent, Dispatcher dispatcher)
+        {
+            _fillRootSubject = new Subject<string>();
+
+            ThreadPool.QueueUserWorkItem(
+                state => GetFileSystemItems(parent, dispatcher, true));
+
+            return _fillRootSubject;
         }
 
         /// <summary>
@@ -103,43 +120,62 @@ namespace CoverRetriever.Service
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="dispatcher">The dispatcher.</param>
-        private void GetFileSystemItems(Folder parent, Dispatcher dispatcher)
+        /// <param name="isRoot">Flag indicating that current folder is root.</param>
+        private void GetFileSystemItems(Folder parent, Dispatcher dispatcher, bool isRoot)
         {
-            _countRequestOfAddItems += 2;
+            _fillRootSubject.OnNext(parent.GetFileSystemItemFullPath());
 
             var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
                 .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
 
-            if (dispatcher != null)
-            {
-                dispatcher.BeginInvoke(DispatcherPriority.Send, new AddItemsToFolderDelegate(AddItemsToFolder), parent, directories);
-            }
-            else
-            {
-                AddItemsToFolder(parent, directories);
-            }
+            AddFileSystemSafe(parent, dispatcher, directories);
 
             var files =
-                Directory.GetFiles(parent.GetFileSystemItemFullPath()).Where(
-                    file => AudioFormat.AudioFileExtensions.Any(ext => file.ToLower().EndsWith(ext))).Select(name =>
+                Directory.GetFiles(parent.GetFileSystemItemFullPath())
+                .Where(file => AudioFormat.AudioFileExtensions.Any(ext => file.ToLower().EndsWith(ext)))
+                .Select(name =>
                     new AudioFile(
                         Path.GetFileName(name),
                         parent,
                         ActivateIMetaProvider(name),
                         ActivateDirectoryCoverOrganizer(name)));
 
-            if (dispatcher != null)
-            {
-                dispatcher.BeginInvoke(DispatcherPriority.Send, new AddItemsToFolderDelegate(AddItemsToFolder), parent, files);
-            }
-            else
-            {
-                AddItemsToFolder(parent, files);
-            }
+            AddFileSystemSafe(parent, dispatcher, files);
 
             foreach (var folder in directories)
             {
-                GetFileSystemItems(folder, dispatcher);
+                GetFileSystemItems(folder, dispatcher, false);
+            }
+
+            if (isRoot)
+            {
+                _fillRootSubject.OnCompleted();
+                if (_onComplete != null)
+                {
+                    _onComplete();
+                }    
+            }
+        }
+
+        /// <summary>
+        /// Adds the file system in specified folder.
+        /// <remarks>
+        /// If dispatcher specified - will be used dispatcher to add items, otherwise will be add without dispatcher.
+        /// </remarks>
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="items">The items.</param>
+        private void AddFileSystemSafe(Folder parent, Dispatcher dispatcher, IEnumerable<FileSystemItem> items)
+        {
+            if (dispatcher != null)
+            {
+                dispatcher.BeginInvoke(
+                    DispatcherPriority.Send, new AddItemsToFolderDelegate(AddItemsToFolder), parent, items);
+            }
+            else
+            {
+                AddItemsToFolder(parent, items);
             }
         }
 
@@ -150,12 +186,7 @@ namespace CoverRetriever.Service
         /// <param name="children">The children.</param>
         private void AddItemsToFolder(Folder parent, IEnumerable<FileSystemItem> children)
         {
-            _countRequestOfAddItems -= 1;
             parent.Children.AddRange(children);
-            if (_countRequestOfAddItems == 0 && _onComplete != null)
-            {
-                _onComplete();
-            }
         }
 
         /// <summary>
