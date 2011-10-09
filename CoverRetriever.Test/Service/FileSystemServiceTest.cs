@@ -12,6 +12,7 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.Service
 {
+    using System;
     using System.Concurrency;
     using System.Configuration;
     using System.Reactive.Testing.Mocks;
@@ -62,15 +63,11 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void GetFileSystemItems_should_return_tree_of_file_system_items()
         {
-            var rootFolder = new RootFolder(_ddtFolder);
-            var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
-            
-            var serviceLocatorMock = new Mock<IServiceLocator>();
-            serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
-                .Returns(coverOrganizerMock.Object);
+            var testTuple = PrepareService();
+            var service = testTuple.Item1;
+            var rootFolder = testTuple.Item2;
 
-            var target = new FileSystemService(serviceLocatorMock.Object);
-            target.FillRootFolderAsync(rootFolder, null).Run();
+            service.FillRootFolderAsync(rootFolder, null).Run();
 
             Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
             rootFolder.Children.Take(23).ForEach(x => Assert.That(x, Is.InstanceOf<Folder>()));
@@ -82,15 +79,11 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void GetFileSystemItems_recursive_load_all_items_and_subfolders()
         {
-            var rootFolder = new RootFolder(_ddtFolder);
-            var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
+            var testTuple = PrepareService();
+            var service = testTuple.Item1;
+            var rootFolder = testTuple.Item2;
 
-            var serviceLocatorMock = new Mock<IServiceLocator>();
-            serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
-                .Returns(coverOrganizerMock.Object);
-
-            var target = new FileSystemService(serviceLocatorMock.Object);
-            target.FillRootFolderAsync(rootFolder, null).Run();
+            service.FillRootFolderAsync(rootFolder, null).Run();
 
             Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
             Assert.That(((Folder)rootFolder.Children[0]).Children.Count, Is.EqualTo(8));
@@ -108,26 +101,63 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void Should_push_32_folders_in_operation_progress_and_one_complete()
         {
-            var rootFolder = new RootFolder(_ddtFolder);
-            var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
+            var testTuple = this.PrepareService();
             var scheduler = new TestScheduler();
             var testObserver = new MockObserver<string>(scheduler);
+            var service = testTuple.Item1;
+            var rootFolder = testTuple.Item2;
+
+            service.FillRootFolderAsync(rootFolder, null).Run(testObserver);
+
+            var countOfOnNextMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnNext);
+            var countOfOnCompleteMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
+            var countOfOnErrorMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnError);
+            
+            Assert.That(countOfOnNextMessages, Is.EqualTo(32));
+            Assert.That(countOfOnCompleteMessages, Is.EqualTo(1));
+            Assert.That(countOfOnErrorMessages, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Should_add_294_audio_files_and_31_foders()
+        {
+            var testTuple = PrepareService();
+            var service = testTuple.Item1;
+            var rootFolder = testTuple.Item2;
+            service.FillRootFolderAsync(rootFolder, null).Run();
+
+            var audioFiles = ToFlatCollecction<AudioFile>(rootFolder);
+            var folders = ToFlatCollecction<Folder>(rootFolder);
+
+            Assert.That(audioFiles.Count(), Is.EqualTo(267));
+            Assert.That(folders.Count(), Is.EqualTo(31));
+        }
+
+        private Tuple<FileSystemService, RootFolder> PrepareService()
+        {
+            var rootFolder = new RootFolder(this._ddtFolder);
+            var coverOrganizerMock = new Mock<DirectoryCoverOrganizer>();
 
             var serviceLocatorMock = new Mock<IServiceLocator>();
             serviceLocatorMock.Setup(x => x.GetInstance<DirectoryCoverOrganizer>())
                 .Returns(coverOrganizerMock.Object);
 
             var target = new FileSystemService(serviceLocatorMock.Object);
-            target.FillRootFolderAsync(rootFolder, null).Run(testObserver);
+    
+            return new Tuple<FileSystemService, RootFolder>(target, rootFolder);
+        }
 
-            var countOfOnNextMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnNext);
-            var countOfOnCompleteMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
-            var countOfOnErrorMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnError);
-            
-            Assert.That(testObserver.Count, Is.EqualTo(32));
-            Assert.That(countOfOnNextMessages, Is.EqualTo(31));
-            Assert.That(countOfOnCompleteMessages, Is.EqualTo(1));
-            Assert.That(countOfOnErrorMessages, Is.EqualTo(0));
+        private IEnumerable<T> ToFlatCollecction<T>(Folder rootFolder)
+        {
+            var items = new List<T>();
+
+            items.AddRange(rootFolder.Children.OfType<T>());
+            foreach (var folrer in rootFolder.Children.OfType<Folder>())
+            {
+                items.AddRange(ToFlatCollecction<T>(folrer));
+            }
+
+            return items;
         }
     }
 }

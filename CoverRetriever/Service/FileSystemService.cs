@@ -12,6 +12,7 @@ namespace CoverRetriever.Service
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -76,10 +77,9 @@ namespace CoverRetriever.Service
         {
             _fillRootSubject = new Subject<string>();
 
-            ThreadPool.QueueUserWorkItem(
-                state => GetFileSystemItems(parent, dispatcher, true));
-
-            return _fillRootSubject;
+            return
+                _fillRootSubject.Defer(
+                    () => { ThreadPool.QueueUserWorkItem(state => GetFileSystemItems(parent, dispatcher, true)); });
         }
 
         /// <summary>
@@ -106,6 +106,7 @@ namespace CoverRetriever.Service
         {
             var parentFullPath = parent.GetFileSystemItemFullPath();
             _fillRootSubject.OnNext(parentFullPath);
+            Debug.WriteLine(parentFullPath);
 
             var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
                 .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
