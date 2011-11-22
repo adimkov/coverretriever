@@ -6,50 +6,54 @@ using System.Windows.Media.Imaging;
 
 namespace CoverRetriever.Controls
 {
-	public class ImageAsyncSource
-	{
-		public static readonly DependencyProperty AsyncSourceProperty =
-			DependencyProperty.RegisterAttached("AsyncSource", typeof (IObservable<Stream>), typeof (ImageAsyncSource),
-			                                    new PropertyMetadata(new PropertyChangedCallback(OnAsyncSourceChanged)));
+    using System.Linq;
 
-		public static void SetAsyncSource(Image o, IObservable<Stream> value)
-		{
-			o.SetValue(AsyncSourceProperty, value);
-		}
+    public class ImageAsyncSource
+    {
+        public static readonly DependencyProperty AsyncSourceProperty =
+            DependencyProperty.RegisterAttached("AsyncSource", typeof (IObservable<Stream>), typeof (ImageAsyncSource),
+                                                new PropertyMetadata(new PropertyChangedCallback(OnAsyncSourceChanged)));
 
-		public static IObservable<Stream> GetAsyncSource(DependencyObject o)
-		{
-			return (IObservable<Stream>) o.GetValue(AsyncSourceProperty);
-		}
+        public static void SetAsyncSource(Image o, IObservable<Stream> value)
+        {
+            o.SetValue(AsyncSourceProperty, value);
+        }
 
-		private static void OnAsyncSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			var image = d as Image;
-			var source = e.NewValue as IObservable<Stream>;
-			if (image != null && source != null)
-			{
-				image.Source = null;
-				AddSource(image, source);
-			}
-		}
+        public static IObservable<Stream> GetAsyncSource(DependencyObject o)
+        {
+            return (IObservable<Stream>) o.GetValue(AsyncSourceProperty);
+        }
 
-		private static void AddSource(Image image, IObservable<Stream> source)
-		{
-			source.Subscribe(stream =>
-			                 	{
-			                 		var bitmapImage = new BitmapImage();
-									bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-									bitmapImage.BeginInit();
-			                 		bitmapImage.StreamSource = stream;
-			                 		bitmapImage.EndInit();
+        private static void OnAsyncSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var image = d as Image;
+            var source = e.NewValue as IObservable<Stream>;
+            if (image != null && source != null)
+            {
+                image.Source = null;
+                AddSource(image, source);
+            }
+        }
 
-									image.Source = bitmapImage;
-			                 	},
-								ex =>
-									{
-										//muffle exception
-										image.Source = null;
-									});
-		}
-	}
+        private static void AddSource(Image image, IObservable<Stream> source)
+        {
+            source
+                .ObserveOnDispatcher()
+                .Subscribe(stream =>
+                                {
+                                    var bitmapImage = new BitmapImage();
+                                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmapImage.BeginInit();
+                                    bitmapImage.StreamSource = stream;
+                                    bitmapImage.EndInit();
+
+                                    image.Source = bitmapImage;
+                                },
+                                ex =>
+                                    {
+                                        // mute exception
+                                        image.Source = null;
+                                    });
+        }
+    }
 }

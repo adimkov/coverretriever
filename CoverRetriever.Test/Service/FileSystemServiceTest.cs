@@ -67,7 +67,8 @@ namespace CoverRetriever.Test.Service
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
 
-            service.FillRootFolderAsync(rootFolder, null).Run();
+            service.GetChildrenForRootFolder(rootFolder)
+                .Run(x => rootFolder.Children.Add(x));
 
             Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
             rootFolder.Children.Take(23).ForEach(x => Assert.That(x, Is.InstanceOf<Folder>()));
@@ -83,9 +84,9 @@ namespace CoverRetriever.Test.Service
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
 
-            service.FillRootFolderAsync(rootFolder, null).Run();
+            service.GetChildrenForRootFolder(rootFolder)
+                .Run(x => rootFolder.Children.Add(x));
 
-            Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
             Assert.That(((Folder)rootFolder.Children[0]).Children.Count, Is.EqualTo(8));
             Assert.That(((Folder)rootFolder.Children[1]).Children.Count, Is.EqualTo(9));
             Assert.That(((Folder)rootFolder.Children[2]).Children.Count, Is.EqualTo(9));
@@ -99,21 +100,21 @@ namespace CoverRetriever.Test.Service
         }
 
         [Test]
-        public void Should_push_32_folders_in_operation_progress_and_one_complete()
+        public void Should_push_23_folders_in_operation_and_one_complete()
         {
             var testTuple = this.PrepareService();
             var scheduler = new TestScheduler();
-            var testObserver = new MockObserver<string>(scheduler);
+            var testObserver = new MockObserver<FileSystemItem>(scheduler);
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
 
-            service.FillRootFolderAsync(rootFolder, null).Run(testObserver);
+            service.GetChildrenForRootFolder(rootFolder).Run(testObserver);
 
             var countOfOnNextMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnNext);
             var countOfOnCompleteMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
             var countOfOnErrorMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnError);
             
-            Assert.That(countOfOnNextMessages, Is.EqualTo(32));
+            Assert.That(countOfOnNextMessages, Is.EqualTo(23));
             Assert.That(countOfOnCompleteMessages, Is.EqualTo(1));
             Assert.That(countOfOnErrorMessages, Is.EqualTo(0));
         }
@@ -124,7 +125,8 @@ namespace CoverRetriever.Test.Service
             var testTuple = PrepareService();
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
-            service.FillRootFolderAsync(rootFolder, null).Run();
+            service.GetChildrenForRootFolder(rootFolder)
+                .Run(x => rootFolder.Children.Add(x));
 
             var audioFiles = ToFlatCollecction<AudioFile>(rootFolder);
             var folders = ToFlatCollecction<Folder>(rootFolder);

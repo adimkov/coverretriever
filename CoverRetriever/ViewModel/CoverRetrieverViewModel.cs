@@ -14,10 +14,8 @@ namespace CoverRetriever.ViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Concurrency;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
-    using System.Windows.Threading;
 
     using CoverRetriever.Interaction;
     using CoverRetriever.Model;
@@ -43,7 +41,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Delay time to check updates in sec.
         /// </summary>
-        private const int DelayToCheckUpdate = 10;
+        private const int DelayToCheckUpdate = 10000;
 
         /// <summary>
         /// Service to access to at file system.
@@ -114,7 +112,7 @@ namespace CoverRetriever.ViewModel
             _openFolderViewModel = openFolderViewModel;
             FileConductorViewModel = fileConductorViewModel;
 
-            openFolderViewModel.PushRootFolder.Subscribe(this.OnNextPushRootFolder);
+            openFolderViewModel.PushRootFolder.Subscribe(OnNextPushRootFolder);
             LoadedCommand = new DelegateCommand(LoadedCommandExecute);
             FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
             PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
@@ -288,7 +286,7 @@ namespace CoverRetriever.ViewModel
             private set
             {
                 _newVersion = value;
-                this.RaisePropertyChanged("NewVersion");
+                RaisePropertyChanged("NewVersion");
             }
         }
 
@@ -342,9 +340,16 @@ namespace CoverRetriever.ViewModel
         {
             _rootFolder = new RootFolder(rootFolderResult.RootFolder);
             RaisePropertyChanged("FileSystem");
-            _fileSystemService.FillRootFolderAsync(_rootFolder, Dispatcher.CurrentDispatcher)
+            StartOperation(CoverRetrieverResources.MessageLibraryLoad);
+            _fileSystemService.GetChildrenForRootFolder(_rootFolder)
+                .SubscribeOn(Scheduler.NewThread)
+                .ObserveOnDispatcher()
                 .Subscribe(
-                x => Debug.WriteLine(x),
+                x =>
+                    {
+                        _rootFolder.Children.Add(x);
+                        
+                    },
                 SelectFirstAudioFile);
             SelectRootFolderRequest.Raise(new CloseNotification());
         }
@@ -354,7 +359,8 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void SelectFirstAudioFile()
         {
-            Dispatcher.CurrentDispatcher.Invoke(new Action(() => SelectedFileSystemItem = FindFirstAudioFile(_rootFolder)));
+            EndOperation();
+            SelectedFileSystemItem = FindFirstAudioFile(_rootFolder);
         }
 
         /// <summary>

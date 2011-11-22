@@ -15,8 +15,6 @@ namespace CoverRetriever.Service
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Threading;
-    using System.Windows.Threading;
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Infrastructure;
@@ -36,14 +34,9 @@ namespace CoverRetriever.Service
         private readonly IServiceLocator _serviceLocator;
 
         /// <summary>
-        /// Hold reference on complete action.
-        /// </summary>
-        private Action _onComplete;
-
-        /// <summary>
         /// Fill root folder observer.
         /// </summary>
-        private Subject<string> _fillRootSubject;
+        private Subject<FileSystemItem> _fillRootSubject;
 
             /// <summary>
         /// Initializes a new instance of the <see cref="FileSystemService"/> class.
@@ -53,33 +46,18 @@ namespace CoverRetriever.Service
         public FileSystemService(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _fillRootSubject = new Subject<string>();
         }
 
         /// <summary>
-        /// Delegate to add files in folder in dispatcher.
-        /// </summary>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <param name="children">
-        /// The children.
-        /// </param>
-        private delegate void AddItemsToFolderDelegate(Folder parent, IEnumerable<FileSystemItem> children);
-
-        /// <summary>
-        /// Fills the root folder with subfolders and audio files async.
+        /// Gets children elements of specified folder.
         /// </summary>
         /// <param name="parent">The root folder.</param>
-        /// <param name="dispatcher">The dispatcher.</param>
-        /// <returns>Observer of operation.</returns>
-        public IObservable<string> FillRootFolderAsync(Folder parent, Dispatcher dispatcher)
+        /// <returns>Observer of filling operation.</returns>
+        public IObservable<FileSystemItem> GetChildrenForRootFolder(Folder parent)
         {
-            _fillRootSubject = new Subject<string>();
-
-            return
-                _fillRootSubject.Defer(
-                    () => { ThreadPool.QueueUserWorkItem(state => GetFileSystemItems(parent, dispatcher, true)); });
+            _fillRootSubject = new Subject<FileSystemItem>();
+            
+            return _fillRootSubject.Defer(() => GetFileSystemItems(parent, true));
         }
 
         /// <summary>
@@ -100,18 +78,16 @@ namespace CoverRetriever.Service
         /// Gets the file system items.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="dispatcher">The dispatcher.</param>
         /// <param name="isRoot">Flag indicating that current folder is root.</param>
-        private void GetFileSystemItems(Folder parent, Dispatcher dispatcher, bool isRoot)
+        private void GetFileSystemItems(Folder parent, bool isRoot)
         {
             var parentFullPath = parent.GetFileSystemItemFullPath();
-            _fillRootSubject.OnNext(parentFullPath);
             Debug.WriteLine(parentFullPath);
 
             var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
                 .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
 
-            AddFileSystemSafe(parent, dispatcher, directories);
+            AddItemsToFolder(parent, isRoot, directories);
 
             var files =
                 Directory.GetFiles(parentFullPath)
@@ -123,42 +99,16 @@ namespace CoverRetriever.Service
                         ActivateIMetaProvider(name),
                         ActivateDirectoryCoverOrganizer(name)));
 
-            AddFileSystemSafe(parent, dispatcher, files);
+            AddItemsToFolder(parent, isRoot, files);
 
             foreach (var folder in directories)
             {
-                GetFileSystemItems(folder, dispatcher, false);
+                GetFileSystemItems(folder, false);
             }
 
             if (isRoot)
             {
                 _fillRootSubject.OnCompleted();
-                if (_onComplete != null)
-                {
-                    _onComplete();
-                }    
-            }
-        }
-
-        /// <summary>
-        /// Adds the file system in specified folder.
-        /// <remarks>
-        /// If dispatcher specified - will be used dispatcher to add items, otherwise will be add without dispatcher.
-        /// </remarks>
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <param name="dispatcher">The dispatcher.</param>
-        /// <param name="items">The items.</param>
-        private void AddFileSystemSafe(Folder parent, Dispatcher dispatcher, IEnumerable<FileSystemItem> items)
-        {
-            if (dispatcher != null)
-            {
-                dispatcher.BeginInvoke(
-                    DispatcherPriority.Send, new AddItemsToFolderDelegate(AddItemsToFolder), parent, items);
-            }
-            else
-            {
-                AddItemsToFolder(parent, items);
             }
         }
 
@@ -166,10 +116,18 @@ namespace CoverRetriever.Service
         /// Adds the items to folder.
         /// </summary>
         /// <param name="parent">The parent.</param>
+        /// <param name="isRoot">If set to <c>true</c> then parent is root.</param>
         /// <param name="children">The children.</param>
-        private void AddItemsToFolder(Folder parent, IEnumerable<FileSystemItem> children)
+        private void AddItemsToFolder(Folder parent, bool isRoot, IEnumerable<FileSystemItem> children)
         {
-            parent.Children.AddRange(children);
+            if (isRoot)
+            {
+                children.ForEach(x => _fillRootSubject.OnNext(x));
+            }
+            else
+            {
+                parent.Children.AddRange(children);
+            }
         }
 
         /// <summary>

@@ -10,7 +10,6 @@
 namespace CoverRetriever.Service
 {
     using System;
-    using System.Windows.Threading;
 
     using CoverRetriever.Model;
 
@@ -20,12 +19,11 @@ namespace CoverRetriever.Service
     public interface IFileSystemService
     {
        /// <summary>
-        /// Fills the root folder with subfolders and audio files async.
+        /// Gets children elements of specified folder.
         /// </summary>
         /// <param name="parent">The root folder.</param>
-        /// <param name="dispatcher">The dispatcher.</param>
         /// <returns>Observer of filling operation.</returns>
-        IObservable<string> FillRootFolderAsync(Folder parent, Dispatcher dispatcher);
+        IObservable<FileSystemItem> GetChildrenForRootFolder(Folder parent);
 
         /// <summary>
         /// Check for directory existence on client machine.

@@ -130,12 +130,16 @@
     <comment>File сonductor view</comment>
   </data>
   <data name="MessageCoverPreview" xml:space="preserve">
-    <value>Loading Cover...</value>
+    <value>Loading the cover...</value>
     <comment>Preview operation</comment>
   </data>
   <data name="MessageDownloadCover" xml:space="preserve">
     <value>Downloading covers...</value>
     <comment>Shell operation message</comment>
+  </data>
+  <data name="MessageLibraryLoad" xml:space="preserve">
+    <value>Loading the library...</value>
+    <comment>Shell</comment>
   </data>
   <data name="MessageSaveCover" xml:space="preserve">
     <value>Saving the cover...</value>
