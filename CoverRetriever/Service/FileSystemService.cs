@@ -84,31 +84,38 @@ namespace CoverRetriever.Service
             var parentFullPath = parent.GetFileSystemItemFullPath();
             Debug.WriteLine(parentFullPath);
 
-            var directories = Directory.GetDirectories(parent.GetFileSystemItemFullPath())
-                .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
-
-            AddItemsToFolder(parent, isRoot, directories);
-
-            var files =
-                Directory.GetFiles(parentFullPath)
-                .Where(file => AudioFormat.AudioFileExtensions.Any(ext => file.ToLower().EndsWith(ext)))
-                .Select(name =>
-                    new AudioFile(
-                        Path.GetFileName(name),
-                        parent,
-                        ActivateIMetaProvider(name),
-                        ActivateDirectoryCoverOrganizer(name)));
-
-            AddItemsToFolder(parent, isRoot, files);
-
-            foreach (var folder in directories)
+            try
             {
-                GetFileSystemItems(folder, false);
+                var directories = Directory.GetDirectories(parentFullPath)
+                    .Select(name => new Folder(Path.GetFileName(name), parent)).ToList();
+
+                AddItemsToFolder(parent, isRoot, directories);
+
+                var files =
+                    Directory.GetFiles(parentFullPath)
+                        .Where(file => AudioFormat.AudioFileExtensions.Any(ext => file.ToLower().EndsWith(ext)))
+                        .Select(name =>
+                                new AudioFile(
+                                    Path.GetFileName(name),
+                                    parent,
+                                    ActivateIMetaProvider(name),
+                                    ActivateDirectoryCoverOrganizer(name)));
+
+                AddItemsToFolder(parent, isRoot, files);
+
+                foreach (var folder in directories)
+                {
+                    GetFileSystemItems(folder, false);
+                }
+
+                if (isRoot)
+                {
+                    _fillRootSubject.OnCompleted();
+                }
             }
-
-            if (isRoot)
+            catch (UnauthorizedAccessException)
             {
-                _fillRootSubject.OnCompleted();
+                Debug.WriteLine("File access exception: '{0}'", parentFullPath);
             }
         }
 
