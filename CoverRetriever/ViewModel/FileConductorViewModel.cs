@@ -184,11 +184,14 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void SetSelectedAudioCoverIfPosible()
         {
+            Cover cover = null;
             if (SelectedAudio != null)
             {
                 var recipient = GrabCoverOrganizer(SelectedAudio);
-                SelectedAudioCover = recipient.IsCoverExists() ? recipient.GetCover() : null;
+                cover = recipient.IsCoverExists() ? recipient.GetCover() : null;
             }
+
+            SelectedAudioCover = cover;
         }
     }
 }

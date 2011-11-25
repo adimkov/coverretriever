@@ -12,6 +12,7 @@ namespace CoverRetriever.ViewModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel.Composition;
     using System.Concurrency;
     using System.Linq;
@@ -116,7 +117,7 @@ namespace CoverRetriever.ViewModel
             LoadedCommand = new DelegateCommand(LoadedCommandExecute);
             FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
             PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
-            SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute, rc => String.IsNullOrEmpty(CoverRetrieveErrorMessage));
+            SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute, CanExecuteSaveCoverCommand);
             SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
             FinishCommand = new DelegateCommand(FinishCommandExecute);
             AboutCommand = new DelegateCommand(AboutCommandExecute);
@@ -125,6 +126,8 @@ namespace CoverRetriever.ViewModel
             PreviewCoverRequest = new InteractionRequest<Notification>();
             SelectRootFolderRequest = new InteractionRequest<Notification>();
             AboutRequest = new InteractionRequest<Notification>();
+
+            _suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
         }
 
         /// <summary>
@@ -383,6 +386,10 @@ namespace CoverRetriever.ViewModel
             {
                 FindRemoteCovers(FileConductorViewModel.SelectedAudio);
             }
+            else
+            {
+                SuggestedCovers.Clear();
+            }
         }
 
         /// <summary>
@@ -561,5 +568,27 @@ namespace CoverRetriever.ViewModel
                 NewVersion = CoverRetrieverResources.TextNewVersion.FormatUIString(revisionVersion.Version);
             }
         }
-    }
+
+        /// <summary>
+        /// Determines whether this instance can execute save cover command.
+        /// </summary>
+        /// <param name="remoteCover">The remote cover.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance can execute save cover command; otherwise, <c>false</c>.
+        /// </returns>
+        private bool CanExecuteSaveCoverCommand(RemoteCover remoteCover)
+        {
+            return String.IsNullOrEmpty(CoverRetrieveErrorMessage) && SuggestedCovers.Count > 0;
+        }
+
+        /// <summary>
+        /// Suggested covers on collection changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="notifyCollectionChangedEventArgs">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        private void SuggestedCoversOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            SaveCoverCommand.RaiseCanExecuteChanged();
+        }
+  }
 }
