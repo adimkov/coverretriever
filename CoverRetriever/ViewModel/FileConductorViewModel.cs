@@ -111,6 +111,12 @@ namespace CoverRetriever.ViewModel
                 if (_recipient != value)
                 {
                     _recipient = value;
+
+                    if (_recipient == CoverRecipient.Directory)
+                    {
+                        ApplyToAllFiles = false;
+                    }
+
                     if (SelectedAudio != null)
                     {
                         SetSelectedAudioCoverIfPosible();
