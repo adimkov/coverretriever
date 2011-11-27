@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioInfo.Helper\PictureHelperTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFmTaggerTest.cs" />
     <Compile Include="AudioInfo\FileNameMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
