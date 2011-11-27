@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lfm status="ok">
+  <tracks>
+    <track rank="1">
+      <name>Поэт</name>
+      <duration>287</duration>
+      <mbid></mbid>
+      <url>http://www.last.fm/music/%D0%94%D0%94%D0%A2/_/%D0%9F%D0%BE%D1%8D%D1%82</url>
+      <streamable fulltrack="0">0</streamable>
+      <artist>
+        <name>ДДТ</name>
+        <mbid>f7456b5b-e5a5-454e-b5db-047308210c8e</mbid>
+        <url>http://www.last.fm/music/%D0%94%D0%94%D0%A2</url>
+      </artist>
+      <image size="small">http://userserve-ak.last.fm/serve/34s/3537790.jpg</image>
+      <image size="medium">http://userserve-ak.last.fm/serve/64s/3537790.jpg</image>
+      <image size="large">http://userserve-ak.last.fm/serve/126/3537790.jpg</image>
+      <image size="extralarge">http://userserve-ak.last.fm/serve/300x300/3537790.jpg</image>
+    </track>
+    <track rank="0.057816">
+      <name>Poet</name>
+      <duration>265</duration>
+      <mbid></mbid>
+      <url>http://www.last.fm/music/%D0%94%D0%94%D0%A2/_/Poet</url>
+      <streamable fulltrack="0">0</streamable>
+      <artist>
+        <name>ДДТ</name>
+        <mbid>f7456b5b-e5a5-454e-b5db-047308210c8e</mbid>
+        <url>http://www.last.fm/music/%D0%94%D0%94%D0%A2</url>
+      </artist>
+      <image size="small">http://userserve-ak.last.fm/serve/34s/3537782.jpg</image>
+      <image size="medium">http://userserve-ak.last.fm/serve/64s/3537782.jpg</image>
+      <image size="large">http://userserve-ak.last.fm/serve/126/3537782.jpg</image>
+      <image size="extralarge">http://userserve-ak.last.fm/serve/300x300/3537782.jpg</image>
+    </track>
+    <track rank="0.024625">
+      <name>01_POET</name>
+      <duration>265</duration>
+      <mbid></mbid>
+      <url>http://www.last.fm/music/005/_/01_POET</url>
+      <streamable fulltrack="0">0</streamable>
+      <artist>
+        <name>005</name>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/005</url>
+      </artist>
+    </track>
+  </tracks>
+</lfm>

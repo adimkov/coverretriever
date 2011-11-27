@@ -94,7 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioInfo.Helper\PictureHelperTest.cs" />
-    <Compile Include="AudioInfo.Tagger\LastFmTaggerTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\AlbumInfoResponseParserTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\LastFmServiceTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\LastFmTaggerTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\FingerprintResponseParserTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\ResponseParserTest.cs" />
+    <Compile Include="AudioInfo.Tagger\LastFm\TrackInfoResponseParserTest.cs" />
     <Compile Include="AudioInfo\FileNameMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
@@ -122,6 +127,21 @@
     <Compile Include="ViewModel\ViewModelMock.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Input.AudioInfo.Tagger.LastFm\InvalidLastFmFingerprintResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Input.AudioInfo.Tagger.LastFm\EmptyLastFmFingerprintResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Input.AudioInfo.Tagger.LastFm\ValidLastFmFingerprintResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Input.AudioInfo.Tagger.LastFm\ValidTaskInfoResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Input.AudioInfo.Tagger.LastFm\ValidAlbumInfoResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Input.AudioInfo\1.flac">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

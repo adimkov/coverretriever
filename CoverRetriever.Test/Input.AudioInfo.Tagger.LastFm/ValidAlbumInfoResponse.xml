@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lfm status="ok">
+  <album>
+    <name>The Wall</name>
+    <artist>Pink Floyd</artist>
+    <id>2024736</id>
+    <mbid>bda29f4e-4af3-406a-b536-14892aa635af</mbid>
+    <url>http://www.last.fm/music/Pink+Floyd/The+Wall</url>
+    <releasedate>    30 Apr 1977, 00:00</releasedate>
+    <image size="small">http://userserve-ak.last.fm/serve/34s/70211546.png</image>
+    <image size="medium">http://userserve-ak.last.fm/serve/64s/70211546.png</image>
+    <image size="large">http://userserve-ak.last.fm/serve/174s/70211546.png</image>
+    <image size="extralarge">http://userserve-ak.last.fm/serve/300x300/70211546.png</image>
+    <image size="mega">http://userserve-ak.last.fm/serve/_/70211546/The+Wall++high+resolution+png.png</image>
+    <listeners>375299</listeners>
+    <playcount>13496785</playcount>
+    <tracks>
+      <track rank="1">
+        <name>In The Flesh? (1994 Digital Remaster)</name>
+        <duration>199</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/In+The+Flesh%3F+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="2">
+        <name>The Thin Ice (1994 Digital Remaster)</name>
+        <duration>149</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/+noredirect/Pink+Floyd/_/The+Thin+Ice+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="3">
+        <name>Another Brick In The Wall (Part 1) (1994 Digital Remaster)</name>
+        <duration>189</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Another+Brick+In+The+Wall+%28Part+1%29+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="4">
+        <name>The Happiest Days Of Our Lives (1994 Digital Remaster)</name>
+        <duration>111</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/The+Happiest+Days+Of+Our+Lives+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="5">
+        <name>Another Brick In The Wall (Part 2) (1994 Digital Remaster)</name>
+        <duration>239</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Another+Brick+In+The+Wall+%28Part+2%29+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="6">
+        <name>Mother (1994 Digital Remaster)</name>
+        <duration>335</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Mother+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="7">
+        <name>Goodbye Blue Sky (1994 Digital Remaster)</name>
+        <duration>167</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Goodbye+Blue+Sky+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="8">
+        <name>Empty Spaces (1994 Digital Remaster)</name>
+        <duration>127</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Empty+Spaces+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="9">
+        <name>Young Lust (1994 Digital Remaster)</name>
+        <duration>210</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Young+Lust+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="10">
+        <name>One Of My Turns (1994 Digital Remaster)</name>
+        <duration>216</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/One+Of+My+Turns+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="11">
+        <name>Don't Leave Me Now (1994 Digital Remaster)</name>
+        <duration>256</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Don%27t+Leave+Me+Now+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="12">
+        <name>Another Brick In The Wall (Part 3) (1994 Digital Remaster)</name>
+        <duration>74</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Another+Brick+In+The+Wall+%28Part+3%29+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="13">
+        <name>Goodbye Cruel World (1994 Digital Remaster)</name>
+        <duration>76</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Goodbye+Cruel+World+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="14">
+        <name>Hey You (1994 Digital Remaster)</name>
+        <duration>281</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Hey+You+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="15">
+        <name>Is There Anybody Out There? (1994 Digital Remaster)</name>
+        <duration>160</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Is+There+Anybody+Out+There%3F+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="16">
+        <name>Nobody Home (1994 Digital Remaster)</name>
+        <duration>204</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Nobody+Home+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="17">
+        <name>Vera (1994 Digital Remaster)</name>
+        <duration>93</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Vera+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="18">
+        <name>Bring The Boys Back Home (1994 Digital Remaster)</name>
+        <duration>86</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Bring+The+Boys+Back+Home+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="19">
+        <name>Comfortably Numb (1994 Digital Remaster)</name>
+        <duration>382</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Comfortably+Numb+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="20">
+        <name>The Show Must Go On (1994 Digital Remaster)</name>
+        <duration>95</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/The+Show+Must+Go+On+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="21">
+        <name>In The Flesh (1994 Digital Remaster)</name>
+        <duration>256</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/In+The+Flesh+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="22">
+        <name>Run Like Hell (1994 Digital Remaster)</name>
+        <duration>263</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Run+Like+Hell+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="23">
+        <name>Waiting For The Worms (1994 Digital Remaster)</name>
+        <duration>237</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Waiting+For+The+Worms+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="24">
+        <name>Stop (1994 Digital Remaster)</name>
+        <duration>30</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Stop+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="25">
+        <name>The Trial (1994 Digital Remaster)</name>
+        <duration>319</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/The+Trial+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+      <track rank="26">
+        <name>Outside The Wall (1994 Digital Remaster)</name>
+        <duration>104</duration>
+        <mbid></mbid>
+        <url>http://www.last.fm/music/Pink+Floyd/_/Outside+The+Wall+%281994+Digital+Remaster%29</url>
+        <streamable fulltrack="0">0</streamable>
+        <artist>
+          <name>Pink Floyd</name>
+          <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+          <url>http://www.last.fm/music/Pink+Floyd</url>
+        </artist>
+      </track>
+    </tracks>
+    <toptags>
+      <tag>
+        <name>albums i own</name>
+        <url>http://www.last.fm/tag/albums%20i%20own</url>
+      </tag>
+      <tag>
+        <name>progressive rock</name>
+        <url>http://www.last.fm/tag/progressive%20rock</url>
+      </tag>
+      <tag>
+        <name>concept album</name>
+        <url>http://www.last.fm/tag/concept%20album</url>
+      </tag>
+      <tag>
+        <name>favorite albums</name>
+        <url>http://www.last.fm/tag/favorite%20albums</url>
+      </tag>
+      <tag>
+        <name>70s</name>
+        <url>http://www.last.fm/tag/70s</url>
+      </tag>
+    </toptags>
+    <wiki>
+      <published>Fri, 18 Dec 2009 20:23:25 +0000</published>
+      <summary><![CDATA[The Wall is a rock opera presented as a double album by the English progressive rock band Pink Floyd, released on November 30th, 1979. It was subsequently performed live, with elaborate theatrical effects, and made into a film.  Following in the footsteps of their previous albums, The Wall is a concept album вЂ” specifically, it deals largely with the theme of isolation from one's peers. The concept was largely inspired by the band's 1977 tour promoting the album Animals...]]></summary>
+      <content>
+        <![CDATA[The Wall is a rock opera presented as a double album by the English progressive rock band Pink Floyd, released on November 30th, 1979. It was subsequently performed live, with elaborate theatrical effects, and made into a film.
+ 
+ Following in the footsteps of their previous albums, The Wall is a concept album вЂ” specifically, it deals largely with the theme of isolation from one's peers. The concept was largely inspired by the band's 1977 tour promoting the album Animals, with regards to an incident where Roger Waters' frustration with the audience reached a point where Waters spat in the face of a fan who was attempting to climb on stage; this, in turn, led him to lament that such a wall exists. With its significantly darker theme, The Wall featured a notably harsher and more theatrical sound than their previous releases.
+ 
+ The Wall is a rock opera that centres on the character &quot;Pink&quot;. Largely based on Waters' personal life, Pink struggles in life from an early age, having lost his father in war (&quot;Another Brick in the Wall (Part 1)&quot;), abused by teachers (&quot;The Happiest Days of Our Lives&quot;), nurtured by an overprotective mother (&quot;Mother&quot;), and deserted by his wife later on (&quot;Don't Leave Me Now&quot;) вЂ” all of which factored into Pink's mental isolation from society, figuratively referred to as &quot;The Wall&quot;. Once Pink is behind his Wall, he slowly becomes insane due to his isolation from his fellow man. This culminates at a concert held by Pink, where he sets his &quot;men&quot; on fans he deems unworthy. He then puts himself on trial (&quot;The Trial&quot;) and finds himself guilty for causing his problems. The album then ends with a monologue by Waters; the fate of Pink is unknown.
+ 
+ The Wall quickly became a bestseller and was eventually certified 26x platinum. It is the Floyd's second-best-selling album after Dark Side of the Moon. However, The Wall contributed heavily to the split in the group that came soon after its release. Roger Waters (lead vocalist) fired keyboardist Rick Wright part way through the recording sessions and assumed most of the creative control over the album. Pink Floyd produced just one more album, The Final Cut, which was practically a Waters solo project, before Rogers finally left the band in the early 80's.
+        
+User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.]]>
+      </content>
+    </wiki>
+  </album>
+</lfm>

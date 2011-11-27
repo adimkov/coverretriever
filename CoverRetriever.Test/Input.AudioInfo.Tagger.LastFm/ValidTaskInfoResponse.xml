@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lfm status="ok">
+  <track>
+    <id>1071213</id>
+    <name>The Final Cut</name>
+    <mbid></mbid>
+    <url>http://www.last.fm/music/Pink+Floyd/_/The+Final+Cut</url>
+    <duration>293000</duration>
+    <streamable fulltrack="0">0</streamable>
+    <listeners>93887</listeners>
+    <playcount>454703</playcount>
+    <artist>
+      <name>Pink Floyd</name>
+      <mbid>83d91898-7763-47d7-b03b-b92132375c47</mbid>
+      <url>http://www.last.fm/music/Pink+Floyd</url>
+    </artist>
+    <album position="11">
+      <artist>Pink Floyd</artist>
+      <title>Oh By the Way (Studio Album Boxset)</title>
+      <mbid></mbid>
+      <url>http://www.last.fm/music/Pink+Floyd/Oh+By+the+Way+%28Studio+Album+Boxset%29</url>
+      <image size="small">http://userserve-ak.last.fm/serve/64s/17481073.jpg</image>
+      <image size="medium">http://userserve-ak.last.fm/serve/126/17481073.jpg</image>
+      <image size="large">http://userserve-ak.last.fm/serve/174s/17481073.jpg</image>
+      <image size="extralarge">http://userserve-ak.last.fm/serve/300x300/17481073.jpg</image>
+    </album>
+    <toptags>
+      <tag>
+        <name>progressive rock</name>
+        <url>http://www.last.fm/tag/progressive%20rock</url>
+      </tag>
+      <tag>
+        <name>classic rock</name>
+        <url>http://www.last.fm/tag/classic%20rock</url>
+      </tag>
+      <tag>
+        <name>rock</name>
+        <url>http://www.last.fm/tag/rock</url>
+      </tag>
+      <tag>
+        <name>pink floyd</name>
+        <url>http://www.last.fm/tag/pink%20floyd</url>
+      </tag>
+      <tag>
+        <name>psychedelic rock</name>
+        <url>http://www.last.fm/tag/psychedelic%20rock</url>
+      </tag>
+    </toptags>
+    <wiki>
+      <published>Mon, 18 May 2009 18:24:05 +0000</published>
+      <summary><![CDATA[&quot;The Final Cut&quot; is the title track from Pink Floyd's 1983's album The Final Cut. It has never been performed live. The video depicts Roger Waters (with eyes blacked out, possibly referencing that this man is Pink) singing to a psychologist and utilizes old film footage of 1930s and 40s life intertwined. It contains a short guitar solo played by David Gilmour.  The orchestral motif is similar to that found on &quot;Comfortably Numb&quot;, which was also scored by Michael Kamen.  ]]></summary>
+      <content>
+        <![CDATA[&quot;The Final Cut&quot; is the title track from Pink Floyd's 1983's album The Final Cut. It has never been performed live. The video depicts Roger Waters (with eyes blacked out, possibly referencing that this man is Pink) singing to a psychologist and utilizes old film footage of 1930s and 40s life intertwined. It contains a short guitar solo played by David Gilmour.
+ 
+ The orchestral motif is similar to that found on &quot;Comfortably Numb&quot;, which was also scored by Michael Kamen.
+ 
+ The lyrics contain further reference to the album &quot;The Wall&quot; with lines such as &quot;And if I'm in I'll show you what's behind the wall.&quot; Indeed, The Final Cut album was originally to be called &quot;Spare Bricks&quot;.
+        
+User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.]]>
+      </content>
+    </wiki>
+  </track>
+</lfm>

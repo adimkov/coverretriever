@@ -27,7 +27,8 @@ namespace CoverRetriever.Test
             for (int i = 0; i < stackTrace.FrameCount; i++)
             {
                 MethodBase method = stackTrace.GetFrame(i).GetMethod();
-                if (method.GetCustomAttributes(typeof (TestAttribute), false).Length > 0)
+                if (IsMethodContainsAttribute(method, typeof(TestAttribute)) ||
+                    IsMethodContainsAttribute(method, typeof(TestCaseAttribute)))
                 {
                     currentTestMethodName = method.Name;
                     break;
@@ -50,7 +51,8 @@ namespace CoverRetriever.Test
             for (int i = 0; i < stackTrace.FrameCount; i++)
             {
                 MethodBase method = stackTrace.GetFrame(i).GetMethod();
-                if (method.GetCustomAttributes(typeof (TestAttribute), false).Length > 0)
+                if (IsMethodContainsAttribute(method, typeof(TestAttribute)) ||
+                    IsMethodContainsAttribute(method, typeof(TestCaseAttribute)))
                 {
                     currentTestClassName = method.DeclaringType.Name;
                     break;
@@ -77,7 +79,8 @@ namespace CoverRetriever.Test
             for (int i = 0; i < stackTrace.FrameCount; i++)
             {
                 MethodBase method = stackTrace.GetFrame(i).GetMethod();
-                if (method.GetCustomAttributes(typeof (TestAttribute), false).Length > 0)
+                if (IsMethodContainsAttribute(method, typeof(TestAttribute)) ||
+                    IsMethodContainsAttribute(method, typeof(TestCaseAttribute)))
                 {
                     currentTestClassName = method.DeclaringType.Namespace;
                     break;
@@ -115,6 +118,11 @@ namespace CoverRetriever.Test
                 return fileStream.Stream;
             }
             throw new InvalidOperationException(String.Format("Resource {0} not found", resourceUri));
+        }
+
+        private static bool IsMethodContainsAttribute(MethodBase method, Type attribute)
+        {
+            return method.GetCustomAttributes(attribute, false).Length > 0;
         }
     }
 }
