@@ -22,7 +22,7 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
     [TestFixture]
     public class LastFmTaggerTest
     {
-        private const string FileToRetrieve = "EmptyFrameFile.mp3";
+        private const string FileToRetrieve = "DDT-Poet.mp3";
 
         private readonly string LastfmfpclientUtility;
         private readonly string LastfmSericeAddress;
@@ -52,6 +52,7 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
             _lastFmTagger.LoadTagsForAudioFile(PathUtils.BuildFullResourcePath(FileToRetrieve)).Run(observer);
 
             Assert.That(_lastFmTagger.GetArtist(), Is.EqualTo("ДДТ"));
+            Assert.That(_lastFmTagger.GetAlbum(), Is.EqualTo("Город без окон. Вход."));
             Assert.That(_lastFmTagger.GetTrackName(), Is.EqualTo("Поэт"));
         }
     }

@@ -12,6 +12,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     using System;
     using System.Linq;
     using System.Net;
+    using System.Text;
     using System.Xml.Linq;
 
     /// <summary>
@@ -54,8 +55,11 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         {
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
             serviceAddress.Query = String.Format("method=track.getinfo&api_key={0}&artist={1}&track={2}", _apiKey, artist, trackName);
-            
-            var webClient = new WebClient();
+
+            var webClient = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
             var trackInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
             webClient.DownloadStringAsync(serviceAddress.Uri);
@@ -83,7 +87,11 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
             serviceAddress.Query = String.Format("method=album.getinfo&api_key={0}&artist={1}&album={2}", _apiKey, artist, albumName);
 
-            var webClient = new WebClient();
+            var webClient = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
+
             var albumInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
             webClient.DownloadStringAsync(serviceAddress.Uri);
