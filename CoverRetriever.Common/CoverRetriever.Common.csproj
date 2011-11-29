@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}</ProjectGuid>
+    <ProjectGuid>{93EDA68B-4D06-4020-BF8C-05E638F2A622}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoverRetriever.AudioInfo</RootNamespace>
-    <AssemblyName>CoverRetriever.AudioInfo</AssemblyName>
+    <RootNamespace>CoverRetriever.Common</RootNamespace>
+    <AssemblyName>CoverRetriever.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,47 +31,49 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx">
       <HintPath>..\packages\Rx-Core.1.0.2838.0\lib\Net4\System.CoreEx.dll</HintPath>
     </Reference>
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive">
       <HintPath>..\packages\Rx-Main.1.0.2838.0\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="taglib-sharp">
-      <HintPath>..\packages\taglib-sharp-2.0.3.7\lib\taglib-sharp.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutoStringHandler.cs" />
-    <Compile Include="Cover.cs" />
-    <Compile Include="FileNameMetaObtainer.cs" />
-    <Compile Include="FlacMetaProvider.cs" />
-    <Compile Include="AudioFileMetaProvider.cs" />
-    <Compile Include="Helper\PictureHelper.cs" />
-    <Compile Include="IActivator.cs" />
-    <Compile Include="ICoverOrganizer.cs" />
-    <Compile Include="IMetaProvider.cs" />
-    <Compile Include="IMetaRecipient.cs" />
-    <Compile Include="MetaProviderException.cs" />
-    <Compile Include="Mp3MetaProvider.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\DeferredCallExtensions.cs" />
+    <Compile Include="Extensions\FormatStringExtensions.cs" />
+    <Compile Include="Validation\Require.cs" />
+    <Compile Include="Extensions\TreeViewExtensions.cs" />
+    <Compile Include="Infrastructure\AudioFormat.cs" />
+    <Compile Include="Infrastructure\ConfigurationKeys.cs" />
+    <Compile Include="Interaction\CloseNotification.cs" />
+    <Compile Include="Interaction\PopupTrigerAction.cs" />
+    <Compile Include="Interaction\WindowExtensions.cs" />
+    <Compile Include="Interaction\WindowExtensionsBehavior.cs" />
+    <Compile Include="Interaction\WindowHandler.cs" />
+    <Compile Include="Interaction\WindowTrigerAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tagger\ITagger.cs" />
-    <Compile Include="Tagger\LastFm\AlbumInfoResponseParser.cs" />
-    <Compile Include="Tagger\LastFm\LastFmService.cs" />
-    <Compile Include="Tagger\LastFm\LastFmTagger.cs" />
-    <Compile Include="Tagger\LastFm\FingerprintResponseParser.cs" />
-    <Compile Include="Tagger\LastFm\ResponseParser.cs" />
-    <Compile Include="Tagger\LastFm\TrackInfoResponseParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

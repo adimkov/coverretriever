@@ -12,6 +12,8 @@ namespace CoverRetriever.Model
     using System.Diagnostics;
     using System.IO;
 
+    using CoverRetriever.Common.Validation;
+
     /// <summary>
     /// Base class for all file system items.
     /// </summary>

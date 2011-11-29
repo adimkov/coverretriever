@@ -18,7 +18,8 @@ namespace CoverRetriever.ViewModel
     using System.Linq;
     using System.Reflection;
 
-    using CoverRetriever.Interaction;
+    using CoverRetriever.Common.Extensions;
+    using CoverRetriever.Common.Interaction;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
     using CoverRetriever.Service;

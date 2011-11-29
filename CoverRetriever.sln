@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.Test", "Cove
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.AudioInfo", "CoverRetriever.AudioInfo\CoverRetriever.AudioInfo.csproj", "{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.Common", "CoverRetriever.Common\CoverRetriever.Common.csproj", "{93EDA68B-4D06-4020-BF8C-05E638F2A622}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93EDA68B-4D06-4020-BF8C-05E638F2A622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93EDA68B-4D06-4020-BF8C-05E638F2A622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93EDA68B-4D06-4020-BF8C-05E638F2A622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93EDA68B-4D06-4020-BF8C-05E638F2A622}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

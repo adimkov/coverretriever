@@ -1,7 +1,6 @@
 using System;
 using System.Concurrency;
 using System.IO;
-using System.Linq;
 using System.Reactive.Testing.Mocks;
 using CoverRetriever.Model;
 using CoverRetriever.ViewModel;
@@ -9,66 +8,68 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
-	[TestFixture]
-	public class CoverPreviewViewModelTest : ViewModelMock
-	{
-		[Test]
-		public void Ctr_should_create_instance_and_not_throw_exceptions()
-		{
-			RemoteCover remoteCover = GetRemoteCoverStub(Observable.Empty<Stream>());
+    using System.Linq;
 
-			var target = new CoverPreviewViewModel(remoteCover);
-			Assert.That(target.CoverSize, Is.EqualTo(remoteCover.CoverSize));
-			Assert.That(target.SaveCoverCommand, Is.Not.Null);
-			Assert.That(target.CloseCommand, Is.Not.Null);
-			Assert.That(target.SaveCover, Is.Not.Null);
-			Assert.That(target.ErrorMessage, Is.Null);
-		}
+    [TestFixture]
+    public class CoverPreviewViewModelTest : ViewModelMock
+    {
+        [Test]
+        public void Ctr_should_create_instance_and_not_throw_exceptions()
+        {
+            RemoteCover remoteCover = GetRemoteCoverStub(Observable.Empty<Stream>());
 
-		[Test]
-		public void Should_begin_load_an_image_on_subscrible()
-		{
-			var coverStream = Observable.Empty<Stream>();
-			
-			var remoteCover = GetRemoteCoverStub(coverStream);
-			var target = new CoverPreviewViewModel(remoteCover);
-			
-			target.SetBusy(true, "test");
-			Assert.That(target.IsBusy, Is.True);
-			
-			target.CoverAsyncSource.Subscribe();
+            var target = new CoverPreviewViewModel(remoteCover);
+            Assert.That(target.CoverSize, Is.EqualTo(remoteCover.CoverSize));
+            Assert.That(target.SaveCoverCommand, Is.Not.Null);
+            Assert.That(target.CloseCommand, Is.Not.Null);
+            Assert.That(target.SaveCover, Is.Not.Null);
+            Assert.That(target.ErrorMessage, Is.Null);
+        }
 
-			Assert.That(target.IsBusy, Is.False);
-			Assert.That(target.OperationName, Is.Not.Null);
-			Assert.That(target.ErrorMessage, Is.Null);
-		}
+        [Test]
+        public void Should_begin_load_an_image_on_subscrible()
+        {
+            var coverStream = Observable.Empty<Stream>();
+            
+            var remoteCover = GetRemoteCoverStub(coverStream);
+            var target = new CoverPreviewViewModel(remoteCover);
+            
+            target.SetBusy(true, "test");
+            Assert.That(target.IsBusy, Is.True);
+            
+            target.CoverAsyncSource.Subscribe();
 
-		[Test]
-		public void SaveCoverCommand_shoult_push_save_command()
-		{
-			var remoteCover = GetRemoteCoverStub(Observable.Empty<Stream>());
-			
-			var target = new CoverPreviewViewModel(remoteCover);
-			
-			var testScheduler = new TestScheduler();
-			var mockObservable = new MockObserver<RemoteCover>(testScheduler);
+            Assert.That(target.IsBusy, Is.False);
+            Assert.That(target.OperationName, Is.Not.Null);
+            Assert.That(target.ErrorMessage, Is.Null);
+        }
 
-			target.SaveCover.Subscribe(mockObservable);
+        [Test]
+        public void SaveCoverCommand_shoult_push_save_command()
+        {
+            var remoteCover = GetRemoteCoverStub(Observable.Empty<Stream>());
+            
+            var target = new CoverPreviewViewModel(remoteCover);
+            
+            var testScheduler = new TestScheduler();
+            var mockObservable = new MockObserver<RemoteCover>(testScheduler);
 
-			target.SaveCoverCommand.Execute();
+            target.SaveCover.Subscribe(mockObservable);
 
-			Assert.That(mockObservable[0].Value.Value, Is.EqualTo(remoteCover));
-		}
-		
-		[Test]
-		public void Should_set_error_message_of_unable_to_load_image()
-		{
-			var remoteCover = GetRemoteCoverStub(Observable.Throw<Stream>(new Exception("UnitTest")));
-			var target = new CoverPreviewViewModel(remoteCover);
-			
-			Assert.Throws<Exception>(() => target.CoverAsyncSource.Subscribe());
-			
-			Assert.That(target.ErrorMessage, Is.EqualTo("UnitTest"));	
-		}
-	}
+            target.SaveCoverCommand.Execute();
+
+            Assert.That(mockObservable[0].Value.Value, Is.EqualTo(remoteCover));
+        }
+        
+        [Test]
+        public void Should_set_error_message_of_unable_to_load_image()
+        {
+            var remoteCover = GetRemoteCoverStub(Observable.Throw<Stream>(new Exception("UnitTest")));
+            var target = new CoverPreviewViewModel(remoteCover);
+            
+            Assert.Throws<Exception>(() => target.CoverAsyncSource.Subscribe());
+            
+            Assert.That(target.ErrorMessage, Is.EqualTo("UnitTest"));	
+        }
+    }
 }

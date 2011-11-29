@@ -5,7 +5,9 @@ using CoverRetriever.Resources;
 
 namespace CoverRetriever.ViewModel
 {
-	public partial class AboutViewModel
+    using CoverRetriever.Common.Extensions;
+
+    public partial class AboutViewModel
 	{
 		public AboutViewModel()
 		{

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -10,7 +9,9 @@ using CoverRetriever.ViewModel;
 
 namespace CoverRetriever.View
 {
-	/// <summary>
+    using System.Linq;
+
+    /// <summary>
 	/// Interaction logic for Shell.xaml
 	/// </summary>
 	[Export]

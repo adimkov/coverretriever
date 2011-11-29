@@ -105,6 +105,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AudioInfo.Helper\PictureHelperTest.cs" />
     <Compile Include="AudioInfo.Tagger\LastFm\AlbumInfoResponseParserTest.cs" />
     <Compile Include="AudioInfo.Tagger\LastFm\LastFmServiceTest.cs" />

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
@@ -10,6 +9,8 @@ using Moq;
 
 namespace CoverRetriever.Test.ViewModel
 {
+    using System.Linq;
+
     public class ViewModelMock
     {
         protected Mock<IFileSystemService> GetFileSystemServiceMock()

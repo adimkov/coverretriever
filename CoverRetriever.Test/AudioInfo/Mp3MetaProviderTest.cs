@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Concurrency;
 using System.IO;
-using System.Linq;
 using System.Reactive.Testing.Mocks;
 using System.Windows;
 using CoverRetriever.AudioInfo;
@@ -11,6 +10,8 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.AudioInfo
 {
+    using System.Linq;
+
     [TestFixture]
     public class Mp3MetaProviderTest
     {

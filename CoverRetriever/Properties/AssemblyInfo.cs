@@ -1,5 +1,13 @@
-﻿using System.Reflection;
-using System.Resources;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2011. All rights reserved.  
+// </copyright>
+// <summary>
+//  Global assembly information
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -9,28 +17,18 @@ using System.Windows;
 [assembly: AssemblyTitle("CoverRetriever")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Cerber Soft")]
-[assembly: AssemblyProduct("CoverRetriever")]
-[assembly: AssemblyCopyright("Copyright © Cerber Soft 2011")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("c0de9a06-dbc4-4fd1-a470-a7254623137e")]
 
-//In order to begin building localizable applications, set 
-//<UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file
-//inside a <PropertyGroup>.  For example, if you are using US english
-//in your source files, set the <UICulture> to en-US.  Then uncomment
-//the NeutralResourceLanguage attribute below.  Update the "en-US" in
-//the line below to match the UICulture setting in the project file.
+// In order to begin building localizable applications, set 
+// <UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file
+// inside a <PropertyGroup>.  For example, if you are using US english
+// in your source files, set the <UICulture> to en-US.  Then uncomment
+// the NeutralResourceLanguage attribute below.  Update the "en-US" in
+// the line below to match the UICulture setting in the project file.
 
-//[assembly: NeutralResourcesLanguage("en-US" , UltimateResourceFallbackLocation.MainAssembly)]
+// [assembly: NeutralResourcesLanguage("en-US" , UltimateResourceFallbackLocation.MainAssembly)]
 
 [assembly:ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
@@ -40,5 +38,3 @@ using System.Windows;
                              //(used if a resource is not found in the page, 
                              // app, or any theme specific resource dictionaries)
 )]
-[assembly: AssemblyVersionAttribute("0.7.0.*")]
-[assembly: NeutralResourcesLanguageAttribute("")]

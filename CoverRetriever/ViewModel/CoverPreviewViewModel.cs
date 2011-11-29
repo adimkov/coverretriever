@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using CoverRetriever.Model;
 using CoverRetriever.Resources;
@@ -9,7 +8,9 @@ using Microsoft.Practices.Prism.Commands;
 
 namespace CoverRetriever.ViewModel
 {
-	public class CoverPreviewViewModel : ViewModelBase
+    using System.Linq;
+
+    public class CoverPreviewViewModel : ViewModelBase
 	{
 		private readonly RemoteCover _remoteCover;
 		private IObservable<Stream> _previewCoverSource;

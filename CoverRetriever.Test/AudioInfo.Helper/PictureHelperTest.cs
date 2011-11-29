@@ -10,7 +10,7 @@ namespace CoverRetriever.Test.AudioInfo.Helper
     [TestFixture]
     public class PictureHelperTest
     {
-        private const string ImageFileWithÄÄÒ = "ÄÄÒ - Ïîıò.mp3.jpg";
+        private const string ImageFileWithÄÄÒ = "DDT-Poet.mp3.jpg";
 
         [Test]
         public void Should_decode_jpeg_jpg_type_frome_extension()

@@ -15,7 +15,7 @@ namespace CoverRetriever.Service
     using System.Net;
     using System.Xml.Linq;
 
-    using CoverRetriever.Infrastructure;
+    using CoverRetriever.Common.Infrastructure;
     using CoverRetriever.Model;
 
     /// <summary>

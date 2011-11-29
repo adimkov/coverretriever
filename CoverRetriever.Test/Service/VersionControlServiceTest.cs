@@ -1,6 +1,5 @@
 
 using System;
-using System.Linq;
 using System.Xml.Linq;
 
 using CoverRetriever.Model;
@@ -14,6 +13,7 @@ namespace CoverRetriever.Test.Service
 {
     using System.Collections.Generic;
     using System.Concurrency;
+    using System.Linq;
     using System.Reactive.Testing.Mocks;
 
     [TestFixture]
