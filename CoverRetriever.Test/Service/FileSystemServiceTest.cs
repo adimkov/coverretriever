@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 using CoverRetriever.Model;
 using CoverRetriever.Service;
@@ -15,6 +14,7 @@ namespace CoverRetriever.Test.Service
     using System;
     using System.Concurrency;
     using System.Configuration;
+    using System.Linq;
     using System.Reactive.Testing.Mocks;
 
     [TestFixture]
@@ -71,7 +71,7 @@ namespace CoverRetriever.Test.Service
                 .Run(x => rootFolder.Children.Add(x));
 
             Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
-            rootFolder.Children.Take(23).ForEach(x => Assert.That(x, Is.InstanceOf<Folder>()));
+            Assert.That(rootFolder.Children.Take(23).All(x => x is Folder), Is.True);
         }
 
         /// <summary>

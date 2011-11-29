@@ -17,7 +17,8 @@ namespace CoverRetriever.Service
     using System.Linq;
 
     using CoverRetriever.AudioInfo;
-    using CoverRetriever.Infrastructure;
+    using CoverRetriever.Common.Extensions;
+    using CoverRetriever.Common.Infrastructure;
     using CoverRetriever.Model;
 
     using Microsoft.Practices.ServiceLocation;

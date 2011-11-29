@@ -1,16 +1,18 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-using CoverRetriever.Infrastructure;
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Converter
 {
-	public class FolderImageConverter : IValueConverter
+    using System.Linq;
+
+    using CoverRetriever.Common.Infrastructure;
+
+    public class FolderImageConverter : IValueConverter
 	{
 		private const string ShellFolder = "/CoverRetriever;component/Assets/ShellFolder.png";
 		private const string ShellAudioFolder = "/CoverRetriever;component/Assets/ShellFolder_Audio.png";

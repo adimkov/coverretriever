@@ -17,6 +17,7 @@ namespace CoverRetriever.Service
     using System.Net;
     using System.Windows;
 
+    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Model;
     using CoverRetriever.Properties;
 
@@ -76,21 +77,19 @@ namespace CoverRetriever.Service
             var observableJson = Observable.FromEvent<DownloadStringCompletedEventArgs>(googleClient, "DownloadStringCompleted");
 
             var requestedUri = _baseAddress.FormatString(_googleKey, coverCount, _searchPattern.FormatString(artist, album));
-            
-            return observableJson
-                .Finally(googleClient.Dispose)
-                .Select(
-                    jsonResponce =>
-                    {
-                        if (jsonResponce.EventArgs.Error != null)
-                        {
-                            throw new CoverSearchException("Unable to get response from google", jsonResponce.EventArgs.Error);
-                        }
 
-                        return this.ParseGoogleImageResponse(jsonResponce.EventArgs.Result).Take(coverCount);
-                    })
-                    .Defer(() => googleClient.DownloadStringAsync(new Uri(requestedUri)))
-                    .Take(1);
+            return DeferredCallExtensions.Defer(
+                observableJson.Finally(googleClient.Dispose).Select(
+                            jsonResponce =>
+                                {
+                                    if (jsonResponce.EventArgs.Error != null)
+                                    {
+                                        throw new CoverSearchException("Unable to get response from google", jsonResponce.EventArgs.Error);
+                                    }
+
+                                    return this.ParseGoogleImageResponse(jsonResponce.EventArgs.Result).Take(coverCount);
+                                }),
+                () => googleClient.DownloadStringAsync(new Uri(requestedUri))).Take(1);
         }
 
         /// <summary>
@@ -102,18 +101,17 @@ namespace CoverRetriever.Service
         {
             ////todo: implement a caching
             var downloader = new WebClient();
-            var downloadOpservable = Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
-                .Select(
-                x => 
-                {
-                    if (x.EventArgs.Error != null)
-                    {
-                        throw new CoverSearchException(x.EventArgs.Error.Message, x.EventArgs.Error);
-                    }
+            var downloadOpservable = DeferredCallExtensions.Defer<MemoryStream>(Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
+                    .Select(
+                        x => 
+                            {
+                                if (x.EventArgs.Error != null)
+                                {
+                                    throw new CoverSearchException(x.EventArgs.Error.Message, x.EventArgs.Error);
+                                }
 
-                    return new MemoryStream(x.EventArgs.Result);
-                })
-                .Defer(() => downloader.DownloadDataAsync(coverUri))
+                                return new MemoryStream(x.EventArgs.Result);
+                            }), () => downloader.DownloadDataAsync(coverUri))
                 .Take(1);
             
             return downloadOpservable;

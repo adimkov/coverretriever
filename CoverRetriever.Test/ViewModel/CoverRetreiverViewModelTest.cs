@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Concurrency;
-using System.Linq;
 using System.Reactive.Testing.Mocks;
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
@@ -13,7 +12,9 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
-	[TestFixture]
+    using System.Linq;
+
+    [TestFixture]
 	public class CoverRetrieverViewModelTest : ViewModelMock
 	{
 		[Test]

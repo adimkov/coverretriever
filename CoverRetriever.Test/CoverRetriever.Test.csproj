@@ -93,6 +93,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AudioInfo.Helper\PictureHelperTest.cs" />
     <Compile Include="AudioInfo\FileNameMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />

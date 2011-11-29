@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Reflection;
-using CoverRetriever.Infrastructure;
+
 using CoverRetriever.Resources;
 using CoverRetriever.Service;
 using Microsoft.Practices.Prism.Commands;
 
 namespace CoverRetriever.ViewModel
 {
-	[Export(typeof(AboutViewModel))]
+    using CoverRetriever.Common.Extensions;
+    using CoverRetriever.Common.Infrastructure;
+
+    [Export(typeof(AboutViewModel))]
 	public partial class AboutViewModel : ViewModelBase
 	{
 		private string _newVersionText;

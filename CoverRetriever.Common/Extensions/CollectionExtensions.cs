@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionEx.cs" author="Anton Dimkov">
+// <copyright file="CollectionExtensions.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
@@ -7,15 +7,16 @@
 // </summary>
 // -------------------------------------------------------------------------------------------------------------------
 
-namespace System.Linq
+namespace CoverRetriever.Common.Extensions
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     /// <summary>
     /// Extensions to a collection.
     /// </summary>
-    public static class CollectionEx
+    public static class CollectionExtensions
     {
         /// <summary>
         /// Iterate each element in collection and apply an action.

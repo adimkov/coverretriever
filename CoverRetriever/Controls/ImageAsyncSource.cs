@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace CoverRetriever.Controls
 {
+    using System.Concurrency;
     using System.Linq;
 
     public class ImageAsyncSource
@@ -13,6 +14,9 @@ namespace CoverRetriever.Controls
         public static readonly DependencyProperty AsyncSourceProperty =
             DependencyProperty.RegisterAttached("AsyncSource", typeof (IObservable<Stream>), typeof (ImageAsyncSource),
                                                 new PropertyMetadata(new PropertyChangedCallback(OnAsyncSourceChanged)));
+
+        public static readonly DependencyProperty DispatcherProperty = DependencyProperty.RegisterAttached(
+            "Dispatcher", typeof(IScheduler), typeof(ImageAsyncSource), new PropertyMetadata(Scheduler.Dispatcher));
 
         public static void SetAsyncSource(Image o, IObservable<Stream> value)
         {
@@ -24,6 +28,16 @@ namespace CoverRetriever.Controls
             return (IObservable<Stream>) o.GetValue(AsyncSourceProperty);
         }
 
+        public static void SetDispatcher(DependencyObject o, IScheduler value)
+        {
+            o.SetValue(DispatcherProperty, value);
+        }
+
+        public static IScheduler GetDispatcher(DependencyObject o)
+        {
+            return (IScheduler)o.GetValue(DispatcherProperty);
+        }
+
         private static void OnAsyncSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var image = d as Image;
@@ -31,14 +45,14 @@ namespace CoverRetriever.Controls
             if (image != null && source != null)
             {
                 image.Source = null;
-                AddSource(image, source);
+                AddSource(image, source, GetDispatcher(d));
             }
         }
 
-        private static void AddSource(Image image, IObservable<Stream> source)
+        private static void AddSource(Image image, IObservable<Stream> source, IScheduler scheduler)
         {
             source
-                .ObserveOnDispatcher()
+                .ObserveOn(scheduler)
                 .Subscribe(stream =>
                                 {
                                     var bitmapImage = new BitmapImage();

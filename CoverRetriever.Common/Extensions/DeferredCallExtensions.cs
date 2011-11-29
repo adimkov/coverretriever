@@ -1,18 +1,21 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeferredCallEx.cs" author="Anton Dimkov">
+// <copyright file="DeferredCallExtensions.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
-//  Extension method to make deffered call.
+//  Extension method to make deferred call.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace System.Linq
+namespace CoverRetriever.Common.Extensions
 {
+    using System;
+    using System.Linq;
+
     /// <summary>
-    /// Extension method to make deffered call.
+    /// Extension method to make deferred call.
     /// </summary>
-    public static class DeferredCallEx
+    public static class DeferredCallExtensions
     {
         /// <summary>
         /// Make deferred call to a service.

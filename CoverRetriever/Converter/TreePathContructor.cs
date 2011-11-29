@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
 
 using CoverRetriever.Model;
 
 namespace CoverRetriever.Converter
 {
-	public class TreePathContructor : IValueConverter
+    using System.Linq;
+
+    public class TreePathContructor : IValueConverter
 	{
 		#region Implementation of IValueConverter
 

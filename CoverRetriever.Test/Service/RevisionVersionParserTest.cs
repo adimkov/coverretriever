@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Xml.Linq;
 
 using CoverRetriever.Service;
@@ -7,7 +6,9 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.Service
 {
-	[TestFixture]
+    using System.Linq;
+
+    [TestFixture]
 	public class RevisionVersionParserTest
 	{
 		[Test]

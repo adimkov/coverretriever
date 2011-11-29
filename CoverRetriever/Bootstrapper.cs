@@ -15,7 +15,7 @@ namespace CoverRetriever
     using System.Windows;
 
     using CoverRetriever.AudioInfo;
-    using CoverRetriever.Infrastructure;
+    using CoverRetriever.Common.Infrastructure;
     using CoverRetriever.View;
 
     using Microsoft.Practices.Prism.MefExtensions;

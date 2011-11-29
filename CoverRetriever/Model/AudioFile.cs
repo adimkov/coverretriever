@@ -12,6 +12,7 @@ namespace CoverRetriever.Model
     using System;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.Common.Validation;
     using CoverRetriever.Service;
 
     /// <summary>

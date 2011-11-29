@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
 using CoverRetriever.Service;
@@ -10,6 +10,8 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
+    using System.Linq;
+
     [TestFixture]
     public class FileConductorViewModelTest : ViewModelMock
     {
