@@ -7,10 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CoverRetriever.Common.Extensions
+namespace System.Linq
 {
     using System;
-    using System.Linq;
 
     /// <summary>
     /// Extension method to make deferred call.

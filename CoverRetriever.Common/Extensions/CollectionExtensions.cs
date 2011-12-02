@@ -7,7 +7,7 @@
 // </summary>
 // -------------------------------------------------------------------------------------------------------------------
 
-namespace CoverRetriever.Common.Extensions
+namespace System.Linq
 {
     using System;
     using System.Collections.Generic;
