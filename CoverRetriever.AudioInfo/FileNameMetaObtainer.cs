@@ -217,9 +217,9 @@ namespace CoverRetriever.AudioInfo
         private string BuildRegexp(string parsePattern)
         {
             var shieldSpecSymbols = parsePattern.Replace(".", @"\.");
-            var trackNumberGroup = String.Format(DigitGroup, TrimTemplateSymbol(TrackNumberBlock));
-            var titleGroup = String.Format(RegexGroup, TrimTemplateSymbol(TitleBlock));
-            var artistGroup = String.Format(RegexGroup, TrimTemplateSymbol(ArtistBlock));
+            var trackNumberGroup = DigitGroup.FormatString(TrimTemplateSymbol(TrackNumberBlock));
+            var titleGroup = RegexGroup.FormatString(TrimTemplateSymbol(TitleBlock));
+            var artistGroup = RegexGroup.FormatString(TrimTemplateSymbol(ArtistBlock));
 
             return
                 shieldSpecSymbols.Replace(TrackNumberBlock, trackNumberGroup).Replace(ArtistBlock, artistGroup).Replace(

@@ -113,7 +113,7 @@ namespace CoverRetriever.AudioInfo.Helper
         /// <returns>The <see cref="Cover"/>.</returns>
         public static Cover PrepareCover(this IPicture picture)
         {
-            var name = string.Format("{0}.{1}", picture.Type, picture.MimeType.Split('/')[1]);
+            var name = "{0}.{1}".FormatString(picture.Type, picture.MimeType.Split('/')[1]);
             Size size;
             var coverStream = new MemoryStream(picture.Data.Count);
 

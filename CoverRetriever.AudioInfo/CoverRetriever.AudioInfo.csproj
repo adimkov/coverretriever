@@ -74,6 +74,12 @@
     <Compile Include="Tagger\LastFm\ResponseParser.cs" />
     <Compile Include="Tagger\LastFm\TrackInfoResponseParser.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoverRetriever.Common\CoverRetriever.Common.csproj">
+      <Project>{93EDA68B-4D06-4020-BF8C-05E638F2A622}</Project>
+      <Name>CoverRetriever.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -119,12 +119,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             var trackInfoObserver = _lastFmService.GetTrackInfo(GetArtist(), GetTrackName())
                 .Do(_trackInfoResponse.Parse)
                 .Select(_ => new Unit());
-////            var albumInfoObserver = _lastFmService.GetTrackInfo(GetArtist(), GetAlbum())
-////                .Do(_albumInfoResponse.Parse)
-////                .Select(_ => new Unit());
-
-////            var resultObserver = trackInfoObserver.Concat(albumInfoObserver);
-
+            
             return trackInfoObserver;
         }
 

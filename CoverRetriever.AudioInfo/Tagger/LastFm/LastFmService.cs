@@ -54,7 +54,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         public IObservable<XDocument> GetTrackInfo(string artist, string trackName)
         {
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
-            serviceAddress.Query = String.Format("method=track.getinfo&api_key={0}&artist={1}&track={2}", _apiKey, artist, trackName);
+            serviceAddress.Query = "method=track.getinfo&api_key={0}&artist={1}&track={2}".FormatString(_apiKey, artist, trackName);
 
             var webClient = new WebClient
                 {
@@ -62,9 +62,9 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 };
             var trackInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
-            webClient.DownloadStringAsync(serviceAddress.Uri);
-            return trackInfoObservable.Select(
-                x =>
+            return trackInfoObservable.Defer(() => webClient.DownloadStringAsync(serviceAddress.Uri))
+                .Select(
+                    x =>
                     {
                         if (x.EventArgs.Error != null)
                         {
@@ -73,7 +73,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
 
                         return XDocument.Parse(x.EventArgs.Result);
                     })
-                    .Take(1);
+                .Take(1);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         public IObservable<XDocument> GetAlbumInfo(string artist, string albumName)
         {
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
-            serviceAddress.Query = String.Format("method=album.getinfo&api_key={0}&artist={1}&album={2}", _apiKey, artist, albumName);
+            serviceAddress.Query = "method=album.getinfo&api_key={0}&artist={1}&album={2}".FormatString(_apiKey, artist, albumName);
 
             var webClient = new WebClient
                 {
@@ -94,17 +94,17 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
 
             var albumInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
-            webClient.DownloadStringAsync(serviceAddress.Uri);
-            return albumInfoObservable.Select(
-                x =>
-                {
-                    if (x.EventArgs.Error != null)
+            return albumInfoObservable.Defer(() => webClient.DownloadStringAsync(serviceAddress.Uri))
+                .Select(
+                    x =>
                     {
-                        throw x.EventArgs.Error;
-                    }
+                        if (x.EventArgs.Error != null)
+                        {
+                            throw x.EventArgs.Error;
+                        }
 
-                    return XDocument.Parse(x.EventArgs.Result);
-                })
+                        return XDocument.Parse(x.EventArgs.Result);
+                    })
                 .Take(1);
         }
     }
