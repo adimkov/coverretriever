@@ -591,7 +591,7 @@ namespace CoverRetriever.ViewModel
         {
             StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedFileSystemItem.Name));
 
-            ((AudioFile)SelectedFileSystemItem).AssignTagger(Tagger.Value)
+            ((AudioFile)FileConductorViewModel.SelectedAudio).AssignTagger(Tagger.Value)
                 .SubscribeOn(Scheduler.ThreadPool)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
@@ -599,7 +599,7 @@ namespace CoverRetriever.ViewModel
                     x =>
                         {
                             FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
-                            Debug.WriteLine("Tags received for {0}", SelectedFileSystemItem.Name);
+                            Debug.WriteLine("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
                         },
                     SetError);
         }
