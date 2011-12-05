@@ -15,10 +15,13 @@ namespace CoverRetriever.ViewModel
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
     using System.Concurrency;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
+    using System.Windows.Input;
 
-    using CoverRetriever.Common.Extensions;
+    using CoverRetriever.AudioInfo;
+    using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Common.Interaction;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
@@ -56,6 +59,51 @@ namespace CoverRetriever.ViewModel
         private readonly ICoverRetrieverService _coverRetrieverService;
 
         /// <summary>
+        /// Backing field for Loaded command.
+        /// </summary>
+        private readonly DelegateCommand _loadedCommand;
+
+        /// <summary>
+        /// Backing field for FileSystemSelectedItemChanged command.
+        /// </summary>
+        private readonly DelegateCommand<FileSystemItem> _fileSystemSelectedItemChangedCommand;
+
+        /// <summary>
+        /// Backing field for PreviewCommand command.
+        /// </summary>
+        private readonly DelegateCommand<RemoteCover> _previewCoverCommand;
+
+        /// <summary>
+        /// Backing field for SaveCover command.
+        /// </summary>
+        private readonly DelegateCommand<RemoteCover> _saveCoverCommand;
+
+        /// <summary>
+        /// Backing field for SelectFolder command.
+        /// </summary>
+        private readonly DelegateCommand _selectFolderCommand;
+
+        /// <summary>
+        /// Backing field for Finish command.
+        /// </summary>
+        private readonly DelegateCommand _finishCommand;
+
+        /// <summary>
+        /// Backing field for About command.
+        /// </summary>
+        private readonly DelegateCommand _aboutCommand;
+        
+        /// <summary>
+        /// Backing field for CloseError command.
+        /// </summary>
+        private readonly DelegateCommand _closeErrorMessage;
+
+        /// <summary>
+        /// Backing field for GrabTags command.
+        /// </summary>
+        private readonly DelegateCommand _grabTagsCommand;
+
+        /// <summary>
         /// Result of saving operation.
         /// </summary>
         private readonly Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
@@ -88,7 +136,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Error message.
         /// </summary>
-        private string _coverRetrieveErrorMessage;
+        private string _coverRetrieverErrorMessage;
 
         /// <summary>
         /// New version of application.
@@ -115,61 +163,123 @@ namespace CoverRetriever.ViewModel
             FileConductorViewModel = fileConductorViewModel;
 
             openFolderViewModel.PushRootFolder.Subscribe(OnNextPushRootFolder);
-            LoadedCommand = new DelegateCommand(LoadedCommandExecute);
-            FileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
-            PreviewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
-            SaveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute, CanExecuteSaveCoverCommand);
-            SelectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
-            FinishCommand = new DelegateCommand(FinishCommandExecute);
-            AboutCommand = new DelegateCommand(AboutCommandExecute);
-            CloseErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
+            _loadedCommand = new DelegateCommand(LoadedCommandExecute);
+            _fileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
+            _previewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
+            _saveCoverCommand = new DelegateCommand<RemoteCover>(SaveCoverCommandExecute, CanExecuteSaveCoverCommand);
+            _selectFolderCommand = new DelegateCommand(SelectFolderCommandExecute);
+            _finishCommand = new DelegateCommand(FinishCommandExecute);
+            _aboutCommand = new DelegateCommand(AboutCommandExecute);
+            _closeErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
+            _grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => FileConductorViewModel.SelectedAudio is AudioFile);
 
             PreviewCoverRequest = new InteractionRequest<Notification>();
             SelectRootFolderRequest = new InteractionRequest<Notification>();
             AboutRequest = new InteractionRequest<Notification>();
 
             _suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
+
+            ObservableScheduler = Scheduler.Dispatcher;
         }
 
         /// <summary>
         /// Gets Loaded window Command.
         /// </summary>
-        public DelegateCommand LoadedCommand { get; private set; }
-        
+        public ICommand LoadedCommand
+        {
+            get
+            {
+                return _loadedCommand;
+            }
+        }
+
         /// <summary>
         /// Gets selection changed in file System tree view command.
         /// </summary>
-        public DelegateCommand<FileSystemItem> FileSystemSelectedItemChangedCommand { get; private set; }
+        public ICommand FileSystemSelectedItemChangedCommand
+        {
+            get
+            {
+                return _fileSystemSelectedItemChangedCommand;
+            }
+        }
         
         /// <summary>
         /// Gets preview selected cover.
         /// </summary>
-        public DelegateCommand<RemoteCover> PreviewCoverCommand { get; private set; }
+        public ICommand PreviewCoverCommand       
+        {
+            get
+            {
+                return _previewCoverCommand;
+            }
+        }
         
         /// <summary>
         /// Gets save selected cover in to selected directory.
         /// </summary>
-        public DelegateCommand<RemoteCover> SaveCoverCommand { get; private set; }
+        public ICommand SaveCoverCommand
+        {
+            get
+            {
+                return _saveCoverCommand;
+            }
+        }
 
         /// <summary>
         /// Gets change root directory command.
         /// </summary>
-        public DelegateCommand SelectFolderCommand { get; private set; }
+        public ICommand SelectFolderCommand
+        {
+            get
+            {
+                return _selectFolderCommand;
+            }
+        }
 
         /// <summary>
         /// Gets finish work of application.
         /// </summary>
-        public DelegateCommand FinishCommand { get; private set; }
+        public ICommand FinishCommand
+        {
+            get
+            {
+                return _finishCommand;
+            }
+        }
         
         /// <summary>
         /// Gets about dialog command.
         /// </summary>
-        public DelegateCommand AboutCommand { get; private set; }
+        public ICommand AboutCommand
+        {
+            get
+            {
+                return _aboutCommand;
+            }
+        }
 
         /// <summary>
         /// Gets close an error message.
         /// </summary>
-        public DelegateCommand CloseErrorMessage { get; private set; }
+        public ICommand CloseErrorMessage
+        {
+            get
+            {
+                return _closeErrorMessage;
+            }
+        }
+
+        /// <summary>
+        /// Gets the grab tags command.
+        /// </summary>
+        public ICommand GrabTagsCommand
+        {
+            get
+            {
+                return _grabTagsCommand;
+            }
+        }
 
         /// <summary>
         /// Gets preview cover dialog request.
@@ -188,6 +298,14 @@ namespace CoverRetriever.ViewModel
         /// The about request.
         /// </value>
         public InteractionRequest<Notification> AboutRequest { get; set; }
+
+        /// <summary>
+        /// Gets or sets the scheduler to execute observable.
+        /// </summary>
+        /// <value>
+        /// The scheduler.
+        /// </value>
+        public IScheduler ObservableScheduler { get; set; }
 
         /// <summary>
         /// Gets the file system.
@@ -259,18 +377,18 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Gets the cover retrieve error message.
         /// </summary>
-        public string CoverRetrieveErrorMessage
+        public string CoverRetrieverErrorMessage
         {
             get
             {
-                return _coverRetrieveErrorMessage;
+                return _coverRetrieverErrorMessage;
             }
 
             private set
             {
-                _coverRetrieveErrorMessage = value;
-                SaveCoverCommand.RaiseCanExecuteChanged();
-                RaisePropertyChanged("CoverRetrieveErrorMessage");
+                _coverRetrieverErrorMessage = value;
+                _saveCoverCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged("CoverRetrieverErrorMessage");
             }
         }
 
@@ -309,7 +427,7 @@ namespace CoverRetriever.ViewModel
         /// The about view model.
         /// </value>
         [Import(typeof(AboutViewModel))]
-        private Lazy<AboutViewModel> AboutViewModel { get; set; }
+        public Lazy<AboutViewModel> AboutViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets the version control service.
@@ -318,17 +436,26 @@ namespace CoverRetriever.ViewModel
         /// The version control.
         /// </value>
         [Import(typeof(IVersionControlService))]
-        private Lazy<IVersionControlService> VersionControl { get; set; }
+        public Lazy<IVersionControlService> VersionControl { get; set; }
 
         /// <summary>
-        /// Loadeds the command execute.
+        /// Gets or sets the audio tagger.
+        /// </summary>
+        /// <value>
+        /// The audio tagger.
+        /// </value>
+        [Import(typeof(ITagger))]
+        public Lazy<ITagger> Tagger { get; set; }
+
+        /// <summary>
+        /// Loads the command execute.
         /// </summary>
         private void LoadedCommandExecute()
         {
             if (_rootFolder == null)
             {
                 _openFolderViewModel.IsCloseEnabled = false;
-                SelectFolderCommand.Execute();
+                _selectFolderCommand.Execute();
                 VersionControl.Value
                     .GetLatestVersion()
                     .Delay(TimeSpan.FromSeconds(DelayToCheckUpdate))
@@ -347,13 +474,9 @@ namespace CoverRetriever.ViewModel
             StartOperation(CoverRetrieverResources.MessageLibraryLoad);
             _fileSystemService.GetChildrenForRootFolder(_rootFolder)
                 .SubscribeOn(Scheduler.NewThread)
-                .ObserveOnDispatcher()
+                .ObserveOn(ObservableScheduler)
                 .Subscribe(
-                x =>
-                    {
-                        _rootFolder.Children.Add(x);
-                        
-                    },
+                x => _rootFolder.Children.Add(x),
                 SelectFirstAudioFile);
             SelectRootFolderRequest.Raise(new CloseNotification());
         }
@@ -373,24 +496,9 @@ namespace CoverRetriever.ViewModel
         /// <param name="file">The file or folder.</param>
         private void FileSystemSelectedItemChangedCommandExecute(FileSystemItem file)
         {
-            var folder = file as Folder;
-            if (folder != null)
-            {
-                FileConductorViewModel.SelectedAudio = (AudioFile)folder.Children.FirstOrDefault(x => x is AudioFile);
-            }
-            else
-            {
-                FileConductorViewModel.SelectedAudio = file as AudioFile;
-            }
-
-            if (FileConductorViewModel.SelectedAudio != null)
-            {
-                FindRemoteCovers(FileConductorViewModel.SelectedAudio);
-            }
-            else
-            {
-                SuggestedCovers.Clear();
-            }
+            SelectedFileSystemItem = file;
+            SetAudioFile(file);
+            _grabTagsCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -413,7 +521,7 @@ namespace CoverRetriever.ViewModel
 
             PreviewCoverRequest.Raise(new Notification
             {
-                Title = "Cover of album {0} - {1}".FormatUIString(
+                Title = CoverRetrieverResources.CoverPreviewTitle.FormatUIString(
                 FileConductorViewModel.SelectedAudio.Artist, 
                 FileConductorViewModel.SelectedAudio.Album),
                 Content = viewModel 
@@ -473,24 +581,69 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void CloseErrorMessageExecute()
         {
-            CoverRetrieveErrorMessage = String.Empty;
+            CoverRetrieverErrorMessage = String.Empty;
+        }
+
+        /// <summary>
+        /// Grabs the tags command execute.
+        /// </summary>
+        private void GrabTagsCommandExecute()
+        {
+            StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedFileSystemItem.Name));
+
+            ((AudioFile)SelectedFileSystemItem).AssignTagger(Tagger.Value)
+                .SubscribeOn(Scheduler.ThreadPool)
+                .ObserveOn(ObservableScheduler)
+                .Finally(EndOperation)
+                .Subscribe(
+                    x =>
+                        {
+                            FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
+                            Debug.WriteLine("Tags received for {0}", SelectedFileSystemItem.Name);
+                        },
+                    SetError);
         }
 
         /// <summary>
         /// Sets the error cover retrieve.
         /// </summary>
         /// <param name="ex">The exception.</param>
-        private void SetErrorCoverRetrieve(Exception ex)
+        private void SetError(Exception ex)
         {
-            CoverRetrieveErrorMessage = ex.Message;
+            CoverRetrieverErrorMessage = ex.Message;
         }
 
         /// <summary>
-        /// Clear error message of cover retiever.
+        /// Clear error message of cover retriever.
         /// </summary>
-        private void ResetErrorCoverRetrieve()
+        private void ResetError()
         {
-            CoverRetrieveErrorMessage = String.Empty;
+            CoverRetrieverErrorMessage = String.Empty;
+        }
+
+        /// <summary>
+        /// Sets the audio file to the file conductor view.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        private void SetAudioFile(FileSystemItem file)
+        {
+            var folder = file as Folder;
+            var audio = file as AudioFile;
+            if (folder != null)
+            {
+                audio = (AudioFile)folder.Children.FirstOrDefault(x => x is AudioFile);
+            }
+            
+            FileConductorViewModel.SelectedAudio = audio;
+            
+            if (audio != null)
+            {
+                FindRemoteCovers(audio.MetaProvider);
+            }
+            else
+            {
+                SuggestedCovers.Clear();
+            }
         }
 
         /// <summary>
@@ -501,7 +654,7 @@ namespace CoverRetriever.ViewModel
         private IObservable<Unit> SaveRemoteCover(RemoteCover remoteCover)
         {
             return FileConductorViewModel.SaveCover(remoteCover)
-                .Do(x => { }, ex => { CoverRetrieveErrorMessage = ex.Message; })
+                .Do(x => { }, ex => { CoverRetrieverErrorMessage = ex.Message; })
                 .OnErrorResumeNext(Observable.Empty<Unit>());
         }
 
@@ -509,16 +662,16 @@ namespace CoverRetriever.ViewModel
         /// Perform search covers in web for audio.
         /// </summary>
         /// <param name="fileDetails">The audio file.</param>
-        private void FindRemoteCovers(AudioFile fileDetails)
+        private void FindRemoteCovers(IMetaProvider fileDetails)
         {
             StartOperation(CoverRetrieverResources.MessageDownloadCover);
-            ResetErrorCoverRetrieve();
+            ResetError();
             _suggestedCovers.Clear();
-            var albumCondition = fileDetails.Album;
+            var albumCondition = fileDetails.GetAlbum();
 
-            _coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
+            _coverRetrieverService.GetCoverFor(fileDetails.GetArtist(), albumCondition, SuggestedCountOfCovers)
                 .SubscribeOn(Scheduler.ThreadPool)
-                .ObserveOnDispatcher()
+                .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
                 .Subscribe(
                 x =>
@@ -526,7 +679,7 @@ namespace CoverRetriever.ViewModel
                     SuggestedCovers.AddRange(x);
                     SelectedSuggestedCover = _suggestedCovers.Max();
                 },
-                SetErrorCoverRetrieve);
+                SetError);
         }
 
         /// <summary>
@@ -579,7 +732,7 @@ namespace CoverRetriever.ViewModel
         /// </returns>
         private bool CanExecuteSaveCoverCommand(RemoteCover remoteCover)
         {
-            return String.IsNullOrEmpty(CoverRetrieveErrorMessage) && SuggestedCovers.Count > 0;
+            return String.IsNullOrEmpty(CoverRetrieverErrorMessage) && SuggestedCovers.Count > 0;
         }
 
         /// <summary>
@@ -589,7 +742,7 @@ namespace CoverRetriever.ViewModel
         /// <param name="notifyCollectionChangedEventArgs">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         private void SuggestedCoversOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            SaveCoverCommand.RaiseCanExecuteChanged();
+            _saveCoverCommand.RaiseCanExecuteChanged();
         }
   }
 }

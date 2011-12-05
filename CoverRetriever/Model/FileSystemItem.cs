@@ -14,12 +14,24 @@ namespace CoverRetriever.Model
 
     using CoverRetriever.Common.Validation;
 
+    using Microsoft.Practices.Prism.ViewModel;
+
     /// <summary>
     /// Base class for all file system items.
     /// </summary>
     [DebuggerDisplay("FileName={Name}")]
-    public class FileSystemItem
+    public class FileSystemItem : NotificationObject
     {
+        /// <summary>
+        /// Backing field for Name property.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// Backing field for Parent property.
+        /// </summary>
+        private FileSystemItem _parent;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileSystemItem"/> class.
         /// </summary>
@@ -46,12 +58,36 @@ namespace CoverRetriever.Model
         /// Gets the file system name.
         /// </summary>
         /// <remarks>Name of file system item.</remarks>
-        public string Name { get; private set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            } 
+
+            private set
+            {
+                _name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
 
         /// <summary>
         /// Gets the parent of file system item.
         /// </summary>
-        public FileSystemItem Parent { get; private set; }
+        public FileSystemItem Parent
+        {
+            get
+            {
+                return _parent;
+            }
+ 
+            private set
+            {
+                _parent = value;
+                RaisePropertyChanged("Parent");
+            }
+        }
 
         /// <summary>
         /// Gets path of the file system item including parent.

@@ -16,6 +16,7 @@ namespace CoverRetriever
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Common.Infrastructure;
+    using CoverRetriever.Properties;
     using CoverRetriever.View;
 
     using Microsoft.Practices.Prism.MefExtensions;
@@ -34,6 +35,9 @@ namespace CoverRetriever
             ProjectHomeUri = new Uri("http://sourceforge.net/projects/coverretriever/");
             BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
             GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
+            LastFmApiKey = Settings.Default.LastFmApiKey;
+            LastFmFingerprintClientPath = Settings.Default.LastFmFingerprintClientPath;
+            LastFmServiceBaseAddress = Settings.Default.LastFmServiceBaseAddress;
         }
 
         /// <summary>
@@ -59,6 +63,25 @@ namespace CoverRetriever
         /// </summary>
         [Export(ConfigurationKeys.GetNewVersionUri)]
         public Uri GetNewVersionUri { get; private set; }
+
+        /// <summary>
+        /// Gets the last fm API key.
+        /// </summary>
+        [Export(ConfigurationKeys.LastFmApiKey)]
+        public string LastFmApiKey { get; private set; }
+        
+        /// <summary>
+        /// Gets the last fm service base address.
+        /// </summary>
+        [Export(ConfigurationKeys.LastFmServiceBaseAddress)]
+        public string LastFmServiceBaseAddress { get; private set; }
+
+        /// <summary>
+        /// Gets the last fm fingerprint client path.
+        /// </summary>
+        [Export(ConfigurationKeys.LastFmFingerprintClientPath)]
+        public string LastFmFingerprintClientPath { get; private set; }
+
 
         /// <summary>
         /// Creates the shell or main window of the application.

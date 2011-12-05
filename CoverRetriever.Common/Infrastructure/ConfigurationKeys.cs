@@ -33,5 +33,20 @@ namespace CoverRetriever.Common.Infrastructure
         /// URI where new version can be reached.
         /// </summary>
         public const string GetNewVersionUri = "GetNewVersionUri";
+
+        /// <summary>
+        /// Last fm API key.
+        /// </summary>
+        public const string LastFmApiKey = "LastFmApiKey";
+
+        /// <summary>
+        /// Last fm base address of service.
+        /// </summary>
+        public const string LastFmServiceBaseAddress = "LastFmServiceBaseAddress";
+
+        /// <summary>
+        /// Last fm fingerprint client path.
+        /// </summary>
+        public const string LastFmFingerprintClientPath = "LastFmFingerprintClientPath";
     }
 }

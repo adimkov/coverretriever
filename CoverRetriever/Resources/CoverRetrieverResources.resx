@@ -121,6 +121,10 @@
     <value>Close</value>
     <comment>About</comment>
   </data>
+  <data name="CoverPreviewTitle" xml:space="preserve">
+    <value>Cover of album {0} - {1}</value>
+    <comment>Shell</comment>
+  </data>
   <data name="FlagApplyToAll" xml:space="preserve">
     <value>Apply to all in the directory</value>
     <comment>File сonductor view</comment>
@@ -128,6 +132,10 @@
   <data name="FlagEmbedCover" xml:space="preserve">
     <value>Embed in the file</value>
     <comment>File сonductor view</comment>
+  </data>
+  <data name="GrabTagMessage" xml:space="preserve">
+    <value>Retrieve tag for '{0}'...</value>
+    <comment>Shell</comment>
   </data>
   <data name="MessageCoverPreview" xml:space="preserve">
     <value>Loading the cover...</value>

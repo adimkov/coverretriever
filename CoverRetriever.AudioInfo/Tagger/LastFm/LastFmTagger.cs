@@ -10,15 +10,19 @@
 namespace CoverRetriever.AudioInfo.Tagger.LastFm
 {
     using System;
+    using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Xml.Linq;
 
+    using CoverRetriever.Common.Infrastructure;
+
     /// <summary>
     /// Provide tags from Last.fm site.
     /// </summary>
+    [Export(typeof(ITagger))]
     public class LastFmTagger : ITagger
     {
         /// <summary>
@@ -52,7 +56,11 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <param name="lastfmfpclientPath">The lastfmfpclient utility path.</param>
         /// <param name="serviceBaseAddress">The last fm service address.</param>
         /// <param name="apiKey">The API key.</param>
-        public LastFmTagger(string lastfmfpclientPath, string serviceBaseAddress, string apiKey)
+        [ImportingConstructor]
+        public LastFmTagger(
+            [Import(ConfigurationKeys.LastFmFingerprintClientPath)]string lastfmfpclientPath,
+            [Import(ConfigurationKeys.LastFmServiceBaseAddress)]string serviceBaseAddress,
+            [Import(ConfigurationKeys.LastFmApiKey)]string apiKey)
         {
             _lastfmfpclientPath = lastfmfpclientPath;
             _lastFmService = new LastFmService(serviceBaseAddress, apiKey);
@@ -81,46 +89,14 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <returns>Operation observable.</returns>
         public IObservable<Unit> LoadTagsForAudioFile(string fileName)
         {
-            if (File.Exists(_lastfmfpclientPath))
-            {
-                try
-                {
-                    var processStartInfo = new ProcessStartInfo(_lastfmfpclientPath, " \"" + fileName + "\"")
-                        {
-                            UseShellExecute = false,
-                            CreateNoWindow = true,
-                            ErrorDialog = false,
-                            RedirectStandardOutput = true,
-                            StandardOutputEncoding = Encoding.UTF8
-                        };
+            var fingerprindObserver = Observable.Start(() => GetFingerprint(fileName));
 
-                    var lastfmfpclientProcess = new Process
-                        {
-                            StartInfo = processStartInfo
-                        };
-
-                    lastfmfpclientProcess.Start();
-                    
-                    _fingerprintResponse.Parse(XDocument.Load(lastfmfpclientProcess.StandardOutput));
-
-                    lastfmfpclientProcess.WaitForExit();
-                    lastfmfpclientProcess.Close();
-                }
-                catch (Exception ex)
-                {
-                    throw new MetaProviderException("Unexpected Error obtaining tags from last.fm for file: " + fileName, ex);
-                }
-            }
-            else
-            {
-                throw new MetaProviderException("lastfmfpclient.exe not found");
-            }
-
-            var trackInfoObserver = _lastFmService.GetTrackInfo(GetArtist(), GetTrackName())
-                .Do(_trackInfoResponse.Parse)
+            var operationOpservable = fingerprindObserver
+                .SelectMany(x => _lastFmService.GetTrackInfo(GetArtist(), GetTrackName())
+                    .Do(_trackInfoResponse.Parse))
                 .Select(_ => new Unit());
-            
-            return trackInfoObserver;
+
+            return operationOpservable;
         }
 
         /// <summary>
@@ -134,9 +110,11 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         }
 
         /// <summary>
-        /// Get an album name.
+        /// Gets an album name.
         /// </summary>
-        /// <returns>The name of album.</returns>
+        /// <returns>
+        /// The name of album.
+        /// </returns>
         public string GetAlbum()
         {
             return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();
@@ -167,6 +145,61 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         public string GetTrackName()
         {
             return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the fingerprint of audio file.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        private void GetFingerprint(string fileName)
+        {
+            if (File.Exists(_lastfmfpclientPath))
+            {
+                try
+                {
+                    var processStartInfo = new ProcessStartInfo(_lastfmfpclientPath, " \"" + fileName + "\"")
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        ErrorDialog = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        StandardOutputEncoding = Encoding.UTF8
+                    };
+
+                    var lastfmfpclientProcess = new Process { StartInfo = processStartInfo };
+
+                    lastfmfpclientProcess.Start();
+                    lastfmfpclientProcess.WaitForExit();
+
+                    if (lastfmfpclientProcess.ExitCode == 0)
+                    {
+                        _fingerprintResponse.Parse(XDocument.Load(lastfmfpclientProcess.StandardOutput));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Process finished with code: {0}\n\r{1}"
+                            .FormatString(
+                            lastfmfpclientProcess.ExitCode,
+                            lastfmfpclientProcess.StandardError.ReadToEnd()));
+                    }
+                    
+                    lastfmfpclientProcess.Close();
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage =
+                        "Unexpected Error obtaining tags from last.fm for file: '{0}'\n\rDue: {1}"
+                        .FormatString(fileName, ex.Message);
+
+                    throw new MetaProviderException(errorMessage, ex);
+                }
+            }
+            else
+            {
+                throw new MetaProviderException("lastfmfpclient.exe not found");
+            }
         }
     }
 }

@@ -201,9 +201,7 @@
     <Resource Include="Input.Service\Versions_couple.xml" />
     <Resource Include="Input.Service\Versions_single.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Input.CoverPreviewViewModelTest\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

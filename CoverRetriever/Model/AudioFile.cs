@@ -10,8 +10,10 @@
 namespace CoverRetriever.Model
 {
     using System;
+    using System.Linq;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Common.Validation;
     using CoverRetriever.Service;
 
@@ -30,6 +32,11 @@ namespace CoverRetriever.Model
         /// Service that saves cover into folder.
         /// </summary>
         private readonly DirectoryCoverOrganizer _directoryCoverOrganizer;
+
+        /// <summary>
+        /// The audio file meta data obtainer.
+        /// </summary>
+        private ITagger _tagger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioFile"/> class.
@@ -85,7 +92,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetArtist();
+                return GetMetaProvider().GetArtist();
             }
         }
 
@@ -96,7 +103,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetAlbum();
+                return GetMetaProvider().GetAlbum();
             }
         }
 
@@ -107,7 +114,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetYear();
+                return GetMetaProvider().GetYear();
             }
         }
 
@@ -118,8 +125,57 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetTrackName();
+                return GetMetaProvider().GetTrackName();
             }
+        }
+
+        /// <summary>
+        /// Gets an audio tag provider.
+        /// </summary>
+        public IMetaProvider MetaProvider
+        {
+            get
+            {
+                return GetMetaProvider();
+            }
+        }
+
+        /// <summary>
+        /// Assigns the tagger.
+        /// </summary>
+        /// <param name="tagger">The tagger.</param>
+        /// <returns>Operation observer.</returns>
+        public IObservable<Unit> AssignTagger(ITagger tagger)
+        {
+            return tagger
+                .LoadTagsForAudioFile(GetFileSystemItemFullPath())
+                .Do(_ =>
+                    {
+                        _tagger = tagger;
+                        RaisePropertyChanged(String.Empty);
+                    });
+        }
+
+        /// <summary>
+        /// Resets the tagger.
+        /// </summary>
+        public void ResetTagger()
+        {
+            _tagger = null;
+        }
+
+        /// <summary>
+        /// Gets the meta provider from file or from tagger.
+        /// </summary>
+        /// <returns>The meta provider.</returns>
+        private IMetaProvider GetMetaProvider()
+        {
+            if (_tagger != null)
+            {
+                return _tagger;
+            }
+
+            return _metaProvider.Value;
         }
     }
 }
