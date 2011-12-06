@@ -8,4 +8,5 @@
                                          FalseValue="Visible"
                                          TrueValue="Collapsed" />
     <converter:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+    <converter:InvertBoolToVisibilityConverter x:Key="invertBoolToVisibilityConverter" />
 </ResourceDictionary>

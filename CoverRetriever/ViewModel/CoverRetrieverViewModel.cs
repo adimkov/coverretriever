@@ -104,6 +104,11 @@ namespace CoverRetriever.ViewModel
         private readonly DelegateCommand _grabTagsCommand;
 
         /// <summary>
+        /// Backing field for RejectSuggestedTag command.
+        /// </summary>
+        private DelegateCommand _rejectSuggestedTagCommand;
+
+        /// <summary>
         /// Result of saving operation.
         /// </summary>
         private readonly Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
@@ -144,6 +149,11 @@ namespace CoverRetriever.ViewModel
         private string _newVersion;
 
         /// <summary>
+        /// Backing field for SaveTagMode property.
+        /// </summary>
+        private bool _saveTagMode;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CoverRetrieverViewModel"/> class.
         /// </summary>
         /// <param name="fileSystemService">The file system service.</param>
@@ -172,6 +182,7 @@ namespace CoverRetriever.ViewModel
             _aboutCommand = new DelegateCommand(AboutCommandExecute);
             _closeErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
             _grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => FileConductorViewModel.SelectedAudio is AudioFile);
+            _rejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
 
             PreviewCoverRequest = new InteractionRequest<Notification>();
             SelectRootFolderRequest = new InteractionRequest<Notification>();
@@ -278,6 +289,17 @@ namespace CoverRetriever.ViewModel
             get
             {
                 return _grabTagsCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand RejectSuggestedTagCommand
+        {
+            get
+            {
+                return _rejectSuggestedTagCommand;
             }
         }
 
@@ -418,6 +440,26 @@ namespace CoverRetriever.ViewModel
         public IObservable<ProcessResult> SavingCoverResult
         {
             get { return _savingCoverResult; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether view in save tag mode.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if view in save tag mode; otherwise, <c>false</c>.
+        /// </value>
+        public bool SaveTagMode
+        {
+            get
+            {
+                return _saveTagMode;
+            } 
+
+            set
+            {
+                _saveTagMode = value;
+                RaisePropertyChanged("SaveTagMode");
+            }
         }
 
         /// <summary>
@@ -591,7 +633,7 @@ namespace CoverRetriever.ViewModel
         {
             StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedFileSystemItem.Name));
 
-            ((AudioFile)FileConductorViewModel.SelectedAudio).AssignTagger(Tagger.Value)
+            FileConductorViewModel.SelectedAudio.AssignTagger(Tagger.Value)
                 .SubscribeOn(Scheduler.ThreadPool)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
@@ -599,9 +641,19 @@ namespace CoverRetriever.ViewModel
                     x =>
                         {
                             FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
+                            SaveTagMode = true;
                             Debug.WriteLine("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
                         },
                     SetError);
+        }
+
+        /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void RejectSuggestedTagCommandExecute()
+        {
+            FileConductorViewModel.SelectedAudio.ResetTagger();
+            SaveTagMode = false;
         }
 
         /// <summary>

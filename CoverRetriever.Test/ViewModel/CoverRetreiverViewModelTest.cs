@@ -217,6 +217,90 @@ namespace CoverRetriever.Test.ViewModel
             Assert.That(root.MetaProvider, Is.EqualTo(taggerMock.Object));
         }
 
+        [Test]
+        public void Should_set_error_message_if_retrieving_tag_failed()
+        {
+            var mettaProvider = new Mock<IMetaProvider>();
+            var root = GetAudioMockedFile(mettaProvider.Object);
+            var taggerMock = new Mock<ITagger>();
+            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
+                .Returns(Observable.Throw<Unit>(new InvalidOperationException()));
+
+            var target = GetCoverRetrieverViewModel();
+            target.Tagger = new Lazy<ITagger>(() => taggerMock.Object);
+
+            target.FileSystemSelectedItemChangedCommand.Execute(root);
+            target.GrabTagsCommand.Execute(null);
+            _testScheduler.Run();
+
+            Thread.Sleep(100);
+
+            Assert.That(target.CoverRetrieverErrorMessage, Is.Not.Empty);
+        }
+
+        [Test]
+        public void Should_switch_view_model_to_save_tag_mode_in_true_if_success_tag_retrieving()
+        {
+            var mettaProvider = new Mock<IMetaProvider>();
+            var root = GetAudioMockedFile(mettaProvider.Object);
+            var taggerMock = new Mock<ITagger>();
+            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
+                .Returns(Observable.Return(new Unit()));
+
+            var target = GetCoverRetrieverViewModel();
+            target.Tagger = new Lazy<ITagger>(() => taggerMock.Object);
+
+            target.FileSystemSelectedItemChangedCommand.Execute(root);
+            target.GrabTagsCommand.Execute(null);
+            _testScheduler.Run();
+
+            Thread.Sleep(100);
+
+            Assert.That(target.SaveTagMode, Is.True);
+        }
+
+        [Test]
+        public void Should_switch_view_model_to_save_tag_mode_in_false_if_tag_retrieving_failed()
+        {
+            var mettaProvider = new Mock<IMetaProvider>();
+            var root = GetAudioMockedFile(mettaProvider.Object);
+            var taggerMock = new Mock<ITagger>();
+            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
+                .Returns(Observable.Throw<Unit>(new InvalidOperationException()));
+
+            var target = GetCoverRetrieverViewModel();
+            target.Tagger = new Lazy<ITagger>(() => taggerMock.Object);
+
+            target.FileSystemSelectedItemChangedCommand.Execute(root);
+            target.GrabTagsCommand.Execute(null);
+            _testScheduler.Run();
+
+            Thread.Sleep(100);
+
+            Assert.That(target.SaveTagMode, Is.False);
+        }
+
+        [Test]
+        public void Should_reset_tag_and_set_save_tag_mode_with_false()
+        {
+            var mettaProvider = new Mock<IMetaProvider>();
+            var root = GetAudioMockedFile(mettaProvider.Object);
+            var taggerMock = new Mock<ITagger>();
+            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
+               .Returns(Observable.Return(new Unit()));
+
+            root.AssignTagger(taggerMock.Object);
+            var target = GetCoverRetrieverViewModel();
+            target.SaveTagMode = true;
+
+            target.FileSystemSelectedItemChangedCommand.Execute(root);
+            target.RejectSuggestedTagCommand.Execute(null);
+
+            Assert.That(target.SaveTagMode, Is.False);
+            Assert.That(root.MetaProvider, Is.EqualTo(mettaProvider.Object));
+        }
+
+
         private CoverRetrieverViewModel GetCoverRetrieverViewModel(
             out Mock<IFileSystemService> fileSystemServiceMock,
             out Mock<FileConductorViewModel> fileConductorViewModelMock,

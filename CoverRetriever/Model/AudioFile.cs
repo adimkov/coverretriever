@@ -162,6 +162,7 @@ namespace CoverRetriever.Model
         public void ResetTagger()
         {
             _tagger = null;
+            RaisePropertyChanged(String.Empty);
         }
 
         /// <summary>

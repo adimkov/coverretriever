@@ -95,6 +95,7 @@
                 </Rectangle>
             </Grid>
         </DataTemplate>
+        
         <DataTemplate x:Key="ErrorIndicatorErrorTemplate">
             <Border BorderBrush="{DynamicResource BorderColor}"
                     BorderThickness="1"
@@ -130,6 +131,12 @@
                 </Grid>
             </Border>
         </DataTemplate>
+        
+        <Style x:Key="TagButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,-3"/>
+        </Style>
     </Window.Resources>
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding PreviewCoverRequest}">
@@ -202,8 +209,8 @@
                     VerticalAlignment="Top">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.55*" />
-                        <ColumnDefinition Width="0.45*" />
+                        <ColumnDefinition Width="190" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <view:FileConductorView Grid.ColumnSpan="2" DataContext="{Binding FileConductorViewModel}" />
                     <Grid x:Name="AnimationGrid"
@@ -228,11 +235,21 @@
                             </i:Interaction.Behaviors>
                         </Image>
                     </Grid>
-                    <Button Grid.Column="1"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Command="{Binding GrabTagsCommand}"
-                            Content="Get tag from Last.fm" />
+                    <Border x:Name="getTagerBorder" Grid.Column="1" Visibility="{Binding SaveTagMode, Converter={StaticResource invertBoolToVisibilityConverter}}">
+                        <Button Style="{StaticResource TagButton}"
+                                Command="{Binding GrabTagsCommand}"
+                                Content="Get tag from Last.fm" />    
+                    </Border>
+                    <Border x:Name="saveTagBorder" Grid.Column="1" Visibility="{Binding SaveTagMode, Converter={StaticResource boolToVisibilityConverter}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="cancelButton" Content="Cancel" Grid.Column="0" Command="{Binding RejectSuggestedTagCommand}" Style="{StaticResource TagButton}"/>
+                            <Button x:Name="saveButton" Content="Save" Grid.Column="1" Style="{StaticResource TagButton}"/>
+                        </Grid>
+                    </Border>
                 </Grid>
             </Border>
             <Border x:Name="SuggestedCoversBorder"
@@ -243,7 +260,6 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <Grid>
-
                     <fluid:ElementFlow x:Name="elementFlow"
                                        cmd:MouseDoubleClick.Command="{Binding PreviewCoverCommand}"
                                        cmd:MouseDoubleClick.CommandParameter="{Binding SelectedItem,

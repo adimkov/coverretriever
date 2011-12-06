@@ -193,6 +193,7 @@
     <Compile Include="Controls\ErrorIndicator.cs" />
     <Compile Include="Controls\ImageAsyncSource.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converter\InvertBoolToVisibilityConverter.cs" />
     <Compile Include="Converter\CoverRecipientToBoolConverter.cs" />
     <Compile Include="Converter\CoverToImageConverter.cs" />
     <Compile Include="Converter\FolderImageConverter.cs" />
