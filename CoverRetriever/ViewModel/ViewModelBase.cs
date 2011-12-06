@@ -11,10 +11,12 @@ namespace CoverRetriever.ViewModel
 {
     using System;
 
+    using Microsoft.Practices.Prism.ViewModel;
+
     /// <summary>
     /// Base view model.
     /// </summary>
-    public abstract class ViewModelBase : NotifyPropertyChanged
+    public abstract class ViewModelBase : NotificationObject
     {
         /// <summary>
         /// Backing field for IsBusy property.
