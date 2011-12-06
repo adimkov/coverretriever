@@ -234,7 +234,6 @@
     <Compile Include="ViewModel\CoverPreviewViewModel.cs" />
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\FileConductorViewModel.cs" />
-    <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\OpenFolderViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AboutView.xaml.cs">
