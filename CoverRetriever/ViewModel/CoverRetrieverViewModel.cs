@@ -197,6 +197,7 @@ namespace CoverRetriever.ViewModel
             _suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
 
             ObservableScheduler = Scheduler.Dispatcher;
+            SubscribeScheduler = Scheduler.ThreadPool;
         }
 
         /// <summary>
@@ -345,6 +346,8 @@ namespace CoverRetriever.ViewModel
         /// The scheduler.
         /// </value>
         public IScheduler ObservableScheduler { get; set; }
+        
+        public IScheduler SubscribeScheduler { get; set; }
 
         /// <summary>
         /// Gets the file system.
@@ -532,7 +535,7 @@ namespace CoverRetriever.ViewModel
             RaisePropertyChanged("FileSystem");
             StartOperation(CoverRetrieverResources.MessageLibraryLoad);
             _fileSystemService.GetChildrenForRootFolder(_rootFolder)
-                .SubscribeOn(Scheduler.NewThread)
+                .SubscribeOn(SubscribeScheduler)
                 .ObserveOn(ObservableScheduler)
                 .Subscribe(
                 x => _rootFolder.Children.Add(x),
@@ -651,7 +654,7 @@ namespace CoverRetriever.ViewModel
             StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedFileSystemItem.Name));
 
             FileConductorViewModel.SelectedAudio.AssignTagger(Tagger.Value)
-                .SubscribeOn(Scheduler.ThreadPool)
+                .SubscribeOn(SubscribeScheduler)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
                 .Subscribe(
@@ -748,7 +751,7 @@ namespace CoverRetriever.ViewModel
             var albumCondition = fileDetails.Album;
 
             _coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
-                .SubscribeOn(Scheduler.ThreadPool)
+                .SubscribeOn(SubscribeScheduler)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
                 .Subscribe(

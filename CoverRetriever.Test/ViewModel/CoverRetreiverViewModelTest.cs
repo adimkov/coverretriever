@@ -223,7 +223,7 @@ namespace CoverRetriever.Test.ViewModel
             var mettaProvider = new Mock<IMetaProvider>();
             var root = GetAudioMockedFile(mettaProvider.Object);
             var taggerMock = new Mock<ITagger>();
-            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
+            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.IsAny<string>()))
                 .Returns(Observable.Throw<Unit>(new InvalidOperationException()));
 
             var target = GetCoverRetrieverViewModel();
@@ -232,8 +232,6 @@ namespace CoverRetriever.Test.ViewModel
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
             _testScheduler.Run();
-
-            Thread.Sleep(100);
 
             Assert.That(target.CoverRetrieverErrorMessage, Is.Not.Empty);
         }
@@ -325,6 +323,7 @@ namespace CoverRetriever.Test.ViewModel
                 GetRootFolderViewModelMock().Object,
                 fileConductorViewModelMock.Object);
             target.ObservableScheduler = _testScheduler;
+            target.SubscribeScheduler = _testScheduler;
             target.VersionControl = new Lazy<IVersionControlService>(() => versionControlMock.Object);
             
             return target;
