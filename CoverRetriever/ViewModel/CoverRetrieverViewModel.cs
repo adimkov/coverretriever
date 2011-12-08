@@ -106,7 +106,12 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Backing field for RejectSuggestedTag command.
         /// </summary>
-        private DelegateCommand _rejectSuggestedTagCommand;
+        private readonly DelegateCommand _rejectSuggestedTagCommand;
+
+        /// <summary>
+        /// Backing field for SaveSuggestedTag command.
+        /// </summary>
+        private readonly DelegateCommand _saveSuggestedTagCommand;
 
         /// <summary>
         /// Result of saving operation.
@@ -183,6 +188,7 @@ namespace CoverRetriever.ViewModel
             _closeErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
             _grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => FileConductorViewModel.SelectedAudio is AudioFile);
             _rejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
+            _saveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
 
             PreviewCoverRequest = new InteractionRequest<Notification>();
             SelectRootFolderRequest = new InteractionRequest<Notification>();
@@ -300,6 +306,17 @@ namespace CoverRetriever.ViewModel
             get
             {
                 return _rejectSuggestedTagCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand SaveSuggestedTagCommand
+        {
+            get
+            {
+                return _saveSuggestedTagCommand;
             }
         }
 
@@ -653,6 +670,15 @@ namespace CoverRetriever.ViewModel
         private void RejectSuggestedTagCommandExecute()
         {
             FileConductorViewModel.SelectedAudio.ResetTagger();
+            SaveTagMode = false;
+        }
+
+                /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void SaveSuggestedTagCommandExecute()
+        {
+            FileConductorViewModel.SelectedAudio.SaveFromTagger();
             SaveTagMode = false;
         }
 

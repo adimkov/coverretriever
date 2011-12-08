@@ -166,6 +166,19 @@ namespace CoverRetriever.Model
         }
 
         /// <summary>
+        /// Saves tag from tagger.
+        /// </summary>
+        public void SaveFromTagger()
+        {
+            if (_tagger == null)
+            {
+                throw new InvalidOperationException("Tagger was not assigned. Assign the tagger first");
+            }
+
+//            _tagger.SaveTagsInTo(_metaProvider.Value);
+        }
+
+        /// <summary>
         /// Gets the meta provider from file or from tagger.
         /// </summary>
         /// <returns>The meta provider.</returns>
@@ -178,5 +191,6 @@ namespace CoverRetriever.Model
 
             return _metaProvider.Value;
         }
+
     }
 }

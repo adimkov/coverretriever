@@ -247,7 +247,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="cancelButton" Content="Cancel" Grid.Column="0" Command="{Binding RejectSuggestedTagCommand}" Style="{StaticResource TagButton}"/>
-                            <Button x:Name="saveButton" Content="Save" Grid.Column="1" Style="{StaticResource TagButton}"/>
+                            <Button x:Name="saveButton" Content="Save" Grid.Column="1" Command="{Binding SaveSuggestedTagCommand}" Style="{StaticResource TagButton}"/>
                         </Grid>
                     </Border>
                 </Grid>
