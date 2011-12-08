@@ -92,7 +92,13 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return GetMetaProvider().Artist;
+<<<<<<< HEAD
+                return GetMetaProvider().GetArtist();
+||||||| merged common ancestors
+                return _metaProvider.Value.GetArtist();
+=======
+                return _metaProvider.Value.Artist;
+>>>>>>> master
             }
         }
 
@@ -103,7 +109,13 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return GetMetaProvider().Album;
+<<<<<<< HEAD
+                return GetMetaProvider().GetAlbum();
+||||||| merged common ancestors
+                return _metaProvider.Value.GetAlbum();
+=======
+                return _metaProvider.Value.Album;
+>>>>>>> master
             }
         }
 
@@ -114,7 +126,13 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return GetMetaProvider().Year;
+<<<<<<< HEAD
+                return GetMetaProvider().GetYear();
+||||||| merged common ancestors
+                return _metaProvider.Value.GetYear();
+=======
+                return _metaProvider.Value.Year;
+>>>>>>> master
             }
         }
 
@@ -125,7 +143,8 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return GetMetaProvider().TrackName;
+<<<<<<< HEAD
+                return GetMetaProvider().GetTrackName();
             }
         }
 
@@ -173,6 +192,11 @@ namespace CoverRetriever.Model
             if (_tagger == null)
             {
                 throw new InvalidOperationException("Tagger was not assigned. Assign the tagger first");
+||||||| merged common ancestors
+                return _metaProvider.Value.GetTrackName();
+=======
+                return _metaProvider.Value.TrackName;
+>>>>>>> master
             }
 
 //            _tagger.SaveTagsInTo(_metaProvider.Value);

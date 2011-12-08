@@ -745,9 +745,9 @@ namespace CoverRetriever.ViewModel
             StartOperation(CoverRetrieverResources.MessageDownloadCover);
             ResetError();
             _suggestedCovers.Clear();
-            var albumCondition = fileDetails.GetAlbum();
+            var albumCondition = fileDetails.Album;
 
-            _coverRetrieverService.GetCoverFor(fileDetails.GetArtist(), albumCondition, SuggestedCountOfCovers)
+            _coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
                 .SubscribeOn(Scheduler.ThreadPool)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)

@@ -92,7 +92,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             var fingerprindObserver = Observable.Start(() => GetFingerprint(fileName));
 
             var operationOpservable = fingerprindObserver
-                .SelectMany(x => _lastFmService.GetTrackInfo(GetArtist(), GetTrackName())
+                .SelectMany(x => _lastFmService.GetTrackInfo(Artist, TrackName)
                     .Do(_trackInfoResponse.Parse))
                 .Select(_ => new Unit());
 
@@ -110,44 +110,6 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         }
 
         /// <summary>
-        /// Gets an album name.
-        /// </summary>
-        /// <returns>
-        /// The name of album.
-        /// </returns>
-        public string GetAlbum()
-        {
-            return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Gets an artist.
-        /// </summary>
-        /// <returns>The artist.</returns>
-        public string GetArtist()
-        {
-            return _fingerprintResponse.SuggestedArtists.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Get year of album.
-        /// </summary>
-        /// <returns>The album year.</returns>
-        public string GetYear()
-        {
-            return _albumInfoResponse.SuggestedYears.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Gets name of track.
-        /// </summary>
-        /// <returns>The name of track.</returns>
-        public string GetTrackName()
-        {
-            return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
-        }
-
-        /// <summary>
         /// Gets the fingerprint of audio file.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
@@ -158,14 +120,14 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 try
                 {
                     var processStartInfo = new ProcessStartInfo(_lastfmfpclientPath, " \"" + fileName + "\"")
-                    {
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        ErrorDialog = false,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        StandardOutputEncoding = Encoding.UTF8
-                    };
+                        {
+                            UseShellExecute = false,
+                            CreateNoWindow = true,
+                            ErrorDialog = false,
+                            RedirectStandardOutput = true,
+                            RedirectStandardError = true,
+                            StandardOutputEncoding = Encoding.UTF8
+                        };
 
                     var lastfmfpclientProcess = new Process { StartInfo = processStartInfo };
 
@@ -180,9 +142,9 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                     {
                         throw new InvalidOperationException(
                             "Process finished with code: {0}\n\r{1}"
-                            .FormatString(
-                            lastfmfpclientProcess.ExitCode,
-                            lastfmfpclientProcess.StandardError.ReadToEnd()));
+                                .FormatString(
+                                    lastfmfpclientProcess.ExitCode,
+                                    lastfmfpclientProcess.StandardError.ReadToEnd()));
                     }
                     
                     lastfmfpclientProcess.Close();
@@ -191,7 +153,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 {
                     var errorMessage =
                         "Unexpected Error obtaining tags from last.fm for file: '{0}'\n\rDue: {1}"
-                        .FormatString(fileName, ex.Message);
+                            .FormatString(fileName, ex.Message);
 
                     throw new MetaProviderException(errorMessage, ex);
                 }
@@ -199,6 +161,50 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             else
             {
                 throw new MetaProviderException("lastfmfpclient.exe not found");
+            }
+        }
+
+        /// <summary>
+        /// Gets an album name.
+        /// </summary>
+        public string Album
+        {
+            get
+            {
+                return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();    
+            }
+        }
+
+        /// <summary>
+        /// Gets an artist.
+        /// </summary>
+        public string Artist
+        {
+            get
+            {
+                return _fingerprintResponse.SuggestedArtists.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets year of album.
+        /// </summary>
+        public string Year
+        {
+            get
+            {
+                return _albumInfoResponse.SuggestedYears.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets name of track.
+        /// </summary>
+        public string TrackName
+        {
+            get
+            {
+                return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
             }
         }
     }

@@ -49,13 +49,11 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
             var testSheduler = new TestScheduler();
             var observer = new MockObserver<Unit>(testSheduler);
 
-            //_lastFmTagger.LoadTagsForAudioFile(PathUtils.BuildFullResourcePath(FileToRetrieve)).Run(observer);
+            _lastFmTagger.LoadTagsForAudioFile(PathUtils.BuildFullResourcePath(FileToRetrieve)).Run(observer);
 
-            _lastFmTagger.LoadTagsForAudioFile(@"C:\Users\Olga\Desktop\Files\03 - Уходи.mp3").Run();
-            
-            Assert.That(_lastFmTagger.GetArtist(), Is.EqualTo("ДДТ"));
-            Assert.That(_lastFmTagger.GetAlbum(), Is.EqualTo("Город без окон. Вход."));
-            Assert.That(_lastFmTagger.GetTrackName(), Is.EqualTo("Поэт"));
+            Assert.That(_lastFmTagger.Artist, Is.EqualTo("ДДТ"));
+            Assert.That(_lastFmTagger.Album, Is.EqualTo("Город без окон. Вход."));
+            Assert.That(_lastFmTagger.TrackName, Is.EqualTo("Поэт"));
         }
     }
 }

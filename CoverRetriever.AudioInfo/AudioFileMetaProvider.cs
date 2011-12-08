@@ -72,6 +72,54 @@ namespace CoverRetriever.AudioInfo
         }
 
         /// <summary>
+        /// Gets an album name.
+        /// </summary>
+        public virtual string Album
+        {
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                return _file.Tag.Album ?? FileNameMetaObtainer.GetAlbum();
+            }
+        }
+
+        /// <summary>
+        /// Gets an artist.
+        /// </summary>
+        public virtual string Artist
+        {
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                return _file.Tag.FirstPerformer ?? FileNameMetaObtainer.GetArtist();
+            }
+        }
+
+        /// <summary>
+        /// Gets year of album.
+        /// </summary>
+        public virtual string Year
+        {
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                return _file.Tag.Year >= 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
+            }
+        }
+
+        /// <summary>
+        /// Gets name of track.
+        /// </summary>
+        public virtual string TrackName
+        {
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                return _file.Tag.Title ?? FileNameMetaObtainer.GetTrackName();
+            }
+        }
+
+        /// <summary>
         /// Gets service to obtain name of file. 
         /// </summary>
         protected FileNameMetaObtainer FileNameMetaObtainer { get; private set; }
@@ -84,46 +132,6 @@ namespace CoverRetriever.AudioInfo
             get { return _file; }
         }
 
-        /// <summary>
-        /// Gets a name of album.
-        /// </summary>
-        /// <returns>Album name.</returns>
-        public virtual string GetAlbum()
-        {
-            EnsureInstanceWasNotDisposed();
-            return _file.Tag.Album ?? FileNameMetaObtainer.GetAlbum();
-        }
-
-        /// <summary>
-        /// Gets an artist.
-        /// </summary>
-        /// <returns>The artist.</returns>
-        public virtual string GetArtist()
-        {
-            EnsureInstanceWasNotDisposed();
-            return _file.Tag.FirstPerformer ?? FileNameMetaObtainer.GetArtist();
-        }
-
-        /// <summary>
-        /// Gets year of album.
-        /// </summary>
-        /// <returns>Year of album.</returns>
-        public virtual string GetYear()
-        {
-            EnsureInstanceWasNotDisposed();
-            return _file.Tag.Year >= 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
-        }
-
-        /// <summary>
-        /// Get name of track.
-        /// </summary>
-        /// <returns>Track name.</returns>
-        public virtual string GetTrackName()
-        {
-            EnsureInstanceWasNotDisposed();
-            return _file.Tag.Title ?? FileNameMetaObtainer.GetTrackName();
-        }
-        
         /// <summary>
         /// Gets a value indicating whether the cover existence.
         /// </summary>

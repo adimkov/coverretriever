@@ -47,7 +47,7 @@ namespace CoverRetriever.Test.Model
         public void GetAlbuum_should_create_meta_provider_and_return_album_info()
         {
             var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.Setup(x => x.GetAlbum()).Returns("Это_все");
+            metaProviderMock.SetupGet(x => x.Album).Returns("Это_все");
 
             var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
 
@@ -63,7 +63,7 @@ namespace CoverRetriever.Test.Model
         public void GetAlbuum_should_create_meta_provider_and_return_artist_info()
         {
             var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.Setup(x => x.GetArtist()).Returns("DDT");
+            metaProviderMock.SetupGet(x => x.Artist).Returns("DDT");
 
             var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
 
@@ -79,7 +79,7 @@ namespace CoverRetriever.Test.Model
         public void GetAlbuum_should_create_meta_provider_and_return_year()
         {
             var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.Setup(x => x.GetYear()).Returns("1995");
+            metaProviderMock.SetupGet(x => x.Year).Returns("1995");
 
             var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
 
@@ -95,7 +95,7 @@ namespace CoverRetriever.Test.Model
         public void GetAlbuum_should_create_meta_provider_and_return_track_name()
         {
             var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.Setup(x => x.GetTrackName()).Returns("Aktrisa_vesna");
+            metaProviderMock.SetupGet(x => x.TrackName).Returns("Aktrisa_vesna");
 
             var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
 
@@ -135,7 +135,7 @@ namespace CoverRetriever.Test.Model
         public void Should_assign_tagger_to_audio_file()
         {
             var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.Setup(x => x.GetTrackName()).Returns("Aktrisa_vesna");
+            metaProviderMock.SetupGet(x => x.TrackName).Returns("Aktrisa_vesna");
             var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
             var tagger = new Mock<ITagger>();
             tagger.Setup(x => x.LoadTagsForAudioFile(It.IsAny<string>()))
