@@ -74,6 +74,13 @@ namespace CoverRetriever.AudioInfo
                 var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Album));
                 return id3.Album ?? base.Album;
             }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = File.GetTag(TagTypes.Id3v2);
+                id3.Album = value;
+            }
         }
 
         /// <summary>
@@ -86,6 +93,13 @@ namespace CoverRetriever.AudioInfo
                 EnsureInstanceWasNotDisposed();
                 var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.FirstPerformer));
                 return id3.FirstPerformer ?? base.Artist;
+            }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = File.GetTag(TagTypes.Id3v2);
+                id3.Performers = new[] { value };
             }
         }
 
@@ -100,6 +114,13 @@ namespace CoverRetriever.AudioInfo
                 var id3 = GetAudioTag(File, x => x.Year > 0);
                 return id3.Year > 0 ? id3.Year.ToString() : base.Year;
             }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = File.GetTag(TagTypes.Id3v2);
+                id3.Year = uint.Parse(value);
+            }
         }
 
         /// <summary>
@@ -112,6 +133,13 @@ namespace CoverRetriever.AudioInfo
                 EnsureInstanceWasNotDisposed();
                 var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Title));
                 return id3.Title ?? base.TrackName;
+            }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = File.GetTag(TagTypes.Id3v2);
+                id3.Title = value;
             }
         }
 

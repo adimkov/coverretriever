@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.AudioInfo
 {
+    using FluentAssertions;
+
     [TestFixture]
     public class FlacMetaProviderTest
     {
@@ -32,8 +34,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
             {
-                var album = target.Album;
-                Assert.That(album, Is.EqualTo("Quiet, Live in Atlanta, 1993"));
+                target.Album.Should().Be("Quiet, Live in Atlanta, 1993");
             }	
         }
         
@@ -42,8 +43,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
             {
-                var artist = target.Artist;
-                Assert.That(artist, Is.EqualTo("Smashing Pumpkins"));
+                target.Artist.Should().Be("Smashing Pumpkins");
             }
         }
 
@@ -52,8 +52,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
             {
-                var trackName = target.TrackName;
-                Assert.That(trackName, Is.EqualTo("Earphoria"));
+                target.TrackName.Should().Be("Earphoria");
             }
         }
 
@@ -62,8 +61,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
             {
-                var year = target.Year;
-                Assert.That(year, Is.EqualTo("1993"));
+                target.Year.Should().Be("1993");
             }
         }
 
@@ -73,6 +71,50 @@ namespace CoverRetriever.Test.AudioInfo
             using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
             {
                 Assert.IsFalse(target.IsEmpty);
+            }
+        }
+
+        [Test]
+        public void should_set_Album_in_to_tags_of_file()
+        {
+            using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
+            {
+                target.Album = "TestSetAlbum";
+
+                target.Album.Should().Be("TestSetAlbum");
+            }
+        }
+
+        [Test]
+        public void should_set_Artist_in_to_tags_of_file()
+        {
+            using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
+            {
+                target.Artist = "TestSetArtist";
+
+                target.Artist.Should().Be("TestSetArtist");
+            }
+        }
+
+        [Test]
+        public void should_set_Yaer_in_to_tags_of_file()
+        {
+            using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
+            {
+                target.Year = "2000";
+
+                target.Year.Should().Be("2000");
+            }
+        }
+
+        [Test]
+        public void should_set_TrackName_in_to_tags_of_file()
+        {
+            using (var target = new FlacMetaProvider(PathUtils.BuildFullResourcePath(Flac1)))
+            {
+                target.TrackName = "TestSetTitle";
+
+                target.TrackName.Should().Be("TestSetTitle");
             }
         }
     }

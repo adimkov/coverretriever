@@ -62,7 +62,6 @@
     <Compile Include="IActivator.cs" />
     <Compile Include="ICoverOrganizer.cs" />
     <Compile Include="IMetaProvider.cs" />
-    <Compile Include="IMetaRecipient.cs" />
     <Compile Include="MetaProviderException.cs" />
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

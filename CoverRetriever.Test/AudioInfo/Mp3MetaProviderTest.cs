@@ -12,6 +12,8 @@ namespace CoverRetriever.Test.AudioInfo
 {
     using System.Linq;
 
+    using FluentAssertions;
+
     [TestFixture]
     public class Mp3MetaProviderTest
     {
@@ -27,7 +29,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithLatinEncoding)))
             {
-                Assert.That(target.Album, Is.EqualTo("Wild Obsession"));
+                target.Album.Should().Be("Wild Obsession");
             }
         }
 
@@ -36,7 +38,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithWindowsEncoding)))
             {
-                Assert.That(target.Album, Is.EqualTo("Ïèðàòñêèé àëüáîì"));
+                target.Album.Should().Be("Ïèðàòñêèé àëüáîì");
             }
         }
 
@@ -45,7 +47,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame)))
             {
-                Assert.That(target.Album, Is.Null);
+                target.Album.Should().BeNull();
             }
         }
 
@@ -54,7 +56,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
             {
-                Assert.That(target.Album, Is.EqualTo("ß ïîëó÷èë ýòó ðîëü"));
+                target.Album.Should().Be("ß ïîëó÷èë ýòó ðîëü");
             }
         }
 
@@ -63,7 +65,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame)))
             {
-                Assert.That(target.TrackName, Is.EqualTo("EmptyFrameFile"));
+                target.TrackName.Should().Be("EmptyFrameFile");
             }	
         }
         [Test]
@@ -80,7 +82,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
             {
-                Assert.IsFalse(target.IsEmpty);
+                target.IsEmpty.Should().BeFalse();
             }
         }
 
@@ -95,34 +97,42 @@ namespace CoverRetriever.Test.AudioInfo
         [Test]
         public void Should_indicate_ability_to_read_write_to_file_covers()
         {
-            var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ));
-            Assert.IsTrue(target.IsCanProcessed);
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                    target.IsCanProcessed.Should().BeTrue();
+            }
         }
 
         [Test]
         public void Should_return_True_as_cover_exists()
         {
-            var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ));
-            Assert.IsTrue(target.IsCoverExists());
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                target.IsCoverExists().Should().BeTrue();
+            }
         }
 
         [Test]
         public void Should_return_False_as_cover_does_not_exist()
         {
-            var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame));
-            Assert.IsFalse(target.IsCoverExists());
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame)))
+            {
+                target.IsCoverExists().Should().BeFalse();
+            }
         }
 
         [Test]
         public void Should_get_cover_from_file()
         {
-            var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ));
-            Cover cover = target.GetCover();
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                Cover cover = target.GetCover();
 
-            Assert.That(cover.Length, Is.EqualTo(113337));
-            Assert.That(cover.CoverSize, Is.EqualTo(new Size(598, 600)));
-            Assert.That(cover.Name, Is.EqualTo("FrontCover.jpg"));
-            Assert.That(cover.CoverStream, Is.Not.Null);
+                cover.Length.Should().Be(113337);
+                cover.CoverSize.Should().Be(new Size(598, 600));
+                cover.Name.Should().Be("FrontCover.jpg");
+                cover.CoverStream.Should().NotBeNull();
+            }
         }
 
         [Test]
@@ -141,7 +151,7 @@ namespace CoverRetriever.Test.AudioInfo
             
             var testScheduler = new TestScheduler();
             var mockObservable = new MockObserver<Unit>(testScheduler);
-            var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(EmptyFrameFileForImageSave));
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(EmptyFrameFileForImageSave)))
             using (var stream = File.OpenRead(PathUtils.BuildFullResourcePath(ImageFileWithÄÄÒ)))
             {
                 var cover = new Cover("FrontCover.jpg", new Size(598, 600), 113337, Observable.Return(stream));
@@ -151,11 +161,10 @@ namespace CoverRetriever.Test.AudioInfo
 
 //			long fileSizeAfter = new FileInfo(BuildFullResourcePath(EmptyFrameFileForImageSave)).Length;
             
-            Assert.That(mockObservable[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(mockObservable[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
+            mockObservable[0].Value.Kind.Should().Be(NotificationKind.OnNext);
+            mockObservable[1].Value.Kind.Should().Be(NotificationKind.OnCompleted);
 //			Assert.That(fileSizeBefore, Is.LessThan(fileSizeAfter));
         }
-
 
         [Test]
         public void Should_throws_error_disposer_on_attempt_to_save_cover_in_file()
@@ -164,6 +173,50 @@ namespace CoverRetriever.Test.AudioInfo
             target.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => target.SaveCover(new Cover()));
+        }
+
+        [Test]
+        public void should_set_Album_in_to_tags_of_file()
+        {
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                target.Album = "TestSetAlbum";
+
+                target.Album.Should().Be("TestSetAlbum");
+            }
+        }
+
+        [Test]
+        public void should_set_Artist_in_to_tags_of_file()
+        {
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                target.Artist = "TestSetArtist";
+
+                target.Artist.Should().Be("TestSetArtist");
+            }
+        }
+
+        [Test]
+        public void should_set_Yaer_in_to_tags_of_file()
+        {
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                target.Year = "2000";
+
+                target.Year.Should().Be("2000");
+            }
+        }
+
+        [Test]
+        public void should_set_TrackName_in_to_tags_of_file()
+        {
+            using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithÄÄÒ)))
+            {
+                target.TrackName = "TestSetTitle";
+
+                target.TrackName.Should().Be("TestSetTitle");
+            }
         }
     }
 }

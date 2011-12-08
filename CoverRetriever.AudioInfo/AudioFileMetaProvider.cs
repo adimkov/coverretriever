@@ -72,7 +72,7 @@ namespace CoverRetriever.AudioInfo
         }
 
         /// <summary>
-        /// Gets an album name.
+        /// Gets or sets an album name.
         /// </summary>
         public virtual string Album
         {
@@ -81,10 +81,16 @@ namespace CoverRetriever.AudioInfo
                 EnsureInstanceWasNotDisposed();
                 return _file.Tag.Album ?? FileNameMetaObtainer.GetAlbum();
             }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                _file.Tag.Album = value;
+            }
         }
 
         /// <summary>
-        /// Gets an artist.
+        /// Gets or sets an artist.
         /// </summary>
         public virtual string Artist
         {
@@ -93,10 +99,16 @@ namespace CoverRetriever.AudioInfo
                 EnsureInstanceWasNotDisposed();
                 return _file.Tag.FirstPerformer ?? FileNameMetaObtainer.GetArtist();
             }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                _file.Tag.Performers = new[] { value };
+            }
         }
 
         /// <summary>
-        /// Gets year of album.
+        /// Gets or sets year of album.
         /// </summary>
         public virtual string Year
         {
@@ -105,10 +117,16 @@ namespace CoverRetriever.AudioInfo
                 EnsureInstanceWasNotDisposed();
                 return _file.Tag.Year >= 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
             }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                _file.Tag.Year = uint.Parse(value);
+            }
         }
 
         /// <summary>
-        /// Gets name of track.
+        /// Gets or sets name of track.
         /// </summary>
         public virtual string TrackName
         {
@@ -116,6 +134,12 @@ namespace CoverRetriever.AudioInfo
             {
                 EnsureInstanceWasNotDisposed();
                 return _file.Tag.Title ?? FileNameMetaObtainer.GetTrackName();
+            }
+
+            set
+            {
+                EnsureInstanceWasNotDisposed();
+                _file.Tag.Title = value;
             }
         }
 
@@ -130,6 +154,14 @@ namespace CoverRetriever.AudioInfo
         protected File File
         {
             get { return _file; }
+        }
+
+        /// <summary>
+        /// Saves tags into file instance.
+        /// </summary>
+        public virtual void Save()
+        {
+            File.Save();
         }
 
         /// <summary>

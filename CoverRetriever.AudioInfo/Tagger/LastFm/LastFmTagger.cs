@@ -12,6 +12,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     using System;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -58,9 +59,9 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <param name="apiKey">The API key.</param>
         [ImportingConstructor]
         public LastFmTagger(
-            [Import(ConfigurationKeys.LastFmFingerprintClientPath)]string lastfmfpclientPath,
-            [Import(ConfigurationKeys.LastFmServiceBaseAddress)]string serviceBaseAddress,
-            [Import(ConfigurationKeys.LastFmApiKey)]string apiKey)
+            [Import(ConfigurationKeys.LastFmFingerprintClientPath)] string lastfmfpclientPath,
+            [Import(ConfigurationKeys.LastFmServiceBaseAddress)] string serviceBaseAddress,
+            [Import(ConfigurationKeys.LastFmApiKey)] string apiKey)
         {
             _lastfmfpclientPath = lastfmfpclientPath;
             _lastFmService = new LastFmService(serviceBaseAddress, apiKey);
@@ -76,9 +77,79 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         {
             get
             {
-                return _fingerprintResponse.IsSuccess && 
-                       _trackInfoResponse.IsSuccess && 
-                       _albumInfoResponse.IsSuccess;
+                return _fingerprintResponse.IsSuccess && _trackInfoResponse.IsSuccess && _albumInfoResponse.IsSuccess;
+            }
+        }
+
+        /// <summary>
+        /// Gets an album name.
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
+            Justification = "Reviewed. Suppression is OK here.")]
+        public string Album
+        {
+            get
+            {
+                return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Property does not support set value");
+            }
+        }
+
+        /// <summary>
+        /// Gets an artist.
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
+            Justification = "Reviewed. Suppression is OK here.")]
+        public string Artist
+        {
+            get
+            {
+                return _fingerprintResponse.SuggestedArtists.FirstOrDefault();
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Property does not support set value");
+            }
+        }
+
+        /// <summary>
+        /// Gets year of album.
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
+            Justification = "Reviewed. Suppression is OK here.")]
+        public string Year
+        {
+            get
+            {
+                return _albumInfoResponse.SuggestedYears.FirstOrDefault();
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Property does not support set value");
+            }
+        }
+
+        /// <summary>
+        /// Gets name of track.
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
+            Justification = "Reviewed. Suppression is OK here.")]
+        public string TrackName
+        {
+            get
+            {
+                return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Property does not support set value");
             }
         }
 
@@ -91,22 +162,20 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         {
             var fingerprindObserver = Observable.Start(() => GetFingerprint(fileName));
 
-            var operationOpservable = fingerprindObserver
-                .SelectMany(x => _lastFmService.GetTrackInfo(Artist, TrackName)
-                    .Do(_trackInfoResponse.Parse))
-                .Select(_ => new Unit());
+            var operationOpservable =
+                fingerprindObserver.SelectMany(
+                    x => _lastFmService.GetTrackInfo(Artist, TrackName).Do(_trackInfoResponse.Parse)).Select(
+                        _ => new Unit());
 
             return operationOpservable;
         }
 
         /// <summary>
-        /// Saves the tags in to specified File.
+        /// Saves tags into file instance.
         /// </summary>
-        /// <param name="tagRecipient">The tag recipient.</param>
-        /// <returns>Operation observable.</returns>
-        public IObservable<Unit> SaveTagsInTo(IMetaRecipient tagRecipient)
+        public void Save()
         {
-            throw new System.NotImplementedException();
+            throw new InvalidOperationException("Object does not support save operation");
         }
 
         /// <summary>
@@ -141,19 +210,17 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                     else
                     {
                         throw new InvalidOperationException(
-                            "Process finished with code: {0}\n\r{1}"
-                                .FormatString(
-                                    lastfmfpclientProcess.ExitCode,
-                                    lastfmfpclientProcess.StandardError.ReadToEnd()));
+                            "Process finished with code: {0}\n\r{1}".FormatString(
+                                lastfmfpclientProcess.ExitCode, lastfmfpclientProcess.StandardError.ReadToEnd()));
                     }
-                    
+
                     lastfmfpclientProcess.Close();
                 }
                 catch (Exception ex)
                 {
                     var errorMessage =
-                        "Unexpected Error obtaining tags from last.fm for file: '{0}'\n\rDue: {1}"
-                            .FormatString(fileName, ex.Message);
+                        "Unexpected Error obtaining tags from last.fm for file: '{0}'\n\rDue: {1}".FormatString(
+                            fileName, ex.Message);
 
                     throw new MetaProviderException(errorMessage, ex);
                 }
@@ -161,50 +228,6 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             else
             {
                 throw new MetaProviderException("lastfmfpclient.exe not found");
-            }
-        }
-
-        /// <summary>
-        /// Gets an album name.
-        /// </summary>
-        public string Album
-        {
-            get
-            {
-                return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();    
-            }
-        }
-
-        /// <summary>
-        /// Gets an artist.
-        /// </summary>
-        public string Artist
-        {
-            get
-            {
-                return _fingerprintResponse.SuggestedArtists.FirstOrDefault();
-            }
-        }
-
-        /// <summary>
-        /// Gets year of album.
-        /// </summary>
-        public string Year
-        {
-            get
-            {
-                return _albumInfoResponse.SuggestedYears.FirstOrDefault();
-            }
-        }
-
-        /// <summary>
-        /// Gets name of track.
-        /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
             }
         }
     }

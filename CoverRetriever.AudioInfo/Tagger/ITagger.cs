@@ -22,12 +22,5 @@ namespace CoverRetriever.AudioInfo.Tagger
         /// <param name="fileName">Name of the file.</param>
         /// <returns>Operation observable.</returns>
         IObservable<Unit> LoadTagsForAudioFile(string fileName);
-
-        /// <summary>
-        /// Saves the tags in to specified File.
-        /// </summary>
-        /// <param name="tagRecipient">The tag recipient.</param>
-        /// <returns>Operation observable.</returns>
-        IObservable<Unit> SaveTagsInTo(IMetaRecipient tagRecipient);
     }
 }

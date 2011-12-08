@@ -20,23 +20,28 @@ namespace CoverRetriever.AudioInfo
         bool IsEmpty { get; }
 
         /// <summary>
-        /// Gets an album name.
+        /// Gets or sets an album name.
         /// </summary>
-        string Album { get; }
+        string Album { get; set; }
 
         /// <summary>
-        /// Gets an artist.
+        /// Gets or sets an artist.
         /// </summary>
-        string Artist { get; }
+        string Artist { get; set; }
 
         /// <summary>
-        /// Gets year of album.
+        /// Gets or sets year of album.
         /// </summary>
-        string Year { get; }
+        string Year { get; set; }
 
         /// <summary>
-        /// Gets name of track.
+        /// Gets or sets name of track.
         /// </summary>
-        string TrackName { get; }
+        string TrackName { get; set; }
+
+        /// <summary>
+        /// Saves tags into file instance.
+        /// </summary>
+        void Save();
     }
 }
