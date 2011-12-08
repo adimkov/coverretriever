@@ -175,7 +175,28 @@ namespace CoverRetriever.Model
                 throw new InvalidOperationException("Tagger was not assigned. Assign the tagger first");
             }
 
-//            _tagger.SaveTagsInTo(_metaProvider.Value);
+            if (!String.IsNullOrEmpty(_tagger.Album))
+            {
+                _metaProvider.Value.Album = _tagger.Album;
+            }
+
+            if (!String.IsNullOrEmpty(_tagger.Artist))
+            {
+                _metaProvider.Value.Artist = _tagger.Artist;
+            }
+
+            if (!String.IsNullOrEmpty(_tagger.Year))
+            {
+                _metaProvider.Value.Year = _tagger.Year;
+            }
+
+            if (!String.IsNullOrEmpty(_tagger.TrackName))
+            {
+                _metaProvider.Value.TrackName = _tagger.TrackName;
+            }
+
+            _metaProvider.Value.Save();
+            RaisePropertyChanged(String.Empty);
         }
 
         /// <summary>
