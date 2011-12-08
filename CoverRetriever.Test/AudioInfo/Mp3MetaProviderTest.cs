@@ -27,7 +27,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithLatinEncoding)))
             {
-                Assert.That(target.GetAlbum(), Is.EqualTo("Wild Obsession"));
+                Assert.That(target.Album, Is.EqualTo("Wild Obsession"));
             }
         }
 
@@ -36,7 +36,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithWindowsEncoding)))
             {
-                Assert.That(target.GetAlbum(), Is.EqualTo("Пиратский альбом"));
+                Assert.That(target.Album, Is.EqualTo("Пиратский альбом"));
             }
         }
 
@@ -45,7 +45,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame)))
             {
-                Assert.That(target.GetAlbum(), Is.Null);
+                Assert.That(target.Album, Is.Null);
             }
         }
 
@@ -54,7 +54,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithДДТ)))
             {
-                Assert.That(target.GetAlbum(), Is.EqualTo("Я получил эту роль"));
+                Assert.That(target.Album, Is.EqualTo("Я получил эту роль"));
             }
         }
 
@@ -63,7 +63,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithEmptyFarame)))
             {
-                Assert.That(target.GetTrackName(), Is.EqualTo("EmptyFrameFile"));
+                Assert.That(target.TrackName, Is.EqualTo("EmptyFrameFile"));
             }	
         }
         [Test]
@@ -89,7 +89,7 @@ namespace CoverRetriever.Test.AudioInfo
         {
             var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(FileWithДДТ));
             target.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => target.GetAlbum());
+            Assert.Throws<ObjectDisposedException>(() => { var album = target.Album; });
         }
 
         [Test]

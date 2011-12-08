@@ -85,7 +85,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetArtist();
+                return _metaProvider.Value.Artist;
             }
         }
 
@@ -96,7 +96,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetAlbum();
+                return _metaProvider.Value.Album;
             }
         }
 
@@ -107,7 +107,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetYear();
+                return _metaProvider.Value.Year;
             }
         }
 
@@ -118,7 +118,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value.GetTrackName();
+                return _metaProvider.Value.TrackName;
             }
         }
     }

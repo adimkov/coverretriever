@@ -63,56 +63,56 @@ namespace CoverRetriever.AudioInfo
             }
         }
 
-        /// <summary>
+       /// <summary>
         /// Gets an album name.
         /// </summary>
-        /// <returns>
-        /// Name of album.
-        /// </returns>
-        public override string GetAlbum()
+        public override string Album
         {
-            EnsureInstanceWasNotDisposed();
-            var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Album));
-            return id3.Album ?? base.GetAlbum();
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Album));
+                return id3.Album ?? base.Album;
+            }
         }
 
         /// <summary>
         /// Gets an artist.
         /// </summary>
-        /// <returns>
-        /// Name of artist.
-        /// </returns>
-        public override string GetArtist()
+        public override string Artist
         {
-            EnsureInstanceWasNotDisposed();
-            var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.FirstPerformer));
-            return id3.FirstPerformer ?? base.GetArtist();
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.FirstPerformer));
+                return id3.FirstPerformer ?? base.Artist;
+            }
         }
 
         /// <summary>
-        /// Get name  of track.
+        /// Gets year of album.
         /// </summary>
-        /// <returns>
-        /// Name of track.
-        /// </returns>
-        public override string GetTrackName()
+        public override string Year
         {
-            EnsureInstanceWasNotDisposed();
-            var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Title));
-            return id3.Title ?? base.GetTrackName();
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = GetAudioTag(File, x => x.Year > 0);
+                return id3.Year > 0 ? id3.Year.ToString() : base.Year;
+            }
         }
 
         /// <summary>
-        /// Get year of album.
+        /// Gets name of track.
         /// </summary>
-        /// <returns>
-        /// Year of composition.
-        /// </returns>
-        public override string GetYear()
+        public override string TrackName
         {
-            EnsureInstanceWasNotDisposed();
-            var id3 = GetAudioTag(File, x => x.Year > 0);
-            return id3.Year > 0 ? id3.Year.ToString() : base.GetYear();
+            get
+            {
+                EnsureInstanceWasNotDisposed();
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Title));
+                return id3.Title ?? base.TrackName;
+            }
         }
 
         /// <summary>
