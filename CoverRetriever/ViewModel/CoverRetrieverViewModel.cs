@@ -560,6 +560,12 @@ namespace CoverRetriever.ViewModel
         {
             SelectedFileSystemItem = file;
             SetAudioFile(file);
+            if (FileConductorViewModel.SelectedAudio != null)
+            {
+                FileConductorViewModel.SelectedAudio.ResetTagger();
+                SaveTagMode = false;
+            }
+
             _grabTagsCommand.RaiseCanExecuteChanged();
         }
 
@@ -674,6 +680,7 @@ namespace CoverRetriever.ViewModel
         {
             FileConductorViewModel.SelectedAudio.ResetTagger();
             SaveTagMode = false;
+            FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
         }
 
                 /// <summary>
