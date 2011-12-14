@@ -27,6 +27,11 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     public class LastFmTagger : ITagger
     {
         /// <summary>
+        /// Safe file name in case to copy in temp folder.
+        /// </summary>
+        private const string SafeFileName = "0E42DCBE{0}";
+
+        /// <summary>
         /// Path to 'lastfmfpclient' utility.
         /// </summary>
         private readonly string _lastfmfpclientPath;
@@ -160,7 +165,9 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <returns>Operation observable.</returns>
         public IObservable<Unit> LoadTagsForAudioFile(string fileName)
         {
-            var fingerprindObserver = Observable.Start(() => GetFingerprint(fileName));
+            var fingerprindObserver = 
+                Observable.Start(() => GetFingerprint(fileName))
+                .Catch<Unit, IOException>(ex => Observable.Start(() => GetFingerprint(MakeSafeFileCopy(fileName))));
 
             var operationOpservable =
                 fingerprindObserver.SelectMany(
@@ -209,19 +216,26 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                     }
                     else
                     {
-                        throw new InvalidOperationException(
+                        var error =  new InvalidOperationException(
                             "Process finished with code: {0}\n\r{1}".FormatString(
                                 lastfmfpclientProcess.ExitCode, lastfmfpclientProcess.StandardError.ReadToEnd()));
+                        error.Data.Add("exitCode", lastfmfpclientProcess.ExitCode);
+
+                        throw error;
                     }
 
                     lastfmfpclientProcess.Close();
                 }
                 catch (Exception ex)
                 {
+                    if (ex.Data.Contains("exitCode") && ex.Data["exitCode"].Equals(1))
+                    {
+                        throw new IOException("File does not found");
+                    }
+
                     var errorMessage =
                         "Unexpected Error obtaining tags from last.fm for file: '{0}'\n\rDue: {1}".FormatString(
                             fileName, ex.Message);
-
                     throw new MetaProviderException(errorMessage, ex);
                 }
             }
@@ -229,6 +243,21 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             {
                 throw new MetaProviderException("lastfmfpclient.exe not found");
             }
+        }
+
+        /// <summary>
+        /// Makes the safe file copy.
+        /// </summary>
+        /// <param name="originalFile">The original file name.</param>
+        /// <returns>Safe file path.</returns>
+        private string MakeSafeFileCopy(string originalFile)
+        {
+            var extension = Path.GetExtension(originalFile);
+            var newFilePath = Path.Combine(Path.GetTempPath(), SafeFileName.FormatString(extension));
+
+            File.Copy(originalFile, newFilePath, true);
+            Debug.WriteLine("The file '{0}' has unsafe symbols and it was copied to '{1}'".FormatString(originalFile, newFilePath));
+            return newFilePath;
         }
     }
 }
