@@ -14,6 +14,7 @@ namespace CoverRetriever.Model
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;
+    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Common.Validation;
     using CoverRetriever.Service;
 
@@ -175,25 +176,10 @@ namespace CoverRetriever.Model
                 throw new InvalidOperationException("Tagger was not assigned. Assign the tagger first");
             }
 
-            if (!String.IsNullOrEmpty(_tagger.Album))
-            {
-                _metaProvider.Value.Album = _tagger.Album;
-            }
-
-            if (!String.IsNullOrEmpty(_tagger.Artist))
-            {
-                _metaProvider.Value.Artist = _tagger.Artist;
-            }
-
-            if (!String.IsNullOrEmpty(_tagger.Year))
-            {
-                _metaProvider.Value.Year = _tagger.Year;
-            }
-
-            if (!String.IsNullOrEmpty(_tagger.TrackName))
-            {
-                _metaProvider.Value.TrackName = _tagger.TrackName;
-            }
+            _tagger.Album.With(x => _metaProvider.Value.Album = x);
+            _tagger.Artist.With(x => _metaProvider.Value.Artist = x);
+            _tagger.Year.With(x => _metaProvider.Value.Year = x);
+            _tagger.TrackName.With(x => _metaProvider.Value.TrackName = x);
 
             _metaProvider.Value.Save();
             RaisePropertyChanged(String.Empty);
