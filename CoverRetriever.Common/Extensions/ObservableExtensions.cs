@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeferredCallExtensions.cs" author="Anton Dimkov">
+// <copyright file="ObservableExtensions.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.  
 // </copyright>
 // <summary>
@@ -14,7 +14,7 @@ namespace System.Linq
     /// <summary>
     /// Extension method to make deferred call.
     /// </summary>
-    public static class DeferredCallExtensions
+    public static class ObservableExtensions
     {
         /// <summary>
         /// Make deferred call to a service.

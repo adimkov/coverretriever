@@ -17,11 +17,12 @@ namespace CoverRetriever.Service
     using System.Net;
     using System.Windows;
 
-    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Model;
     using CoverRetriever.Properties;
 
     using Newtonsoft.Json;
+
+    using ObservableExtensions = System.Linq.ObservableExtensions;
 
     /// <summary>
     ///  Service to grab covers through google engine.
@@ -78,7 +79,7 @@ namespace CoverRetriever.Service
 
             var requestedUri = _baseAddress.FormatString(_googleKey, coverCount, _searchPattern.FormatString(artist, album));
 
-            return DeferredCallExtensions.Defer(
+            return ObservableExtensions.Defer(
                 observableJson.Finally(googleClient.Dispose).Select(
                             jsonResponce =>
                                 {
@@ -101,7 +102,7 @@ namespace CoverRetriever.Service
         {
             ////todo: implement a caching
             var downloader = new WebClient();
-            var downloadOpservable = DeferredCallExtensions.Defer<MemoryStream>(Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
+            var downloadOpservable = ObservableExtensions.Defer<MemoryStream>(Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
                     .Select(
                         x => 
                             {

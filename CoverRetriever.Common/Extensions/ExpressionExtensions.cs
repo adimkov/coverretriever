@@ -6,7 +6,7 @@
 //  Linq expressions extension
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace CoverRetriever.Common.Extensions
+namespace System.Linq
 {
     using System;
 
