@@ -48,11 +48,17 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <summary>
         /// Gets the track info.
         /// </summary>
+        /// <remarks>Method return empty observable if any arguments is null.</remarks>
         /// <param name="artist">The artist.</param>
         /// <param name="trackName">Name of the track.</param>
         /// <returns>Retrieved track info.</returns>
         public IObservable<XDocument> GetTrackInfo(string artist, string trackName)
         {
+            if (String.IsNullOrEmpty(artist) || String.IsNullOrEmpty(trackName))
+            {
+                return Observable.Empty<XDocument>();
+            }
+
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
             serviceAddress.Query = "method=track.getinfo&api_key={0}&artist={1}&track={2}".FormatString(_apiKey, artist, trackName);
 
@@ -79,11 +85,17 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <summary>
         /// Gets the album info.
         /// </summary>
+        /// <remarks>Method return empty observable if any arguments is null.</remarks>
         /// <param name="artist">The artist.</param>
         /// <param name="albumName">Name of the album.</param>
         /// <returns>Retrieved album info.</returns>
         public IObservable<XDocument> GetAlbumInfo(string artist, string albumName)
         {
+            if (String.IsNullOrEmpty(artist) || String.IsNullOrEmpty(albumName))
+            {
+                return Observable.Empty<XDocument>();
+            }
+
             var serviceAddress = new UriBuilder(_serviceBaseAddress);
             serviceAddress.Query = "method=album.getinfo&api_key={0}&artist={1}&album={2}".FormatString(_apiKey, artist, albumName);
 

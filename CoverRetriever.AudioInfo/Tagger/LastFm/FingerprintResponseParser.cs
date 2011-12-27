@@ -95,5 +95,15 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 }
             }
         }
+
+        /// <summary>
+        /// Clear the response.
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            _suggestedArtists.Clear();
+            _suggestedTrackNames.Clear();
+        }
     }
 }

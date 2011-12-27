@@ -14,7 +14,6 @@ namespace CoverRetriever.Model
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;
-    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Common.Validation;
     using CoverRetriever.Service;
 
@@ -150,7 +149,8 @@ namespace CoverRetriever.Model
         {
             return tagger
                 .LoadTagsForAudioFile(GetFileSystemItemFullPath())
-                .Do(_ =>
+                .Completed(
+                () =>
                     {
                         _tagger = tagger;
                         RaisePropertyChanged(String.Empty);

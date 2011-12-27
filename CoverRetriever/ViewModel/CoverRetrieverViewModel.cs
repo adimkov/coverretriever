@@ -663,14 +663,14 @@ namespace CoverRetriever.ViewModel
                 .SubscribeOn(SubscribeScheduler)
                 .ObserveOn(ObservableScheduler)
                 .Finally(EndOperation)
-                .Subscribe(
-                    x =>
-                        {
-                            FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
-                            SaveTagMode = true;
-                            Debug.WriteLine("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
-                        },
-                    SetError);
+                .Completed(
+                () =>
+                    {
+                        FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
+                        SaveTagMode = true;
+                        Debug.WriteLine("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
+                    })
+                .Subscribe(x => { }, SetError);
         }
 
         /// <summary>

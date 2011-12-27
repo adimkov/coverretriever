@@ -118,6 +118,7 @@
     <Compile Include="AudioInfo\FileNameMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
+    <Compile Include="Common.Extensions\ObservableExtensionsTest.cs" />
     <Compile Include="Controls\ImageAsyncSourceTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
@@ -178,6 +179,10 @@
     <ProjectReference Include="..\CoverRetriever.AudioInfo\CoverRetriever.AudioInfo.csproj">
       <Project>{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}</Project>
       <Name>CoverRetriever.AudioInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoverRetriever.Common\CoverRetriever.Common.csproj">
+      <Project>{93EDA68B-4D06-4020-BF8C-05E638F2A622}</Project>
+      <Name>CoverRetriever.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\CoverRetriever\CoverRetriever.csproj">
       <Project>{C0DE9A06-DBC4-4FD1-A470-A7254623137E}</Project>

@@ -52,5 +52,13 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 }
             }
         }
+
+        /// <summary>
+        /// Clear the response.
+        /// </summary>
+        public virtual void Clear()
+        {
+            IsSuccess = false;
+        }
     }
 }

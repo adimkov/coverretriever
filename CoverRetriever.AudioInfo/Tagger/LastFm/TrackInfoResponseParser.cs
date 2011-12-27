@@ -30,7 +30,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <summary>
         /// The backing field for SuggestedAlbums.
         /// </summary>
-        private readonly IList<string> _sugesstedAlbums = new List<string>();
+        private readonly IList<string> _suggestedAlbums = new List<string>();
 
         /// <summary>
         /// Gets the suggested albums.
@@ -39,7 +39,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         {
             get
             {
-                return _sugesstedAlbums;
+                return _suggestedAlbums;
             }
         }
 
@@ -49,19 +49,28 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <param name="response">The response.</param>
         public override void Parse(XDocument response)
         {
-            _sugesstedAlbums.Clear();
+            _suggestedAlbums.Clear();
             base.Parse(response);
             if (IsSuccess)
             {
                 foreach (var albums in response.Descendants(AlbumElement))
                 {
                     var nameElement = albums.Element(TitleElement);
-                    if (nameElement != null && !_sugesstedAlbums.Contains(nameElement.Value))
+                    if (nameElement != null && !_suggestedAlbums.Contains(nameElement.Value))
                     {
-                        _sugesstedAlbums.Add(nameElement.Value);
+                        _suggestedAlbums.Add(nameElement.Value);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Clear the response.
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            _suggestedAlbums.Clear();
         }
     }
 }

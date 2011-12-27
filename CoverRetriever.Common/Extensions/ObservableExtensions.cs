@@ -10,6 +10,9 @@
 namespace System.Linq
 {
     using System;
+    using System.Collections.Generic;
+
+    using CoverRetriever.Common.Validation;
 
     /// <summary>
     /// Extension method to make deferred call.
@@ -25,9 +28,37 @@ namespace System.Linq
         /// <returns>Defer observable.</returns>
         public static IObservable<T> Defer<T>(this IObservable<T> observable, Action doAction)
         {
+            Require.NotNull(observable, "observable");
+            Require.NotNull(doAction, "doAction");
+
             var actionObservable = Observable.Timer(TimeSpan.FromMilliseconds(1)).Do(_ => doAction());
 
             return Observable.Empty<T>().Do(x => { }, () => actionObservable.Subscribe()).Concat(observable);
+        }
+
+        /// <summary>
+        /// Completes the specified source.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="completeAction">The complete action.</param>
+        /// <returns>The Observable.</returns>
+        public static IObservable<TSource> Completed<TSource>(this IObservable<TSource> source, Action completeAction)
+        {
+            Require.NotNull(source, "source");
+            Require.NotNull(completeAction, "completeAction");
+
+            var subject = new Subject<TSource>();
+
+            return subject.Defer(
+                () => source.Subscribe(
+                    subject.OnNext,
+                    subject.OnError,
+                    () =>
+                    {
+                        completeAction();
+                        subject.OnCompleted();
+                    }));
         }
     }
 }

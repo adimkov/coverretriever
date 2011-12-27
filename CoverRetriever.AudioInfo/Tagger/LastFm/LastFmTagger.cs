@@ -37,14 +37,14 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         private readonly string _lastfmfpclientPath;
 
         /// <summary>
-        /// Fingerprint parser.
-        /// </summary>
-        private readonly FingerprintResponseParser _fingerprintResponse;
-
-        /// <summary>
         /// The Last.fm API.
         /// </summary>
         private readonly LastFmService _lastFmService;
+
+        /// <summary>
+        /// Fingerprint parser.
+        /// </summary>
+        private readonly FingerprintResponseParser _fingerprintResponse;
 
         /// <summary>
         /// Track info parser.
@@ -165,14 +165,20 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <returns>Operation observable.</returns>
         public IObservable<Unit> LoadTagsForAudioFile(string fileName)
         {
+            _fingerprintResponse.Clear();
+            _trackInfoResponse.Clear();
+            _albumInfoResponse.Clear();
+
             var fingerprindObserver = 
                 Observable.Start(() => GetFingerprint(fileName))
                 .Catch<Unit, IOException>(ex => Observable.Start(() => GetFingerprint(MakeSafeFileCopy(fileName))));
 
-            var operationOpservable =
-                fingerprindObserver.SelectMany(
-                    x => _lastFmService.GetTrackInfo(Artist, TrackName).Do(_trackInfoResponse.Parse)).Select(
-                        _ => new Unit());
+            var operationOpservable = fingerprindObserver
+                .SelectMany(x => _lastFmService.GetTrackInfo(Artist, TrackName)
+                    .Do(_trackInfoResponse.Parse))
+                 .SelectMany(x => _lastFmService.GetAlbumInfo(Artist, Album)
+                    .Do(_albumInfoResponse.Parse))
+                .Select(_ => new Unit());
 
             return operationOpservable;
         }
