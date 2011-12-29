@@ -33,5 +33,10 @@ namespace CoverRetriever.Common.Infrastructure
         /// URI where new version can be reached.
         /// </summary>
         public const string GetNewVersionUri = "GetNewVersionUri";
+
+        /// <summary>
+        /// Path to the cache file.
+        /// </summary>
+        public const string CacheFilePath = "CacheFilePath";
     }
 }

@@ -16,6 +16,7 @@ namespace CoverRetriever
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Common.Infrastructure;
+    using CoverRetriever.Properties;
     using CoverRetriever.View;
 
     using Microsoft.Practices.Prism.MefExtensions;
@@ -34,6 +35,7 @@ namespace CoverRetriever
             ProjectHomeUri = new Uri("http://sourceforge.net/projects/coverretriever/");
             BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
             GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
+            CacheFilePath = Settings.Default.CacheFilePath;
         }
 
         /// <summary>
@@ -59,6 +61,12 @@ namespace CoverRetriever
         /// </summary>
         [Export(ConfigurationKeys.GetNewVersionUri)]
         public Uri GetNewVersionUri { get; private set; }
+
+        /// <summary>
+        /// Gets the cache file path.
+        /// </summary>
+        [Export(ConfigurationKeys.CacheFilePath)]
+        public string CacheFilePath { get; private set; }
 
         /// <summary>
         /// Creates the shell or main window of the application.
