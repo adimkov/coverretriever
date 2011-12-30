@@ -53,7 +53,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("./cache.tmp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("./CoverRetriever.cache")]
         public string CacheFilePath {
             get {
                 return ((string)(this["CacheFilePath"]));
