@@ -30,6 +30,26 @@ namespace CoverRetriever.Caching
         private readonly string _cacheFilePath;
 
         /// <summary>
+        /// The one session cache.
+        /// </summary>
+        private readonly IDictionary<string, CacheItem> _sessionCache = new Dictionary<string, CacheItem>();
+
+        /// <summary>
+        /// The persistence cache dictionary.
+        /// </summary>
+        private IDictionary<string, CacheItem> _cache = new Dictionary<string, CacheItem>();
+
+        /// <summary>
+        /// Flush cache onto disk.
+        /// </summary>
+        private IDisposable _saveTimer;
+
+        /// <summary>
+        /// Indicating is cache loaded.
+        /// </summary>
+        private bool _cacheLoaded;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LocalFileCacheService"/> class.
         /// </summary>
         public LocalFileCacheService()
@@ -49,24 +69,22 @@ namespace CoverRetriever.Caching
         }
 
         /// <summary>
-        /// The persistence cache dictionary.
+        /// Gets the <see cref="System.Object"/> with the specified key.
         /// </summary>
-        private IDictionary<string, CacheItem> _cache = new Dictionary<string, CacheItem>();
+        /// <param name="key">The key of cached value.</param>
+        /// <returns>Cached value or null.</returns>
+        public object this[string key]
+        {
+            get
+            {
+                if (!_cacheLoaded)
+                {
+                    Load();
+                }
 
-        /// <summary>
-        /// The one session cache
-        /// </summary>
-        private readonly IDictionary<string, CacheItem> _sessionCache = new Dictionary<string, CacheItem>();
-
-        /// <summary>
-        /// Flush cache onto disk
-        /// </summary>
-        private IDisposable _saveTimer;
-
-        /// <summary>
-        /// Indicating is cache loaded.
-        /// </summary>
-        private bool _cacheLoaded;
+                return GetCachedValue(key);
+            }
+        }
 
         /// <summary>
         /// Adds or replace the value into cache.
@@ -102,29 +120,13 @@ namespace CoverRetriever.Caching
         }
 
         /// <summary>
-        /// Gets the <see cref="System.Object"/> with the specified key.
-        /// </summary>
-        public object this[string key]
-        {
-            get
-            {
-                if (!_cacheLoaded)
-                {
-                    Load();
-                }
-
-                return GetCachedValue(key);
-            }
-        }
-
-        /// <summary>
         /// Flushes the cache to file.
         /// </summary>
         private void Flush()
         {
             try
             {
-                using (var cacheStream = File.Open(_cacheFilePath,FileMode.OpenOrCreate))
+                using (var cacheStream = File.Open(_cacheFilePath, FileMode.OpenOrCreate))
                 {
                     var formatter = new BinaryFormatter();
                     formatter.Serialize(cacheStream, _cache);
@@ -145,7 +147,7 @@ namespace CoverRetriever.Caching
             {
                 try
                 {
-                    using (var cacheStream = File.Open(_cacheFilePath, FileMode.Open))
+                    using (var cacheStream = File.OpenRead(_cacheFilePath))
                     {
                         var formatter = new BinaryFormatter();
                         _cache = (IDictionary<string, CacheItem>)formatter.Deserialize(cacheStream);
@@ -166,7 +168,7 @@ namespace CoverRetriever.Caching
         /// Gets the live time from <see cref="CacheMode"/>.
         /// </summary>
         /// <param name="mode">The mode.</param>
-        /// <returns></returns>
+        /// <returns>Live time.</returns>
         private DateTime GetLiveTime(CacheMode mode)
         {
             switch (mode)
@@ -185,7 +187,7 @@ namespace CoverRetriever.Caching
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="mode">The mode.</param>
-        /// <returns>The cache record</returns>
+        /// <returns>The cache record.</returns>
         private CacheItem CreateCacheItem(object value, CacheMode mode)
         {
             return new CacheItem(value, GetLiveTime(mode));
@@ -195,7 +197,7 @@ namespace CoverRetriever.Caching
         /// Gets the cache containing key.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <returns>The cache or null</returns>
+        /// <returns>The cache or null.</returns>
         private IDictionary<string, CacheItem> GetCacheContainingKey(string key)
         {
             if (_cache.ContainsKey(key))
