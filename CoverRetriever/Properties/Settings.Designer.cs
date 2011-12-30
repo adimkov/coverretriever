@@ -53,6 +53,14 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("./cache.tmp")]
+        public string CacheFilePath {
+            get {
+                return ((string)(this["CacheFilePath"]));
+            }
+        }
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("b25b959554ed76058ac220b7b2e0a026")]
         public string LastFmApiKey {
             get {
@@ -76,6 +84,5 @@ namespace CoverRetriever.Properties {
             get {
                 return ((string)(this["LastFmFingerprintClientPath"]));
             }
-        }
-    }
+        }    }
 }

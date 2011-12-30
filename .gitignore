@@ -19,6 +19,7 @@ Thumbs.db
 *.log
 *.docstates
 *.Cache
+*.orig
 \[Bb]in
 [Dd]ebug*/
 ClietBin

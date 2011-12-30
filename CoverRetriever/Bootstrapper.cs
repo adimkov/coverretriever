@@ -35,6 +35,7 @@ namespace CoverRetriever
             ProjectHomeUri = new Uri("http://sourceforge.net/projects/coverretriever/");
             BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
             GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
+            CacheFilePath = Settings.Default.CacheFilePath;
             LastFmApiKey = Settings.Default.LastFmApiKey;
             LastFmFingerprintClientPath = Settings.Default.LastFmFingerprintClientPath;
             LastFmServiceBaseAddress = Settings.Default.LastFmServiceBaseAddress;
@@ -65,6 +66,12 @@ namespace CoverRetriever
         public Uri GetNewVersionUri { get; private set; }
 
         /// <summary>
+        /// Gets the cache file path.
+        /// </summary>
+        [Export(ConfigurationKeys.CacheFilePath)]
+        public string CacheFilePath { get; private set; }
+
+        /// <summary>
         /// Gets the last fm API key.
         /// </summary>
         [Export(ConfigurationKeys.LastFmApiKey)]
@@ -81,7 +88,6 @@ namespace CoverRetriever
         /// </summary>
         [Export(ConfigurationKeys.LastFmFingerprintClientPath)]
         public string LastFmFingerprintClientPath { get; private set; }
-
 
         /// <summary>
         /// Creates the shell or main window of the application.

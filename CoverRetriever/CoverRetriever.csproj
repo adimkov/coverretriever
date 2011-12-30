@@ -185,6 +185,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Caching\CacheItem.cs" />
+    <Compile Include="Caching\CacheMode.cs" />
+    <Compile Include="Caching\LocalFileCacheService.cs" />
     <Compile Include="Commands\Command.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -223,6 +226,7 @@
     <Compile Include="Resources\CoverRetrieverResourcesWrapper.cs" />
     <Compile Include="Service\DirectoryCoverOrganizer.cs" />
     <Compile Include="Service\GoogleCoverRetrieverService.cs" />
+    <Compile Include="Caching\ICacheService.cs" />
     <Compile Include="Service\ICoverRetrieverService.cs" />
     <Compile Include="Service\FileSystemService.cs" />
     <Compile Include="Service\IFileSystemService.cs" />

@@ -11,6 +11,8 @@
     <Setting Name="KeyGoogle" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ABQIAAAAyJOVurPXLFVPtU1RN7FF_RT1b26EPce9DeOid2McjHSSSzE4jRRSIw3t1tJbbma6w0bpHwFki780Aw</Value>
     </Setting>
+    <Setting Name="CacheFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">./cache.tmp</Value>
     <Setting Name="LastFmApiKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">b25b959554ed76058ac220b7b2e0a026</Value>
     </Setting>
