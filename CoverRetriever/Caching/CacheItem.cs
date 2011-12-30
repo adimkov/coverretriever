@@ -12,6 +12,7 @@ namespace CoverRetriever.Caching
     /// <summary>
     /// The cache item.
     /// </summary>
+    [Serializable]
     public struct CacheItem
     {
         /// <summary>

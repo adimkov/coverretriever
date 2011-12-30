@@ -34,6 +34,9 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private readonly IFileSystemService _fileSystemService;
 
+        /// <summary>
+        /// Is enable to close.
+        /// </summary>
         private bool _isCloseEnabled;
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace CoverRetriever.ViewModel
         {
             ConfirmCommand = new DelegateCommand<string>(ConfirmCommandExecute);
             _fileSystemService = fileSystemService;
-            this.IsCloseEnabled = true;
+            IsCloseEnabled = true;
         }
 
         /// <summary>
@@ -95,7 +98,7 @@ namespace CoverRetriever.ViewModel
         /// <param name="rootFolder">The root folder.</param>
         private void ConfirmCommandExecute(string rootFolder)
         {
-            this.IsCloseEnabled = true;
+            IsCloseEnabled = true;
             _rootFolderSubject.OnNext(new RootFolderResult(rootFolder));
         }
     }
