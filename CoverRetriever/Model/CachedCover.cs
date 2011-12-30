@@ -73,25 +73,25 @@ namespace CoverRetriever.Model
             {
                 if (_downloadedCover != null)
                 {
-                    Debug.WriteLine("Return cached cover");
+                    Trace.WriteLine("Return cached cover");
                     return Observable.Return(ProduceCoverStream());
                 }
 
                 if (_lastException != null)
                 {
-                    Debug.WriteLine("Return cached error");
+                    Trace.WriteLine("Return cached error");
                     return Observable.Throw<Stream>(_lastException);
                 }
 
                 if (!_isDownloading)
                 {
-                    Debug.WriteLine("Perform first download cover");
+                    Trace.WriteLine("Perform first download cover");
                     _isDownloading = true;
                         
                     return _sourceStream.Do(
                         x =>
                         {
-                            Debug.WriteLine("Cover successfully downloaded");
+                            Trace.WriteLine("Cover successfully downloaded");
                             _downloadedCover = new byte[x.Length];
                             x.Read(_downloadedCover, 0, _downloadedCover.Length);
                             x.Seek(0, SeekOrigin.Begin); // Return start position back for read by listeners
@@ -100,7 +100,7 @@ namespace CoverRetriever.Model
                         },
                         ex =>
                         {
-                            Debug.WriteLine("Cover was nod downloaded due error");
+                            Trace.WriteLine("Cover was nod downloaded due error");
                             _lastException = ex;
                             _coverStreamListeners.ForEach(s => s.OnError(ex));
                         }).Finally(

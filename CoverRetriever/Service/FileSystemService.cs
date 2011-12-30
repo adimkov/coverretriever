@@ -83,7 +83,7 @@ namespace CoverRetriever.Service
         private void GetFileSystemItems(Folder parent, bool isRoot)
         {
             var parentFullPath = parent.GetFileSystemItemFullPath();
-            Debug.WriteLine(parentFullPath);
+            Trace.WriteLine(parentFullPath);
 
             try
             {
@@ -116,7 +116,7 @@ namespace CoverRetriever.Service
             }
             catch (UnauthorizedAccessException)
             {
-                Debug.WriteLine("File access exception: '{0}'", parentFullPath);
+                Trace.WriteLine("File access exception: '{0}'", parentFullPath);
             }
         }
 
