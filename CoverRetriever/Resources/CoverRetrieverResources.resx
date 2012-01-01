@@ -221,6 +221,10 @@
     <value>Step 1. Choose a folder with audio files</value>
     <comment>Open folder dialog</comment>
   </data>
+  <data name="TextTaggerPoweredBy" xml:space="preserve">
+    <value>Tag finder powered by:</value>
+    <comment>About</comment>
+  </data>
   <data name="TextTrackName" xml:space="preserve">
     <value>Title:</value>
     <comment>File сonductor view</comment>

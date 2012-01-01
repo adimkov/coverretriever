@@ -295,6 +295,15 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tag finder powered by:.
+        /// </summary>
+        public static string TextTaggerPoweredBy {
+            get {
+                return ResourceManager.GetString("TextTaggerPoweredBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
         public static string TextTrackName {

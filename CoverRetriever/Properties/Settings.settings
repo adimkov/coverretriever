@@ -13,6 +13,7 @@
     </Setting>
     <Setting Name="CacheFilePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">./CoverRetriever.cache</Value>
+    </Setting>
     <Setting Name="LastFmApiKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">b25b959554ed76058ac220b7b2e0a026</Value>
     </Setting>
