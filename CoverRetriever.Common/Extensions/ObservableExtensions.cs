@@ -60,5 +60,23 @@ namespace System.Linq
                         subject.OnCompleted();
                     }));
         }
+
+        /// <summary>
+        /// Traces the specified observable.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>The source observable.</returns>
+        public static IObservable<TSource> Trace<TSource>(this IObservable<TSource> source, string name)
+        {
+            return source
+                .Timestamp()
+                .Do(
+                    x => Diagnostics.Trace.TraceInformation("OnNext '{0}': [{1}] {2}", name, x.Timestamp, x.Value),
+                    ex => Diagnostics.Trace.TraceError("OnError '{0}': {1}", name, ex),
+                    () => Diagnostics.Trace.TraceError("OnCompleted '{0}'", name))
+                .RemoveTimestamp();
+        }
     }
 }

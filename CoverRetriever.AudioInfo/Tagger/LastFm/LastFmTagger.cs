@@ -169,15 +169,18 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             _trackInfoResponse.Clear();
             _albumInfoResponse.Clear();
 
-            var fingerprindObserver = 
+            var fingerprintObserver = 
                 Observable.Start(() => GetFingerprint(fileName))
-                .Catch<Unit, IOException>(ex => Observable.Start(() => GetFingerprint(MakeSafeFileCopy(fileName))));
+                .Catch<Unit, IOException>(ex => Observable.Start(() => GetFingerprint(MakeSafeFileCopy(fileName))))
+                .Trace("FingerprintClient");
 
-            var operationOpservable = fingerprindObserver
+            var operationOpservable = fingerprintObserver
                 .SelectMany(x => _lastFmService.GetTrackInfo(Artist, TrackName)
-                    .Do(_trackInfoResponse.Parse))
+                    .Do(_trackInfoResponse.Parse)
+                    .Trace("TrackInfo"))
                  .SelectMany(x => _lastFmService.GetAlbumInfo(Artist, Album)
-                    .Do(_albumInfoResponse.Parse))
+                    .Do(_albumInfoResponse.Parse)
+                    .Trace("AlbumInfo"))
                 .Select(_ => new Unit());
 
             return operationOpservable;
