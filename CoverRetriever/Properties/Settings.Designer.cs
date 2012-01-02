@@ -62,7 +62,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("b25b959554ed76058ac220b7b2e0a026")]
+        [global::System.Configuration.DefaultSettingValueAttribute("d33202221533846659200a867cafcc81")]
         public string LastFmApiKey {
             get {
                 return ((string)(this["LastFmApiKey"]));
@@ -80,7 +80,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("./lastfmfpclient\\lastfmfpclient.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("./LfmFpClient/lastfmfpclient.exe")]
         public string LastFmFingerprintClientPath {
             get {
                 return ((string)(this["LastFmFingerprintClientPath"]));
