@@ -1,12 +1,13 @@
 Cover Retriever (C) Anton Dimkov 2011
 
 1. About
-The tool gets album covers from the internet using the meta tags from the MP3 file and stores found covers locally on your computer's hard drive.
+Cover Retriever is a small, simple, easy to use application specially designed to help you find covers for compositions in "MP3/FLAC" formats and saving them onto disk or in audio file.
 
 2. Supported files formats
-At this moment mp3 files.
+*.mp3
+*.flac
 
-5. History
+3. History
 0.3.0.0 (2011-03-19)
 	First preview release
 0.4.0.0 (2011-03-19)
@@ -22,3 +23,8 @@ At this moment mp3 files.
 	*Improvement of Update Checker
 0.7.0.0 (2011-10-03)
 	*The design was applied
+0.8.0.0 (2012-01-)
+	*The tag finder added
+	*Improved Open folder Dialog
+	*Improved library loading
+	*Bug fixing
