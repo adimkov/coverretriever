@@ -17,7 +17,6 @@ namespace CoverRetriever.Service
     using System.Linq;
 
     using CoverRetriever.AudioInfo;
-    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Common.Infrastructure;
     using CoverRetriever.Model;
 
@@ -83,7 +82,7 @@ namespace CoverRetriever.Service
         private void GetFileSystemItems(Folder parent, bool isRoot)
         {
             var parentFullPath = parent.GetFileSystemItemFullPath();
-            Trace.WriteLine(parentFullPath);
+            Trace.TraceInformation(parentFullPath);
 
             try
             {
@@ -116,7 +115,7 @@ namespace CoverRetriever.Service
             }
             catch (UnauthorizedAccessException)
             {
-                Trace.WriteLine("File access exception: '{0}'", parentFullPath);
+                Trace.TraceError("File access exception: '{0}'", parentFullPath);
             }
         }
 

@@ -75,7 +75,7 @@ namespace System.Linq
                 .Do(
                     x => Diagnostics.Trace.TraceInformation("OnNext '{0}': [{1}] {2}", name, x.Timestamp, x.Value),
                     ex => Diagnostics.Trace.TraceError("OnError '{0}': {1}", name, ex),
-                    () => Diagnostics.Trace.TraceError("OnCompleted '{0}'", name))
+                    () => Diagnostics.Trace.TraceInformation("OnCompleted '{0}'", name))
                 .RemoveTimestamp();
         }
     }

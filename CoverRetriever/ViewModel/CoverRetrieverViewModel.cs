@@ -346,7 +346,13 @@ namespace CoverRetriever.ViewModel
         /// The scheduler.
         /// </value>
         public IScheduler ObservableScheduler { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the subscribe scheduler.
+        /// </summary>
+        /// <value>
+        /// The subscribe scheduler.
+        /// </value>
         public IScheduler SubscribeScheduler { get; set; }
 
         /// <summary>
@@ -668,7 +674,7 @@ namespace CoverRetriever.ViewModel
                     {
                         FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
                         SaveTagMode = true;
-                        Debug.WriteLine("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
+                        Trace.TraceInformation("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
                     })
                 .Subscribe(x => { }, SetError);
         }
