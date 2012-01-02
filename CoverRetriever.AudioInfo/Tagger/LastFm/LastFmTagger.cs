@@ -165,9 +165,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <returns>Operation observable.</returns>
         public IObservable<Unit> LoadTagsForAudioFile(string fileName)
         {
-            _fingerprintResponse.Clear();
-            _trackInfoResponse.Clear();
-            _albumInfoResponse.Clear();
+            CleanOffParsers();
 
             var fingerprintObserver = 
                 Observable.Start(() => GetFingerprint(fileName))
@@ -261,12 +259,25 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         /// <returns>Safe file path.</returns>
         private string MakeSafeFileCopy(string originalFile)
         {
+            CleanOffParsers();
             var extension = Path.GetExtension(originalFile);
             var newFilePath = Path.Combine(Path.GetTempPath(), SafeFileName.FormatString(extension));
 
             File.Copy(originalFile, newFilePath, true);
-            Debug.WriteLine("The file '{0}' has unsafe symbols and it was copied to '{1}'".FormatString(originalFile, newFilePath));
+            Trace.TraceWarning("The file '{0}' has unsafe symbols and it was copied to '{1}'".FormatString(originalFile, newFilePath));
             return newFilePath;
         }
+
+
+        /// <summary>
+        /// Cleans off the parsers.
+        /// </summary>
+        private void CleanOffParsers()
+        {
+            _fingerprintResponse.Clear();
+            _trackInfoResponse.Clear();
+            _albumInfoResponse.Clear();
+        }
+
     }
 }
