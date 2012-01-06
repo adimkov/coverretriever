@@ -6,7 +6,7 @@
       <Value Profile="(Default)">https://ajax.googleapis.com/ajax/services/search/images</Value>
     </Setting>
     <Setting Name="SearhGooglePattern" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">{0} - {1}&amp;imgtype=photo</Value>
+      <Value Profile="(Default)">{0} - {1}</Value>
     </Setting>
     <Setting Name="KeyGoogle" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ABQIAAAAyJOVurPXLFVPtU1RN7FF_RT1b26EPce9DeOid2McjHSSSzE4jRRSIw3t1tJbbma6w0bpHwFki780Aw</Value>
