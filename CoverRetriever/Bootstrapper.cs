@@ -32,7 +32,7 @@ namespace CoverRetriever
         public Bootstrapper()
         {
             VersionControlConnectionString = "http://adimkov.users.sourceforge.net/CoverRetrieverAssets/Versions.xml";
-            ProjectHomeUri = new Uri("http://sourceforge.net/projects/coverretriever/");
+            ProjectHomeUri = new Uri("http://dimkov.org");
             BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
             GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
             CacheFilePath = Settings.Default.CacheFilePath;
