@@ -1,6 +1,7 @@
 ﻿<Window x:Class="CoverRetriever.View.Shell"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors"
         xmlns:cmd="clr-namespace:Microsoft.Practices.Prism.Commands"
         xmlns:controls="clr-namespace:CoverRetriever.Controls"
         xmlns:converter="clr-namespace:CoverRetriever.Converter"
@@ -95,7 +96,7 @@
                 </Rectangle>
             </Grid>
         </DataTemplate>
-        
+
         <DataTemplate x:Key="ErrorIndicatorErrorTemplate">
             <Border BorderBrush="{DynamicResource BorderColor}"
                     BorderThickness="1"
@@ -131,11 +132,21 @@
                 </Grid>
             </Border>
         </DataTemplate>
-        
-        <Style x:Key="TagButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="0,0,0,-3"/>
+
+        <Style x:Key="TagButton"
+               BasedOn="{StaticResource {x:Type Button}}"
+               TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,0,0,-3" />
+        </Style>
+
+        <Style x:Key="TaggerHighlight" TargetType="Border">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="{StaticResource ColorAccentHighlightBrush}" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="-3,-3,-3,-6" />
         </Style>
     </Window.Resources>
     <i:Interaction.Triggers>
@@ -235,19 +246,43 @@
                             </i:Interaction.Behaviors>
                         </Image>
                     </Grid>
-                    <Border x:Name="getTagerBorder" Grid.Column="1" Visibility="{Binding SaveTagMode, Converter={StaticResource invertBoolToVisibilityConverter}}">
-                        <Button Style="{StaticResource TagButton}"
-                                Command="{Binding GrabTagsCommand}"
-                                Content="Get tag from Last.fm" />    
+                    <Border x:Name="getTaggerBorder"
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Visibility="{Binding SaveTagMode,
+                                                 Converter={StaticResource invertBoolToVisibilityConverter}}">
+                        <Grid>
+                            <Button x:Name="getTagButton"
+                                    Command="{Binding GrabTagsCommand}"
+                                    Content="Get tag from Last.fm"
+                                    Style="{StaticResource TagButton}" />
+                            <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:HighlightElementBehavior />
+                                </i:Interaction.Behaviors>
+                            </Border>
+                        </Grid>
                     </Border>
-                    <Border x:Name="saveTagBorder" Grid.Column="1" Visibility="{Binding SaveTagMode, Converter={StaticResource boolToVisibilityConverter}}">
+                    <Border x:Name="saveTagBorder"
+                            Grid.Column="1"
+                            Visibility="{Binding SaveTagMode,
+                                                 Converter={StaticResource boolToVisibilityConverter}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="cancelButton" Content="Cancel" Grid.Column="0" Command="{Binding RejectSuggestedTagCommand}" Style="{StaticResource TagButton}"/>
-                            <Button x:Name="saveButton" Content="Save" Grid.Column="1" Command="{Binding SaveSuggestedTagCommand}" Style="{StaticResource TagButton}"/>
+                            <Button x:Name="cancelButton"
+                                    Grid.Column="0"
+                                    Command="{Binding RejectSuggestedTagCommand}"
+                                    Content="Cancel"
+                                    Style="{StaticResource TagButton}" />
+                            <Button x:Name="saveButton"
+                                    Grid.Column="1"
+                                    Command="{Binding SaveSuggestedTagCommand}"
+                                    Content="Save"
+                                    Style="{StaticResource TagButton}" />
                         </Grid>
                     </Border>
                 </Grid>
@@ -292,16 +327,16 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <controls:ErrorIndicator HorizontalAlignment="Stretch"
+            <controls:ErrorIndicator Grid.Row="1"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="2"
+                                     HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      HorizontalContentAlignment="Stretch"
                                      VerticalContentAlignment="Stretch"
                                      ErrorContent="{Binding CoverRetrieverErrorMessage}"
                                      ErrorContentTemplate="{StaticResource ErrorIndicatorErrorTemplate}"
-                                     OverlayBrush="#E4EFEFEF" 
-                                     Grid.Row="1" 
-                                     Grid.Column="2"
-                                     Grid.RowSpan="2"/>
+                                     OverlayBrush="#E4EFEFEF" />
             <Border x:Name="CommandBorder"
                     Grid.Row="3"
                     Grid.Column="2"

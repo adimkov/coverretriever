@@ -186,6 +186,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviors\HighlightElementBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Caching\CacheItem.cs" />
     <Compile Include="Caching\CacheMode.cs" />
@@ -407,6 +408,7 @@
   <ItemGroup>
     <Resource Include="Assets\Lastfm_logo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)LfmFpClient"
