@@ -184,11 +184,12 @@
                   Margin="0,0,0,2"
                   Background="{DynamicResource ColorAccentBrush}"
                   BorderThickness="0,0,0,1">
-                <MenuItem Header="File" Padding="7,5,8,3">
-                    <MenuItem Command="{Binding SelectFolderCommand}" Header="Open Folder" />
+                <MenuItem Header="{Binding Path=CoverRetrieverResources.TextFile, Source={StaticResource coverRetrieverResources}}" Padding="7,5,8,3">
+                    <MenuItem Command="{Binding SelectFolderCommand}" Header="{Binding Path=CoverRetrieverResources.TextOpenFolder, Source={StaticResource coverRetrieverResources}}" />
                 </MenuItem>
                 <MenuItem Command="{Binding AboutCommand}"
-                          Header="About"
+                          Header="{Binding Path=CoverRetrieverResources.TextAbout,
+                                           Source={StaticResource coverRetrieverResources}}"
                           Padding="7,5,8,3" />
             </Menu>
             <Border x:Name="FileSystemBorder"
@@ -256,7 +257,8 @@
                         <Grid>
                             <Button x:Name="getTagButton"
                                     Command="{Binding GrabTagsCommand}"
-                                    Content="Get tag from Last.fm"
+                                    Content="{Binding Path=CoverRetrieverResources.TextGetTagsFromLasrFm,
+                                                      Source={StaticResource coverRetrieverResources}}"
                                     Style="{StaticResource TagButton}" />
                             <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
                                 <i:Interaction.Behaviors>
@@ -277,12 +279,14 @@
                             <Button x:Name="cancelButton"
                                     Grid.Column="0"
                                     Command="{Binding RejectSuggestedTagCommand}"
-                                    Content="Cancel"
+                                    Content="{Binding CoverRetrieverResources.TextCancel,
+                                                      Source={StaticResource coverRetrieverResources}}"
                                     Style="{StaticResource TagButton}" />
                             <Button x:Name="saveButton"
                                     Grid.Column="1"
                                     Command="{Binding SaveSuggestedTagCommand}"
-                                    Content="Save"
+                                    Content="{Binding CoverRetrieverResources.TextSave,
+                                                      Source={StaticResource coverRetrieverResources}}"
                                     Style="{StaticResource TagButton}" />
                         </Grid>
                     </Border>
@@ -369,7 +373,7 @@
                             Command="{Binding SaveCoverCommand}"
                             CommandParameter="{Binding SelectedItem,
                                                        ElementName=elementFlow}"
-                            Content="{Binding CoverRetrieverResources.TextSaveCoverInToDirectory,
+                            Content="{Binding CoverRetrieverResources.TextSave,
                                               Source={StaticResource coverRetrieverResources}}"
                             Style="{DynamicResource GreenButton}" />
                 </Grid>

@@ -134,7 +134,7 @@
     <comment>File сonductor view</comment>
   </data>
   <data name="GrabTagMessage" xml:space="preserve">
-    <value>Retrieve tag for '{0}'...</value>
+    <value>Retrieving tags for '{0}'...</value>
     <comment>Shell</comment>
   </data>
   <data name="MessageCoverPreview" xml:space="preserve">
@@ -152,6 +152,10 @@
   <data name="MessageSaveCover" xml:space="preserve">
     <value>Saving the cover...</value>
     <comment>Operation message</comment>
+  </data>
+  <data name="TextAbout" xml:space="preserve">
+    <value>About</value>
+    <comment>Shell</comment>
   </data>
   <data name="TextAlbum" xml:space="preserve">
     <value>Album:</value>
@@ -189,8 +193,16 @@
     <value>Width:</value>
     <comment>CoverPreview</comment>
   </data>
+  <data name="TextFile" xml:space="preserve">
+    <value>File</value>
+    <comment>Shell</comment>
+  </data>
   <data name="TextFileDetails" xml:space="preserve">
     <value>Audio Info</value>
+    <comment>Shell</comment>
+  </data>
+  <data name="TextGetTagsFromLasrFm" xml:space="preserve">
+    <value>Get tag from Last.fm</value>
     <comment>Shell</comment>
   </data>
   <data name="TextNewVersion" xml:space="preserve">
@@ -201,6 +213,10 @@
     <value>Ok</value>
     <comment>Button</comment>
   </data>
+  <data name="TextOpenFolder" xml:space="preserve">
+    <value>Open Folder</value>
+    <comment>Shell</comment>
+  </data>
   <data name="TextProduct" xml:space="preserve">
     <value>Cover Retriever</value>
     <comment>About</comment>
@@ -209,7 +225,7 @@
     <value>Project home</value>
     <comment>About</comment>
   </data>
-  <data name="TextSaveCoverInToDirectory" xml:space="preserve">
+  <data name="TextSave" xml:space="preserve">
     <value>Save</value>
     <comment>Button</comment>
   </data>

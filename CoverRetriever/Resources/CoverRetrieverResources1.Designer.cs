@@ -97,7 +97,7 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retrieve tag for &apos;{0}&apos;....
+        ///   Looks up a localized string similar to Retrieving tags for &apos;{0}&apos;....
         /// </summary>
         public static string GrabTagMessage {
             get {
@@ -138,6 +138,15 @@ namespace CoverRetriever.Resources {
         public static string MessageSaveCover {
             get {
                 return ResourceManager.GetString("MessageSaveCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string TextAbout {
+            get {
+                return ResourceManager.GetString("TextAbout", resourceCulture);
             }
         }
         
@@ -223,11 +232,29 @@ namespace CoverRetriever.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string TextFile {
+            get {
+                return ResourceManager.GetString("TextFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio Info.
         /// </summary>
         public static string TextFileDetails {
             get {
                 return ResourceManager.GetString("TextFileDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get tag from Last.fm.
+        /// </summary>
+        public static string TextGetTagsFromLasrFm {
+            get {
+                return ResourceManager.GetString("TextGetTagsFromLasrFm", resourceCulture);
             }
         }
         
@@ -246,6 +273,15 @@ namespace CoverRetriever.Resources {
         public static string TextOk {
             get {
                 return ResourceManager.GetString("TextOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Folder.
+        /// </summary>
+        public static string TextOpenFolder {
+            get {
+                return ResourceManager.GetString("TextOpenFolder", resourceCulture);
             }
         }
         
@@ -270,9 +306,9 @@ namespace CoverRetriever.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        public static string TextSaveCoverInToDirectory {
+        public static string TextSave {
             get {
-                return ResourceManager.GetString("TextSaveCoverInToDirectory", resourceCulture);
+                return ResourceManager.GetString("TextSave", resourceCulture);
             }
         }
         
