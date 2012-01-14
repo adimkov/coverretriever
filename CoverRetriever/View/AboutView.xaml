@@ -12,6 +12,7 @@
         Height="392"
         Background="{DynamicResource Background}"
         cmd:Loaded.Command="{Binding LoadedCommand}"
+        Icon="/CoverRetriever;component/CoverRetriever.ico"
         interact:WindowExtensions.HideOnClose="True"
         ResizeMode="NoResize"
         WindowStyle="ThreeDBorderWindow"

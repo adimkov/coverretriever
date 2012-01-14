@@ -25,6 +25,7 @@
         Background="{DynamicResource Background}"
         cmd:Closing.Command="{Binding FinishCommand}"
         cmd:Loaded.Command="{Binding LoadedCommand}"
+        Icon="/CoverRetriever;component/CoverRetriever.ico"
         mc:Ignorable="d">
     <Window.Resources>
         <converter:TreePathContructor x:Key="treePathContructor" />

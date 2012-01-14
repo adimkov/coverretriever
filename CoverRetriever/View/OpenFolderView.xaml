@@ -8,6 +8,7 @@
         Width="459"
         Height="180"
         Background="{DynamicResource Background}"
+        Icon="/CoverRetriever;component/CoverRetriever.ico"
         interact:WindowExtensions.HideOnClose="True"
         Loaded="WindowLoaded"
         ResizeMode="NoResize"
