@@ -10,6 +10,8 @@ namespace CoverRetriever.Test.ViewModel
 {
     using System.Linq;
 
+    using CoverRetriever.AudioInfo;
+
     [TestFixture]
     public class CoverPreviewViewModelTest : ViewModelMock
     {
@@ -52,7 +54,7 @@ namespace CoverRetriever.Test.ViewModel
             var target = new CoverPreviewViewModel(remoteCover);
             
             var testScheduler = new TestScheduler();
-            var mockObservable = new MockObserver<RemoteCover>(testScheduler);
+            var mockObservable = new MockObserver<Cover>(testScheduler);
 
             target.SaveCover.Subscribe(mockObservable);
 

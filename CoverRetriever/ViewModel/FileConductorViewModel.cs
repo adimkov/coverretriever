@@ -132,7 +132,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         /// <param name="remoteCover">The remote cover.</param>
         /// <returns>Save cover operation indicator.</returns>
-        public virtual IObservable<Unit> SaveCover(RemoteCover remoteCover)
+        public virtual IObservable<Unit> SaveCover(Cover remoteCover)
         {
             if (!ApplyToAllFiles)
             {

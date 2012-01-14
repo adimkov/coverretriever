@@ -800,7 +800,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         /// <param name="remoteCover">The remote cover.</param>
         /// <returns>Operation observable.</returns>
-        private IObservable<Unit> SaveRemoteCover(RemoteCover remoteCover)
+        private IObservable<Unit> SaveRemoteCover(Cover remoteCover)
         {
             return FileConductorViewModel.SaveCover(remoteCover)
                 .Do(x => { }, ex => { CoverRetrieverErrorMessage = ex.Message; })

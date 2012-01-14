@@ -98,7 +98,7 @@ namespace CoverRetriever.Test.ViewModel
             target.FileSystemSelectedItemChangedCommand.Execute(root);
 
             coverRetrieverServiceMock.Verify(x => x.GetCoverFor(It.IsAny<string>(), It.IsAny<string>(), 6), Times.Once());
-            Assert.That(eventCounter, Is.EqualTo(4));
+            Assert.That(eventCounter, Is.EqualTo(5));
         }
 
         [Test]
