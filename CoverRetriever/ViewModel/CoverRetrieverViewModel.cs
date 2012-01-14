@@ -114,6 +114,26 @@ namespace CoverRetriever.ViewModel
         private readonly DelegateCommand _saveSuggestedTagCommand;
 
         /// <summary>
+        /// The request to enlarge selected cover.
+        /// </summary>
+        private readonly InteractionRequest<Notification> _previewCoverRequest;
+
+        /// <summary>
+        /// The request to open library window.
+        /// </summary>
+        private readonly InteractionRequest<Notification> _selectRootFolderRequest;
+
+        /// <summary>
+        /// The request to highlight GetTag button.
+        /// </summary>
+        private readonly InteractionRequest<Notification> _highlightToGetTags;
+
+        /// <summary>
+        /// The request to show about window.
+        /// </summary>
+        private readonly InteractionRequest<Notification> _aboutRequest;
+
+        /// <summary>
         /// Result of saving operation.
         /// </summary>
         private readonly Subject<ProcessResult> _savingCoverResult = new Subject<ProcessResult>();
@@ -190,9 +210,10 @@ namespace CoverRetriever.ViewModel
             _rejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
             _saveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
 
-            PreviewCoverRequest = new InteractionRequest<Notification>();
-            SelectRootFolderRequest = new InteractionRequest<Notification>();
-            AboutRequest = new InteractionRequest<Notification>();
+            _previewCoverRequest = new InteractionRequest<Notification>();
+            _selectRootFolderRequest = new InteractionRequest<Notification>();
+            _highlightToGetTags = new InteractionRequest<Notification>();
+            _aboutRequest = new InteractionRequest<Notification>();
 
             _suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
 
@@ -324,20 +345,49 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Gets preview cover dialog request.
         /// </summary>
-        public InteractionRequest<Notification> PreviewCoverRequest { get; private set; }
+        public IInteractionRequest PreviewCoverRequest
+        {
+            get
+            {
+                return _previewCoverRequest;
+            }
+        }
         
         /// <summary>
         /// Gets select new root folder dialog.
         /// </summary>
-        public InteractionRequest<Notification> SelectRootFolderRequest { get; private set; }
+        public IInteractionRequest SelectRootFolderRequest
+        {
+            get
+            {
+                return _selectRootFolderRequest;
+            }
+        }
 
         /// <summary>
-        /// Gets or sets the about request.
+        /// Gets the request for highlight 'get tags' button.
+        /// </summary>
+        public IInteractionRequest HighlightToGetTags
+        {
+            get
+            {
+                return _highlightToGetTags;
+            }
+        }
+
+        /// <summary>
+        /// Gets the about request.
         /// </summary>
         /// <value>
         /// The about request.
         /// </value>
-        public InteractionRequest<Notification> AboutRequest { get; set; }
+        public IInteractionRequest AboutRequest
+        {
+            get
+            {
+                return _aboutRequest;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the scheduler to execute observable.
@@ -394,7 +444,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Gets the suggested covers.
         /// </summary>
-       public ObservableCollection<RemoteCover> SuggestedCovers
+        public ObservableCollection<RemoteCover> SuggestedCovers
         {
             get
             {
@@ -402,12 +452,12 @@ namespace CoverRetriever.ViewModel
             }
         }
 
-       /// <summary>
-       /// Gets or sets the selected suggested cover.
-       /// </summary>
-       /// <value>
-       /// The selected cover.
-       /// </value>
+        /// <summary>
+        /// Gets or sets the selected suggested cover.
+        /// </summary>
+        /// <value>
+        /// The selected cover.
+        /// </value>
         public RemoteCover SelectedSuggestedCover
         {
             get
@@ -546,7 +596,7 @@ namespace CoverRetriever.ViewModel
                 .Subscribe(
                 x => _rootFolder.Children.Add(x),
                 SelectFirstAudioFile);
-            SelectRootFolderRequest.Raise(new CloseNotification());
+            _selectRootFolderRequest.Raise(new CloseNotification());
         }
 
         /// <summary>
@@ -593,7 +643,7 @@ namespace CoverRetriever.ViewModel
                         .Subscribe();
                 });
 
-            PreviewCoverRequest.Raise(new Notification
+            _previewCoverRequest.Raise(new Notification
             {
                 Title = CoverRetrieverResources.CoverPreviewTitle.FormatUIString(
                 FileConductorViewModel.SelectedAudio.Artist, 
@@ -624,7 +674,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void SelectFolderCommandExecute()
         {
-            SelectRootFolderRequest.Raise(new Notification
+            _selectRootFolderRequest.Raise(new Notification
             {
                 Title = CoverRetrieverResources.TitleStepOne,
                 Content = _openFolderViewModel
@@ -644,7 +694,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void AboutCommandExecute()
         {
-            AboutRequest.Raise(new Notification
+            _aboutRequest.Raise(new Notification
             {
                 Content = AboutViewModel.Value
             });
@@ -732,6 +782,11 @@ namespace CoverRetriever.ViewModel
             
             if (audio != null)
             {
+                if (audio.IsNeededToRetrieveTags)
+                {
+                    _highlightToGetTags.Raise(null);
+                }
+
                 FindRemoteCovers(audio.MetaProvider);
             }
             else

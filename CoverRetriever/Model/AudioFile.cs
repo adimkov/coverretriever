@@ -141,6 +141,20 @@ namespace CoverRetriever.Model
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is needed to retrieve tags.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> If this instance is needed to retrieve tags; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsNeededToRetrieveTags
+        {
+            get
+            {
+                return String.IsNullOrWhiteSpace(Artist);
+            }
+        }
+
+        /// <summary>
         /// Assigns the tagger.
         /// </summary>
         /// <param name="tagger">The tagger.</param>

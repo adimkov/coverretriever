@@ -13,16 +13,23 @@ namespace CoverRetriever.Behaviors
     using System.Windows.Interactivity;
     using System.Windows.Media.Animation;
 
+    using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+
     /// <summary>
     /// Highlights an element.
     /// </summary>
     public class HighlightElementBehavior : Behavior<FrameworkElement>
     {
         /// <summary>
-        /// IsTurnedOn DependencyProperty.
+        /// HighlightRequest DependencyProperty.
         /// </summary>
-        public static readonly DependencyProperty IsTurnedOnProperty = DependencyProperty.Register(
-            "IsTurnedOn", typeof(bool), typeof(HighlightElementBehavior), new PropertyMetadata(false, OnIsTurnedOnChanged));
+        public static readonly DependencyProperty HighlightRequestProperty = DependencyProperty.Register(
+            "HighlightRequest", typeof(IInteractionRequest), typeof(HighlightElementBehavior), new PropertyMetadata(null, OnHighlightRequestChanged));
+
+        /// <summary>
+        /// Pause time in milliseconds.
+        /// </summary>
+        private const int PauseTime = 1500;
 
         /// <summary>
         /// The animation of highlight.
@@ -30,21 +37,18 @@ namespace CoverRetriever.Behaviors
         private Storyboard _highlightAnimation;
 
         /// <summary>
-        /// Gets or sets a value indicating whether behavior is turned on.
+        /// Gets or sets request to highlight element.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if this behavior is turned on; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsTurnedOn
+        public IInteractionRequest HighlightRequest
         {
             get
             {
-                return (bool)GetValue(IsTurnedOnProperty);
+                return (IInteractionRequest)GetValue(HighlightRequestProperty);
             }
 
             set
             {
-                SetValue(IsTurnedOnProperty, value);
+                SetValue(HighlightRequestProperty, value);
             }
         }
 
@@ -55,26 +59,46 @@ namespace CoverRetriever.Behaviors
         {
             base.OnAttached();
             _highlightAnimation = CreateHighlightAnimation();
-            TurnOnOrOffHighlight(IsTurnedOn);
         }
 
         /// <summary>
-        /// Called when turned on changed.
+        /// Raises the HighlightRequest changed event.
         /// </summary>
         /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnIsTurnedOnChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnHighlightRequestChanged(DependencyPropertyChangedEventArgs e)
         {
-            TurnOnOrOffHighlight((bool)e.NewValue);
+            var newRequest = (IInteractionRequest)e.NewValue;
+            var oldRequest = (IInteractionRequest)e.OldValue;
+            
+            if (newRequest != null)
+            {
+                newRequest.Raised += HighlightRequestOnRaised;
+            }
+
+            if (oldRequest != null)
+            {
+                oldRequest.Raised -= HighlightRequestOnRaised;
+            }
         }
 
         /// <summary>
-        /// Called when turned on changed.
+        /// Called when highlight request has been changed.
         /// </summary>
         /// <param name="d">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void OnIsTurnedOnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnHighlightRequestChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((HighlightElementBehavior)d).OnIsTurnedOnChanged(e);
+            ((HighlightElementBehavior)d).OnHighlightRequestChanged(e);
+        }
+
+        /// <summary>
+        /// Highlights the request on raised.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="Microsoft.Practices.Prism.Interactivity.InteractionRequest.InteractionRequestedEventArgs"/> instance containing the event data.</param>
+        private void HighlightRequestOnRaised(object sender, InteractionRequestedEventArgs args)
+        {
+            _highlightAnimation.Begin(AssociatedObject);
         }
 
         /// <summary>
@@ -84,40 +108,21 @@ namespace CoverRetriever.Behaviors
         private Storyboard CreateHighlightAnimation()
         {
             var opacity = new DoubleAnimationUsingKeyFrames();
-            opacity.KeyFrames.Add(new SplineDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
-            opacity.KeyFrames.Add(new SplineDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(100))));
-            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(200))));
-            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(300))));
-            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(400))));
-            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(2))));
-
+            opacity.KeyFrames.Add(new SplineDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime))));
+            opacity.KeyFrames.Add(new SplineDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 150))));
+            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 250))));
+            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 350))));
+            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 450))));
+            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 550))));
+            opacity.KeyFrames.Add(new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(PauseTime + 650))));
+                                                                                                              
             Storyboard.SetTarget(opacity, AssociatedObject);
             Storyboard.SetTargetProperty(opacity, new PropertyPath(UIElement.OpacityProperty));
 
-            var storiboard = new Storyboard
-                {
-                    RepeatBehavior = RepeatBehavior.Forever
-                };
-
+            var storiboard = new Storyboard();
             storiboard.Children.Add(opacity);
             
             return storiboard;
-        }
-
-        /// <summary>
-        /// Turns the on or off highlight.
-        /// </summary>
-        /// <param name="isTurnOn">If set to <c>true</c> [is turn on].</param>
-        private void TurnOnOrOffHighlight(bool isTurnOn)
-        {
-            if (isTurnOn)
-            {
-                AssociatedObject.Loaded += (sender, args) => _highlightAnimation.Begin(AssociatedObject);
-            }
-            else
-            {
-                _highlightAnimation.Stop();
-            }
         }
     }
 }

@@ -259,7 +259,7 @@
                                     Style="{StaticResource TagButton}" />
                             <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
                                 <i:Interaction.Behaviors>
-                                    <behaviors:HighlightElementBehavior />
+                                    <behaviors:HighlightElementBehavior HighlightRequest="{Binding HighlightToGetTags}" />
                                 </i:Interaction.Behaviors>
                             </Border>
                         </Grid>
