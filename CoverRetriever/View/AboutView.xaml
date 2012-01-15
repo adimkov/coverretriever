@@ -7,14 +7,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resources="clr-namespace:CoverRetriever.Resources"
         xmlns:viewModel="clr-namespace:CoverRetriever.ViewModel"
-        Title="Cover Retriever"
-        Width="364"
-        Height="392"
+        Title="About Cover Retriever"
+        Width="420"
         Background="{DynamicResource Background}"
         cmd:Loaded.Command="{Binding LoadedCommand}"
         Icon="/CoverRetriever;component/CoverRetriever.ico"
         interact:WindowExtensions.HideOnClose="True"
         ResizeMode="NoResize"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
         WindowStyle="ThreeDBorderWindow"
         mc:Ignorable="d">
     <Window.Resources>
@@ -104,25 +105,31 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border Style="{DynamicResource BackgroundBorderStyle}">
-        <Grid Margin="4" d:DataContext="{StaticResource AboutViewModelDataSource}">
+    <Border d:DataContext="{StaticResource ResourceKey=AboutViewModelDataSource}" Style="{DynamicResource BackgroundBorderStyle}">
+        <Grid Margin="4">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="110" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="176" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="130" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.ColumnSpan="2"
+                <Image Grid.RowSpan="3"
+                       VerticalAlignment="Top"
+                       Source="/CoverRetriever;component/CoverRetriever.ico" />
+                <TextBlock Grid.RowSpan="3"
+                           Grid.Column="1"
+                           Grid.ColumnSpan="2"
                            Margin="20,0,0,0"
                            FontSize="26.667"
                            Style="{DynamicResource HeaderTextStyle}"
@@ -130,7 +137,8 @@
                                           Source={StaticResource CoverRetrieverResources}}"
                            d:LayoutOverrides="Width" />
                 <TextBlock Grid.Row="1"
-                           Grid.Column="1"
+                           Grid.RowSpan="2"
+                           Grid.Column="2"
                            Margin="0,4,0,0"
                            d:LayoutOverrides="Width">
                     <Hyperlink NavigateUri="{Binding BlogUri}" RequestNavigate="Hyperlink_RequestNavigate">
@@ -141,8 +149,9 @@
                 </TextBlock>
 
                 <StackPanel Grid.Row="2"
+                            Grid.Column="1"
                             Grid.ColumnSpan="2"
-                            Margin="15,5,15,15"
+                            Margin="15,5,15,0"
                             VerticalAlignment="Top">
                     <TextBlock x:Name="DescriptionTextBlock"
                                FontSize="10.667"
@@ -172,8 +181,8 @@
                 </StackPanel>
 
                 <Grid x:Name="poweredBy"
-                      Grid.Row="3"
-                      Grid.ColumnSpan="2"
+                      Grid.Row="4"
+                      Grid.ColumnSpan="3"
                       Margin="15,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
