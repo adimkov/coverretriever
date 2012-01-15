@@ -1,4 +1,4 @@
-Cover Retriever (C) Anton Dimkov 2011
+Cover Retriever (C) Anton Dimkov 2012
 
 1. About
 Cover Retriever is a small, simple, easy to use application specially designed to help you find covers for compositions in "MP3/FLAC" formats and saving them onto disk or in audio file.
@@ -23,7 +23,7 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 	*Improvement of Update Checker
 0.7.0.0 (2011-10-03)
 	*The design was applied
-0.8.0.0 (2012-01-)
+0.8.0.0 (2012-01-15)
 	*The tag finder added
 	*Save last opened folder in Open Folder dialog
 	*Improved library loading
