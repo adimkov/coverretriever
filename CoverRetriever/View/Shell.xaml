@@ -276,16 +276,16 @@
                                 <ColumnDefinition Width="100" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="cancelButton"
-                                    Grid.Column="0"
-                                    Command="{Binding RejectSuggestedTagCommand}"
-                                    Content="{Binding CoverRetrieverResources.TextCancel,
-                                                      Source={StaticResource coverRetrieverResources}}"
-                                    Style="{StaticResource TagButton}" />
                             <Button x:Name="saveButton"
-                                    Grid.Column="1"
+                                    Grid.Column="0"
                                     Command="{Binding SaveSuggestedTagCommand}"
                                     Content="{Binding CoverRetrieverResources.TextSave,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+                            <Button x:Name="cancelButton"
+                                    Grid.Column="1"
+                                    Command="{Binding RejectSuggestedTagCommand}"
+                                    Content="{Binding CoverRetrieverResources.TextCancel,
                                                       Source={StaticResource coverRetrieverResources}}"
                                     Style="{StaticResource TagButton}" />
                         </Grid>
