@@ -195,8 +195,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Command.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EmptyStringValidatorBehavior.cs" />
     <Compile Include="Controls\ErrorIndicator.cs" />
     <Compile Include="Controls\ImageAsyncSource.cs" />
+    <Compile Include="Controls\TextValidator.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\InvertBoolToVisibilityConverter.cs" />
     <Compile Include="Converter\CoverRecipientToBoolConverter.cs" />

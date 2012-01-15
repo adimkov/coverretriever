@@ -1082,7 +1082,7 @@
                                     <Storyboard>
                                         <DoubleAnimation Duration="0"
                                                          Storyboard.TargetName="FocusVisualElement"
-                                                         Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
                                                          To="1" />
                                     </Storyboard>
                                 </VisualState>
@@ -1108,6 +1108,22 @@
                                                     <System:Boolean>True</System:Boolean>
                                                 </DiscreteObjectKeyFrame.Value>
                                             </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="AdditionalValidationStates">
+                                <VisualState x:Name="Clean">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="EmptyElement" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Empty">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="EmptyElement" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -1197,6 +1213,14 @@
                                       Fill="{StaticResource ErrorBrush}" />
                             </Grid>
                         </Border>
+                        <Rectangle x:Name="EmptyElement"
+                                   Margin="1"
+                                   Fill="{DynamicResource ErrorBrush}"
+                                   Opacity="0.15"
+                                   RadiusX="1"
+                                   RadiusY="1"
+                                   StrokeThickness="{StaticResource FocusVisualStrokeThickness}"
+                                   Visibility="Collapsed" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
