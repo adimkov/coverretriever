@@ -10,7 +10,7 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 3. History
 0.3.0.0 (2011-03-19)
 	First preview release
-0.4.0.0 (2011-03-19)
+0.4.0.0 (2011-04-19)
 	*Update Checker
 	*Animation during saving a cover
 	*Bug fixing
@@ -25,6 +25,8 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 	*The design was applied
 0.8.0.0 (2012-01-)
 	*The tag finder added
-	*Improved Open folder Dialog
+	*Save last opened folder in Open Folder dialog
 	*Improved library loading
+	*Application icon added
+	*Improved cover search
 	*Bug fixing
