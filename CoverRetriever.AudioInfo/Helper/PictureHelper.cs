@@ -9,6 +9,7 @@
 
 namespace CoverRetriever.AudioInfo.Helper
 {
+    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
@@ -98,7 +99,10 @@ namespace CoverRetriever.AudioInfo.Helper
                 downloadedCover.Write(buffer, 0, read);
             } 
             while (read != 0);
-            
+
+            downloadedCover.Position = 0;
+
+            EnsureImageStreamValid(downloadedCover);
             var frontCover = new Picture(new ByteVector(downloadedCover.ToArray(), (int)downloadedCover.Length));
             frontCover.Type = pictureType;
             frontCover.MimeType = GetMimeTipeFromFileExtension(Path.GetExtension(name));
@@ -121,9 +125,9 @@ namespace CoverRetriever.AudioInfo.Helper
             coverStream.Flush();
             coverStream.Position = 0;
 
-            using (var bitmap = new Bitmap(coverStream))
+            using (var image = Image.FromStream(coverStream))
             {
-                size = new Size(bitmap.Width, bitmap.Height);
+                size = new Size(image.Width, image.Height);
             }
 
             coverStream.Position = 0;
@@ -146,6 +150,72 @@ namespace CoverRetriever.AudioInfo.Helper
             }
 
             return picture;
+        }
+
+        /// <summary>
+        /// Determines whether image is valid.
+        /// </summary>
+        /// <param name="picture">The picture.</param>
+        /// <returns>
+        ///   <c>true</c> if image is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsImageValid(this IPicture picture)
+        {
+            var coverStream = new MemoryStream(picture.Data.Count);
+
+            coverStream.Write(picture.Data.Data, 0, picture.Data.Count);
+            coverStream.Flush();
+            coverStream.Position = 0;
+
+            return IsImageStreamValid(coverStream);
+        }
+
+        /// <summary>
+        /// Determines whether image stream is valid.
+        /// </summary>
+        /// <param name="imageStream">The image stream.</param>
+        /// <returns>
+        ///   <c>true</c> if image stream is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsImageStreamValid(Stream imageStream)
+        {
+            try
+            {
+                EnsureImageStreamValid(imageStream);
+                return true;
+            }
+            catch (FileFormatException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether stream contains valid image.
+        /// </summary>
+        /// <param name="imageStream">The image stream.</param>
+        public static void EnsureImageStreamValid(Stream imageStream)
+        {
+            Image image = null;
+            try
+            {
+                image = Image.FromStream(imageStream);
+                if (imageStream.CanSeek)
+                {
+                    imageStream.Position = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new FileFormatException("Invalid image format", ex);
+            }
+            finally
+            {
+                if (image != null)
+                {
+                    image.Dispose();
+                }
+            }
         }
     }
 }

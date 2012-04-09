@@ -30,3 +30,5 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 	*Application icon added
 	*Improved cover search
 	*Bug fixing
+0.8.1.0 (2012-04-9)
+	*Fixed crashes during file switching

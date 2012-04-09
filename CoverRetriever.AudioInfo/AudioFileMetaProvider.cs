@@ -171,7 +171,8 @@ namespace CoverRetriever.AudioInfo
         public virtual bool IsCoverExists()
         {
             EnsureInstanceWasNotDisposed();
-            return _file.Tag.GetCoverSafe(PictureType.FrontCover) != null;
+            var frontCover = _file.Tag.GetCoverSafe(PictureType.FrontCover);
+            return frontCover != null && frontCover.IsImageValid();
         }
 
         /// <summary>

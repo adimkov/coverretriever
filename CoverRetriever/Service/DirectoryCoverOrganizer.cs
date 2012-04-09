@@ -17,6 +17,7 @@ namespace CoverRetriever.Service
     using System.Linq;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.AudioInfo.Helper;
 
     using Size = System.Windows.Size;
 
@@ -103,7 +104,8 @@ namespace CoverRetriever.Service
         /// <returns><c>True</c> if cover exists.</returns>
         public bool IsCoverExists()
         {
-            return File.Exists(GetCoverPath());
+            var coverFullPath = GetCoverPath();
+            return File.Exists(coverFullPath) && PictureHelper.IsImageStreamValid(File.OpenRead(coverFullPath));
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace CoverRetriever.Service
         /// <returns>Operation observable.</returns>
         public IObservable<Unit> SaveCover(Cover cover)
         {
-            if (IsCoverExists())
+            if (File.Exists(GetCoverPath()))
             {
                 File.Delete(GetCoverPath());
             }
@@ -127,6 +129,7 @@ namespace CoverRetriever.Service
                 {
                     try
                     {
+                        PictureHelper.EnsureImageStreamValid(stream);
                         using (var newCoverStream = File.Open(newCoverPath, FileMode.CreateNew, FileAccess.Write))
                         {
                             var buffer = new byte[BufferSize];
@@ -136,7 +139,7 @@ namespace CoverRetriever.Service
                             {
                                 readed = stream.Read(buffer, 0, BufferSize);
                                 newCoverStream.Write(buffer, 0, readed);
-                            } 
+                            }
                             while (readed != 0);
                             newCoverStream.Flush();
                         }
@@ -195,9 +198,9 @@ namespace CoverRetriever.Service
         {
             var ms = new MemoryStream();
             Size size;
-            using (var bitmap = new Bitmap(coverFullPath))
+            using (var image = Image.FromFile(coverFullPath))
             {
-                size = new Size(bitmap.Width, bitmap.Height);
+                size = new Size(image.Width, image.Height);
             }
 
             using (var coverStream = File.OpenRead(coverFullPath))
