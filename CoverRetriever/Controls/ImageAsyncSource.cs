@@ -58,6 +58,7 @@ namespace CoverRetriever.Controls
                                     var bitmapImage = new BitmapImage();
                                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                     bitmapImage.BeginInit();
+                                    bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreColorProfile; 
                                     bitmapImage.StreamSource = stream;
                                     bitmapImage.EndInit();
 
