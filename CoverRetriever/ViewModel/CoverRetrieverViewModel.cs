@@ -46,7 +46,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Delay time to check updates in sec.
         /// </summary>
-        private const int DelayToCheckUpdate = 10000;
+        private const int DelayToCheckUpdate = 4;
 
         /// <summary>
         /// Service to access to at file system.
