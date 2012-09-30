@@ -13,6 +13,8 @@ namespace CoverRetriever.View
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Forms;
@@ -48,7 +50,7 @@ namespace CoverRetriever.View
             InitializeComponent();
             _cacheService = ServiceLocator.Current.GetInstance<ICacheService>();
 
-            Observable.FromEvent<TextChangedEventArgs>(FolderPathTextBlock, "TextChanged")
+            Observable.FromEventPattern<TextChangedEventArgs>(FolderPathTextBlock, "TextChanged")
                 .Throttle(TimeSpan.FromMilliseconds(300))
                 .ObserveOnDispatcher()
                 .Subscribe(CheckFolderExistence);
@@ -108,7 +110,7 @@ namespace CoverRetriever.View
         /// Checks the folder existence.
         /// </summary>
         /// <param name="event">The @event.</param>
-        private void CheckFolderExistence(IEvent<TextChangedEventArgs> @event)
+        private void CheckFolderExistence(EventPattern<TextChangedEventArgs> @event)
         {
             if (ViewModel != null)
             {

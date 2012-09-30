@@ -10,6 +10,7 @@ using CoverRetriever.ViewModel;
 namespace CoverRetriever.View
 {
     using System.Linq;
+    using System.Reactive.Linq;
 
     /// <summary>
 	/// Interaction logic for Shell.xaml

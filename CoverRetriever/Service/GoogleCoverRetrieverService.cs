@@ -15,6 +15,7 @@ namespace CoverRetriever.Service
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Reactive.Linq;
     using System.Windows;
 
     using CoverRetriever.Model;
@@ -75,7 +76,7 @@ namespace CoverRetriever.Service
             }
 
             var googleClient = new WebClient();
-            var observableJson = Observable.FromEvent<DownloadStringCompletedEventArgs>(googleClient, "DownloadStringCompleted");
+            var observableJson = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(googleClient, "DownloadStringCompleted");
 
             var requestedUri = _baseAddress.FormatString(_googleKey, coverCount, _searchPattern.FormatString(artist, album));
 
@@ -102,7 +103,7 @@ namespace CoverRetriever.Service
         {
             ////todo: implement a caching
             var downloader = new WebClient();
-            var downloadOpservable = ObservableExtensions.Defer<MemoryStream>(Observable.FromEvent<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
+            var downloadOpservable = ObservableExtensions.Defer(Observable.FromEventPattern<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
                     .Select(
                         x => 
                             {

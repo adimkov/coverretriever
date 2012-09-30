@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Concurrency;
-using System.Reactive.Testing.Mocks;
 using CoverRetriever.AudioInfo;
 using CoverRetriever.Model;
 using CoverRetriever.ViewModel;
@@ -12,11 +10,14 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
-    using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
     using System.Threading;
 
     using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Service;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class CoverRetrieverViewModelTest : ViewModelMock
@@ -121,7 +122,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
-            Assert.That(mockObserver[0].Value.Value, Is.EqualTo(ProcessResult.Begin));
+            Assert.That(mockObserver.Messages[0].Value.Value, Is.EqualTo(ProcessResult.Begin));
         }
 
         [Test]
@@ -144,7 +145,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
-            Assert.That(mockObserver[1].Value.Value, Is.EqualTo(ProcessResult.Done));
+            Assert.That(mockObserver.Messages[1].Value.Value, Is.EqualTo(ProcessResult.Done));
         }
 
         [Test]
@@ -167,7 +168,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
-            Assert.That(mockObserver[1].Value.Value, Is.EqualTo(ProcessResult.Done));
+            Assert.That(mockObserver.Messages[1].Value.Value, Is.EqualTo(ProcessResult.Done));
             Assert.IsNotNullOrEmpty(target.CoverRetrieverErrorMessage);
         }
 
@@ -210,7 +211,7 @@ namespace CoverRetriever.Test.ViewModel
             
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
-            _testScheduler.Run();
+            _testScheduler.Start();
             
             Thread.Sleep(100);
 
@@ -231,7 +232,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
-            _testScheduler.Run();
+            _testScheduler.Start();
 
             Assert.That(target.CoverRetrieverErrorMessage, Is.Not.Empty);
         }
@@ -250,7 +251,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
-            _testScheduler.Run();
+            _testScheduler.Start();
 
             Thread.Sleep(100);
 
@@ -271,7 +272,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
-            _testScheduler.Run();
+            _testScheduler.Start();
 
             Thread.Sleep(100);
 

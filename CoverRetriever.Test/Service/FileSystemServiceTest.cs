@@ -12,10 +12,12 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.Service
 {
     using System;
-    using System.Concurrency;
     using System.Configuration;
     using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive;
+    using System.Reactive.Linq;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class FileSystemServiceTest
@@ -68,7 +70,7 @@ namespace CoverRetriever.Test.Service
             var rootFolder = testTuple.Item2;
 
             service.GetChildrenForRootFolder(rootFolder)
-                .Run(x => rootFolder.Children.Add(x));
+                .ForEach(x => rootFolder.Children.Add(x));
 
             Assert.That(rootFolder.Children.Select(x => x.Name), Is.EqualTo(_catalogContent));
             Assert.That(rootFolder.Children.Take(23).All(x => x is Folder), Is.True);
@@ -85,7 +87,7 @@ namespace CoverRetriever.Test.Service
             var rootFolder = testTuple.Item2;
 
             service.GetChildrenForRootFolder(rootFolder)
-                .Run(x => rootFolder.Children.Add(x));
+                .ForEach(x => rootFolder.Children.Add(x));
 
             Assert.That(((Folder)rootFolder.Children[0]).Children.Count, Is.EqualTo(8));
             Assert.That(((Folder)rootFolder.Children[1]).Children.Count, Is.EqualTo(9));
@@ -110,9 +112,9 @@ namespace CoverRetriever.Test.Service
 
             service.GetChildrenForRootFolder(rootFolder).Run(testObserver);
 
-            var countOfOnNextMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnNext);
-            var countOfOnCompleteMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
-            var countOfOnErrorMessages = testObserver.Count(x => x.Value.Kind == NotificationKind.OnError);
+            var countOfOnNextMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnNext);
+            var countOfOnCompleteMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
+            var countOfOnErrorMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnError);
             
             Assert.That(countOfOnNextMessages, Is.EqualTo(23));
             Assert.That(countOfOnCompleteMessages, Is.EqualTo(1));
@@ -126,7 +128,7 @@ namespace CoverRetriever.Test.Service
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
             service.GetChildrenForRootFolder(rootFolder)
-                .Run(x => rootFolder.Children.Add(x));
+                .ForEach(x => rootFolder.Children.Add(x));
 
             var audioFiles = ToFlatCollecction<AudioFile>(rootFolder);
             var folders = ToFlatCollecction<Folder>(rootFolder);

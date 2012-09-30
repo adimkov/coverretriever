@@ -9,14 +9,14 @@
 
 namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
 {
-    using System.Collections.Generic;
-    using System.Concurrency;
     using System.Configuration;
     using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive;
     using System.Xml.Linq;
 
     using CoverRetriever.AudioInfo.Tagger.LastFm;
+
+    using Microsoft.Reactive.Testing;
 
     using NUnit.Framework;
 
@@ -43,9 +43,9 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
             var observer = new MockObserver<XDocument>(testSheduler);
             _lastFmService.GetTrackInfo("Pink Floyd", "The final cut").Run(observer);
 
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[0].Value.Value, Is.Not.Null);
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[0].Value.Value, Is.Not.Null);
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
         }
 
         [Test]
@@ -55,9 +55,9 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
             var observer = new MockObserver<XDocument>(testSheduler);
             _lastFmService.GetAlbumInfo("Pink Floyd", "Animals").Run(observer);
 
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[0].Value.Value, Is.Not.Null);
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[0].Value.Value, Is.Not.Null);
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
         }
     }
 }

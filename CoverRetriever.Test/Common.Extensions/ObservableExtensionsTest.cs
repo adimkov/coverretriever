@@ -8,11 +8,12 @@
 namespace CoverRetriever.Test.Common.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Concurrency;
     using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive;
+    using System.Reactive.Disposables;
+    using System.Reactive.Linq;
 
+    using Microsoft.Reactive.Testing;
 
     using NUnit.Framework;
 
@@ -25,17 +26,21 @@ namespace CoverRetriever.Test.Common.Extensions
             var isCalled = false;
             var scheduler = new TestScheduler();
             var observer = new MockObserver<Unit>(scheduler);
-            var observable =  new MockObservable<Unit>(
-                new Notification<Unit>.OnNext(new Unit()),
-                new Notification<Unit>.OnNext(new Unit()),
-                new Notification<Unit>.OnCompleted());
+            var observable = Observable.Create<Unit>(
+                x =>
+                {
+                    x.OnNext(new Unit());
+                    x.OnNext(new Unit());
+                    x.OnCompleted();
+                    return Disposable.Empty;
+                });
 
             observable.Completed(() => isCalled = true).Run(observer);
-
+            
             Assert.IsTrue(isCalled);
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[2].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[2].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
         }
 
         [Test]
@@ -44,15 +49,20 @@ namespace CoverRetriever.Test.Common.Extensions
             var isCalled = false;
             var scheduler = new TestScheduler();
             var observer = new MockObserver<Unit>(scheduler);
-            var observable = new MockObservable<Unit>(
-                new Notification<Unit>.OnNext(new Unit()),
-                new Notification<Unit>.OnNext(new Unit()));
+          
+            var observable = Observable.Create<Unit>(
+               x =>
+               {
+                   x.OnNext(new Unit());
+                   x.OnNext(new Unit());
+                   return Disposable.Empty;
+               });
 
             observable.Completed(() => isCalled = true).Timeout(TimeSpan.FromSeconds(1)).Run(observer);
 
             Assert.IsFalse(isCalled);
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
         }
 
         [Test]
@@ -61,15 +71,19 @@ namespace CoverRetriever.Test.Common.Extensions
             var isCalled = false;
             var scheduler = new TestScheduler();
             var observer = new MockObserver<Unit>(scheduler);
-            var observable = new MockObservable<Unit>(
-                new Notification<Unit>.OnNext(new Unit()),
-                new Notification<Unit>.OnError(new Exception()));
+            var observable = Observable.Create<Unit>(
+               x =>
+               {
+                   x.OnNext(new Unit());
+                   x.OnError(new Exception());
+                   return Disposable.Empty;
+               });
 
             observable.Completed(() => isCalled = true).Run(observer);
 
             Assert.IsFalse(isCalled);
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnError));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnError));
         }
 
         [Test]
@@ -78,7 +92,7 @@ namespace CoverRetriever.Test.Common.Extensions
             var isCalled = false;
             var observable = Observable.Empty<Unit>();
 
-            observable.Completed(() => isCalled = true).Run();
+            observable.Completed(() => isCalled = true).FirstOrDefault();
 
             Assert.IsTrue(isCalled);
         }

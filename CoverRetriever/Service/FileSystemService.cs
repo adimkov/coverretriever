@@ -15,6 +15,7 @@ namespace CoverRetriever.Service
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reactive.Subjects;
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Common.Infrastructure;

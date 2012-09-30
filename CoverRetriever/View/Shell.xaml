@@ -15,8 +15,7 @@
         xmlns:model="clr-namespace:CoverRetriever.Model"
         xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity"
         xmlns:resources="clr-namespace:CoverRetriever.Resources"
-        xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
-        xmlns:view="clr-namespace:CoverRetriever.View"
+        xmlns:view="clr-namespace:CoverRetriever.View" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Shell"
         Width="760"
         Height="560"
@@ -167,7 +166,7 @@
             </interaction:WindowTrigerAction>
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
-    <toolkit:BusyIndicator BusyContent="{Binding OperationName}" IsBusy="{Binding IsBusy}">
+    <xctk:BusyIndicator BusyContent="{Binding OperationName}" IsBusy="{Binding IsBusy}">
         <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -379,5 +378,5 @@
                 </Grid>
             </Border>
         </Grid>
-    </toolkit:BusyIndicator>
+    </xctk:BusyIndicator>
 </Window>

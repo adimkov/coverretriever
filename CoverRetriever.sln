@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever", "CoverRetriever\CoverRetriever.csproj", "{C0DE9A06-DBC4-4FD1-A470-A7254623137E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.Test", "CoverRetriever.Test\CoverRetriever.Test.csproj", "{3F8EF431-DF07-4AA6-93A2-69036D0AC8E4}"
@@ -8,6 +8,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.AudioInfo", "CoverRetriever.AudioInfo\CoverRetriever.AudioInfo.csproj", "{EC3BF1E8-F137-45CF-82E2-7D7ECFB6CC01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoverRetriever.Common", "CoverRetriever.Common\CoverRetriever.Common.csproj", "{93EDA68B-4D06-4020-BF8C-05E638F2A622}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6B9065B6-DA28-439D-B370-43FB9F58436F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

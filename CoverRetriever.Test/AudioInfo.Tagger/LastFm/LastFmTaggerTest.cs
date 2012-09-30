@@ -9,13 +9,13 @@
 
 namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
 {
-    using System;
-    using System.Concurrency;
     using System.Configuration;
     using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive;
 
     using CoverRetriever.AudioInfo.Tagger.LastFm;
+
+    using Microsoft.Reactive.Testing;
 
     using NUnit.Framework;
 

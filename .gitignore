@@ -23,6 +23,7 @@ Thumbs.db
 \[Bb]in
 [Dd]ebug*/
 ClietBin
+packages/
 *.lib
 *.sbr
 obj/

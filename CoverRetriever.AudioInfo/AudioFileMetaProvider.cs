@@ -12,6 +12,8 @@ namespace CoverRetriever.AudioInfo
     using System;
     using System.IO;
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     using CoverRetriever.AudioInfo.Helper;
 

@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.Service
 {
     using System.Linq;
+    using System.Reactive.Linq;
 
     //TODO: finish test
     [TestFixture]
@@ -20,7 +21,7 @@ namespace CoverRetriever.Test.Service
         {
             IEnumerable<RemoteCover> actual = null;
             var target = new GoogleCoverRetrieverService();
-            target.GetCoverFor("Sex Pistols", "Pretty Vacant", 3).Run(x => actual = x);
+            target.GetCoverFor("Sex Pistols", "Pretty Vacant", 3).ForEach(x => actual = x);
             
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.Count(), Is.EqualTo(3));
@@ -32,12 +33,12 @@ namespace CoverRetriever.Test.Service
             IEnumerable<RemoteCover> actual = null;
             Stream firstThumbStream = null;
             var target = new GoogleCoverRetrieverService();
-            target.GetCoverFor("Sex Pistols", "Pretty Vacant", 1).Run(x => actual = x);
+            target.GetCoverFor("Sex Pistols", "Pretty Vacant", 1).ForEach(x => actual = x);
 
             Assert.That(actual, Is.Not.Null);
             actual.First().ThumbStream
                 .Timeout(TimeSpan.FromMinutes(1))
-                .Run(x => firstThumbStream = x);
+                .ForEach(x => firstThumbStream = x);
 
             Assert.That(firstThumbStream, Is.Not.Null);
             Assert.That(firstThumbStream.CanRead, Is.True);

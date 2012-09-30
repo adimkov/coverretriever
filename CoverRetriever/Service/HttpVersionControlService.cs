@@ -13,6 +13,7 @@ namespace CoverRetriever.Service
     using System.ComponentModel.Composition;
     using System.Linq;
     using System.Net;
+    using System.Reactive.Linq;
     using System.Xml.Linq;
 
     using CoverRetriever.Common.Infrastructure;
@@ -59,7 +60,7 @@ namespace CoverRetriever.Service
         /// <returns>Observable of latest application version.</returns>
         public IObservable<RevisionVersion> GetLatestVersion()
         {
-            var xmlDownloadedPush = Observable.FromEvent<OpenReadCompletedEventArgs>(_xmlDownloader, "OpenReadCompleted");
+            var xmlDownloadedPush = Observable.FromEventPattern<OpenReadCompletedEventArgs>(_xmlDownloader, "OpenReadCompleted");
             
             _xmlDownloader.OpenReadAsync(new Uri(ConnectionString, UriKind.Absolute));
 

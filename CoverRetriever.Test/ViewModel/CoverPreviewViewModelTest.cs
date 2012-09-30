@@ -1,16 +1,16 @@
 using System;
-using System.Concurrency;
 using System.IO;
-using System.Reactive.Testing.Mocks;
 using CoverRetriever.Model;
 using CoverRetriever.ViewModel;
 using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
-    using System.Linq;
+    using System.Reactive.Linq;
 
     using CoverRetriever.AudioInfo;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class CoverPreviewViewModelTest : ViewModelMock
@@ -60,7 +60,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.SaveCoverCommand.Execute();
 
-            Assert.That(mockObservable[0].Value.Value, Is.EqualTo(remoteCover));
+            Assert.That(mockObservable.Messages[0].Value.Value, Is.EqualTo(remoteCover));
         }
         
         [Test]

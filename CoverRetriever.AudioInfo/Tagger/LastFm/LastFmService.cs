@@ -12,6 +12,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     using System;
     using System.Linq;
     using System.Net;
+    using System.Reactive.Linq;
     using System.Text;
     using System.Xml.Linq;
 
@@ -66,7 +67,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 {
                     Encoding = Encoding.UTF8
                 };
-            var trackInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
+            var trackInfoObservable = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
             return trackInfoObservable.Defer(() => webClient.DownloadStringAsync(serviceAddress.Uri))
                 .Select(
@@ -104,7 +105,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                     Encoding = Encoding.UTF8
                 };
 
-            var albumInfoObservable = Observable.FromEvent<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
+            var albumInfoObservable = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(webClient, "DownloadStringCompleted");
 
             return albumInfoObservable.Defer(() => webClient.DownloadStringAsync(serviceAddress.Uri))
                 .Select(

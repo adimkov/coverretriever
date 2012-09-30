@@ -10,6 +10,8 @@ using Moq;
 namespace CoverRetriever.Test.ViewModel
 {
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     public class ViewModelMock
     {

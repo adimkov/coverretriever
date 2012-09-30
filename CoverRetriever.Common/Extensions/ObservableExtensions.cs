@@ -10,7 +10,9 @@
 namespace System.Linq
 {
     using System;
-    using System.Collections.Generic;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Threading;
 
     using CoverRetriever.Common.Validation;
 
@@ -62,6 +64,30 @@ namespace System.Linq
         }
 
         /// <summary>
+        /// Runs sync specified source.
+        /// </summary>
+        /// <typeparam name="T">
+        /// Type of observable.
+        /// </typeparam>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <param name="observer">
+        /// The observer.
+        /// </param>
+        ////[Obsolete("Foreach method")]
+        public static void Run<T>(this IObservable<T> source, IObserver<T> observer)
+        {
+            var resetEvent = new ManualResetEvent(false);
+            
+            source
+                .Finally(() => resetEvent.Set())
+                .Subscribe(observer);
+            
+            resetEvent.WaitOne();
+        }
+
+        /// <summary>
         /// Traces the specified observable.
         /// </summary>
         /// <typeparam name="TSource">The type of the source.</typeparam>
@@ -70,13 +96,11 @@ namespace System.Linq
         /// <returns>The source observable.</returns>
         public static IObservable<TSource> Trace<TSource>(this IObservable<TSource> source, string name)
         {
-            return source
-                .Timestamp()
-                .Do(
+            return
+                source.Timestamp().Do(
                     x => Diagnostics.Trace.TraceInformation("OnNext '{0}': [{1}] {2}", name, x.Timestamp, x.Value),
                     ex => Diagnostics.Trace.TraceError("OnError '{0}': {1}", name, ex),
-                    () => Diagnostics.Trace.TraceInformation("OnCompleted '{0}'", name))
-                .RemoveTimestamp();
+                    () => Diagnostics.Trace.TraceInformation("OnCompleted '{0}'", name)).Select(x => x.Value);
         }
     }
 }

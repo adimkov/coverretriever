@@ -11,6 +11,8 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.ViewModel
 {
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     [TestFixture]
     public class FileConductorViewModelTest : ViewModelMock
@@ -27,7 +29,7 @@ namespace CoverRetriever.Test.ViewModel
             target.SelectedAudio = GetAudioMockedFile(frameCoverOrganizer.As<IMetaProvider>().Object,
                                             (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            target.SaveCover(GetRemoteCoverStub()).Run();
+            target.SaveCover(GetRemoteCoverStub()).FirstOrDefault();
 
             directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
             frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
@@ -47,7 +49,7 @@ namespace CoverRetriever.Test.ViewModel
                 frameCoverOrganizer.As<IMetaProvider>().Object,
                 (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            target.SaveCover(GetRemoteCoverStub()).Run();
+            target.SaveCover(GetRemoteCoverStub()).FirstOrDefault();
 
             directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
             frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Once());
@@ -67,7 +69,7 @@ namespace CoverRetriever.Test.ViewModel
             target.SelectedAudio = GetMockedFolderWithAudioFile(frameCoverOrganizer.As<IMetaProvider>().Object,
                                             (DirectoryCoverOrganizer)directoryCoverOrganizerMock.Object);
 
-            target.SaveCover(GetRemoteCoverStub()).Run();
+            target.SaveCover(GetRemoteCoverStub()).FirstOrDefault();
 
             directoryCoverOrganizerMock.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Never());
             frameCoverOrganizer.Verify(x => x.SaveCover(It.IsAny<Cover>()), Times.Exactly(4));

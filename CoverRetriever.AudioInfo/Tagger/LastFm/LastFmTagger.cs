@@ -15,6 +15,8 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
     using System.Text;
     using System.Xml.Linq;
 

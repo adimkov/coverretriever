@@ -8,8 +8,9 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.Controls
 {
-    using System.Concurrency;
-    using System.Linq;
+    using System.Reactive.Linq;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class ImageAsyncSourceTest
@@ -40,7 +41,7 @@ namespace CoverRetriever.Test.Controls
             var image = new Image();
             image.SetValue(ImageAsyncSource.DispatcherProperty, scheduler);
             image.SetValue(ImageAsyncSource.AsyncSourceProperty, asyncSource);
-            scheduler.Run();
+            scheduler.Start();
             var imageSource = image.Source as BitmapImage;
 
             Assert.That(imageSource, Is.Not.Null);

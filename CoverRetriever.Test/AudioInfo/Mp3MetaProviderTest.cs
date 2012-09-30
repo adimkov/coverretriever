@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Concurrency;
 using System.IO;
-using System.Reactive.Testing.Mocks;
 using System.Windows;
 using CoverRetriever.AudioInfo;
 
@@ -11,8 +8,12 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.AudioInfo
 {
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     using FluentAssertions;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class Mp3MetaProviderTest
@@ -160,9 +161,9 @@ namespace CoverRetriever.Test.AudioInfo
             }
 
 //			long fileSizeAfter = new FileInfo(BuildFullResourcePath(EmptyFrameFileForImageSave)).Length;
-            
-            mockObservable[0].Value.Kind.Should().Be(NotificationKind.OnNext);
-            mockObservable[1].Value.Kind.Should().Be(NotificationKind.OnCompleted);
+
+            mockObservable.Messages[0].Value.Kind.Should().Be(NotificationKind.OnNext);
+            mockObservable.Messages[1].Value.Kind.Should().Be(NotificationKind.OnCompleted);
 //			Assert.That(fileSizeBefore, Is.LessThan(fileSizeAfter));
         }
 

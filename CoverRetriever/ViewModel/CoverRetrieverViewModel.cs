@@ -14,9 +14,12 @@ namespace CoverRetriever.ViewModel
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
-    using System.Concurrency;
     using System.Diagnostics;
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Concurrency;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
     using System.Reflection;
     using System.Windows.Input;
 
@@ -217,7 +220,7 @@ namespace CoverRetriever.ViewModel
 
             _suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
 
-            ObservableScheduler = Scheduler.Dispatcher;
+            ObservableScheduler = DispatcherScheduler.Instance;
             SubscribeScheduler = Scheduler.ThreadPool;
         }
 

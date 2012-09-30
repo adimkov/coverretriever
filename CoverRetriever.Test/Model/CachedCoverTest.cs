@@ -10,14 +10,14 @@
 namespace CoverRetriever.Test.Model
 {
     using System;
-    using System.Concurrency;
     using System.IO;
-    using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive.Linq;
     using System.Windows;
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Model;
+
+    using Microsoft.Reactive.Testing;
 
     using Moq;
 
@@ -62,8 +62,8 @@ namespace CoverRetriever.Test.Model
 
             Assert.AreEqual(1, downloadRequestCount);
             Assert.AreEqual(
-                StreamExtractor(mockObserver1[0].Value.Value),
-                StreamExtractor(mockObserver2[0].Value.Value));
+                StreamExtractor(mockObserver1.Messages[0].Value.Value),
+                StreamExtractor(mockObserver2.Messages[0].Value.Value));
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace CoverRetriever.Test.Model
             target.CoverStream.Subscribe(mockObserver2);
 
             Assert.AreEqual(1, downloadRequestCount);
-            Assert.NotNull(mockObserver1[0].Value.Exception);
-            Assert.NotNull(mockObserver2[0].Value.Exception);
-            Assert.AreEqual(mockObserver1[0].Value.Exception, mockObserver2[0].Value.Exception);
+            Assert.NotNull(mockObserver1.Messages[0].Value.Exception);
+            Assert.NotNull(mockObserver2.Messages[0].Value.Exception);
+            Assert.AreEqual(mockObserver1.Messages[0].Value.Exception, mockObserver2.Messages[0].Value.Exception);
     
         }
 
@@ -116,8 +116,8 @@ namespace CoverRetriever.Test.Model
             target.CoverStream.Subscribe(mockObserver1);
             target.CoverStream.Subscribe(mockObserver2);
 
-            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver1[0].Value.Value));
-            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver2[0].Value.Value));
+            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver1.Messages[0].Value.Value));
+            CollectionAssert.AreEquivalent(testBytes, StreamExtractor(mockObserver2.Messages[0].Value.Value));
                
         }
 

@@ -10,8 +10,8 @@
 namespace CoverRetriever.ViewModel
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Reactive.Subjects;
 
     using CoverRetriever.Model;
     using CoverRetriever.Service;

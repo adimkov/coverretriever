@@ -2,7 +2,9 @@ using System;
 
 namespace CoverRetriever.AudioInfo
 {
-	public interface ICoverOrganizer
+    using System.Reactive;
+
+    public interface ICoverOrganizer
 	{
 		/// <summary>
 		/// Indicate if can work with cover

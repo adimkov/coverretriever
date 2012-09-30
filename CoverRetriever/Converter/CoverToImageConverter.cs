@@ -12,6 +12,7 @@ namespace CoverRetriever.Converter
     using System;
     using System.Globalization;
     using System.Linq;
+    using System.Reactive.Linq;
     using System.Windows;
     using System.Windows.Data;
     using CoverRetriever.AudioInfo;

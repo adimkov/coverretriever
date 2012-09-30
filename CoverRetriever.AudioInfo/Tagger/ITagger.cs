@@ -10,6 +10,7 @@
 namespace CoverRetriever.AudioInfo.Tagger
 {
     using System;
+    using System.Reactive;
 
     /// <summary>
     /// Provide tags for audio file.

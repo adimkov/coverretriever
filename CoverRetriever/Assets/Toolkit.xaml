@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib"
-                    xmlns:toolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended">
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
     <!--
         ***************************************************************************
@@ -9,7 +9,7 @@
         ***************************************************************************
     -->
 
-    <Style TargetType="toolkit:BusyIndicator">
+    <Style TargetType="xctk:BusyIndicator">
         <Setter Property="Background" Value="#FFF0F0F0" />
         <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -43,7 +43,7 @@
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="toolkit:BusyIndicator">
+                <ControlTemplate TargetType="xctk:BusyIndicator">
                     <Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="VisibilityStates">

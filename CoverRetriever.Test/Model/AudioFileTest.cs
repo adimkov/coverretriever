@@ -11,6 +11,8 @@ using NUnit.Framework;
 namespace CoverRetriever.Test.Model
 {
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     using CoverRetriever.AudioInfo.Tagger;
 
@@ -143,7 +145,7 @@ namespace CoverRetriever.Test.Model
 
             var target = new AudioFile("unit", RootFolder, lazyMetaProvider);
 
-            target.AssignTagger(tagger.Object).Run();
+            target.AssignTagger(tagger.Object).FirstOrDefault();
 
             Assert.That(target.MetaProvider, Is.EqualTo(tagger.Object));
         }

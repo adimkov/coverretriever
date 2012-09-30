@@ -13,6 +13,8 @@ namespace CoverRetriever.ViewModel
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Model;

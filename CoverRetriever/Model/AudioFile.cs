@@ -11,6 +11,7 @@ namespace CoverRetriever.Model
 {
     using System;
     using System.Linq;
+    using System.Reactive;
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;

@@ -6,8 +6,8 @@ using System.Windows.Media.Imaging;
 
 namespace CoverRetriever.Controls
 {
-    using System.Concurrency;
-    using System.Linq;
+    using System.Reactive.Concurrency;
+    using System.Reactive.Linq;
 
     public class ImageAsyncSource
     {
@@ -16,7 +16,7 @@ namespace CoverRetriever.Controls
                                                 new PropertyMetadata(new PropertyChangedCallback(OnAsyncSourceChanged)));
 
         public static readonly DependencyProperty DispatcherProperty = DependencyProperty.RegisterAttached(
-            "Dispatcher", typeof(IScheduler), typeof(ImageAsyncSource), new PropertyMetadata(Scheduler.Dispatcher));
+            "Dispatcher", typeof(IScheduler), typeof(ImageAsyncSource), new PropertyMetadata(DispatcherScheduler.Instance));
 
         public static void SetAsyncSource(Image o, IObservable<Stream> value)
         {

@@ -14,6 +14,7 @@ namespace CoverRetriever.Caching
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reactive.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
 
     using CoverRetriever.Common.Infrastructure;

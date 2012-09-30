@@ -11,10 +11,11 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.Service
 {
-    using System.Collections.Generic;
-    using System.Concurrency;
     using System.Linq;
-    using System.Reactive.Testing.Mocks;
+    using System.Reactive;
+    using System.Reactive.Linq;
+
+    using Microsoft.Reactive.Testing;
 
     [TestFixture]
     public class VersionControlServiceTest
@@ -30,7 +31,7 @@ namespace CoverRetriever.Test.Service
                 .Returns(Enumerable.Empty<RevisionVersion>);
 
             var target = new HttpVersionControlService(VersionFileLocation, revisionVersionParserMock.Object);
-            target.GetLatestVersion().Run();
+            target.GetLatestVersion().FirstOrDefault();
             revisionVersionParserMock.VerifyAll();
         }
 
@@ -47,7 +48,7 @@ namespace CoverRetriever.Test.Service
 
             var target = new HttpVersionControlService(VersionFileLocation, revisionVersionParserMock.Object);
             RevisionVersion latest = null;
-            target.GetLatestVersion().Run(x => latest = x);
+            target.GetLatestVersion().ForEach(x => latest = x);
             revisionVersionParserMock.VerifyAll();
             Assert.That(latest.Version.ToString(), Is.EqualTo("0.1.3.5"));
         }
@@ -61,9 +62,9 @@ namespace CoverRetriever.Test.Service
             var observer = new MockObserver<RevisionVersion>(new TestScheduler());
             target.GetLatestVersion().Run(observer);
 
-            Assert.That(observer.Count, Is.EqualTo(2));
-            Assert.That(observer[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
-            Assert.That(observer[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
+            Assert.That(observer.Messages.Count, Is.EqualTo(2));
+            Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
+            Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
         }
     }
 }
