@@ -10,8 +10,11 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
+    using System.Diagnostics;
     using System.Reactive;
+    using System.Reactive.Concurrency;
     using System.Reactive.Linq;
+    using System.Reflection;
     using System.Threading;
 
     using CoverRetriever.AudioInfo.Tagger;
@@ -213,8 +216,6 @@ namespace CoverRetriever.Test.ViewModel
             target.GrabTagsCommand.Execute(null);
             _testScheduler.Start();
             
-            Thread.Sleep(100);
-
             Assert.That(root.MetaProvider, Is.EqualTo(taggerMock.Object));
         }
 
@@ -224,14 +225,16 @@ namespace CoverRetriever.Test.ViewModel
             var mettaProvider = new Mock<IMetaProvider>();
             var root = GetAudioMockedFile(mettaProvider.Object);
             var taggerMock = new Mock<ITagger>();
+            
             taggerMock.Setup(x => x.LoadTagsForAudioFile(It.IsAny<string>()))
-                .Returns(Observable.Throw<Unit>(new InvalidOperationException()));
+                .Returns(Observable.Throw<Unit>(new Exception()));
 
             var target = GetCoverRetrieverViewModel();
             target.Tagger = new Lazy<ITagger>(() => taggerMock.Object);
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
+
             _testScheduler.Start();
 
             Assert.That(target.CoverRetrieverErrorMessage, Is.Not.Empty);
@@ -253,8 +256,6 @@ namespace CoverRetriever.Test.ViewModel
             target.GrabTagsCommand.Execute(null);
             _testScheduler.Start();
 
-            Thread.Sleep(100);
-
             Assert.That(target.SaveTagMode, Is.True);
         }
 
@@ -273,8 +274,6 @@ namespace CoverRetriever.Test.ViewModel
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.GrabTagsCommand.Execute(null);
             _testScheduler.Start();
-
-            Thread.Sleep(100);
 
             Assert.That(target.SaveTagMode, Is.False);
         }

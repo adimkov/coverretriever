@@ -52,15 +52,16 @@ namespace System.Linq
 
             var subject = new Subject<TSource>();
 
-            return subject.Defer(
-                () => source.Subscribe(
-                    subject.OnNext,
-                    subject.OnError,
-                    () =>
-                    {
-                        completeAction();
-                        subject.OnCompleted();
-                    }));
+            source.Subscribe(
+                subject.OnNext,
+                subject.OnError,
+                () =>
+                {
+                    completeAction();
+                    subject.OnCompleted();
+                });
+
+            return subject;
         }
 
         /// <summary>
