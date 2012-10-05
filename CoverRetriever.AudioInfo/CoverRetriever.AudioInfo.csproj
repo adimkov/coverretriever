@@ -68,6 +68,7 @@
     <Compile Include="MetaProviderException.cs" />
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EditableObject.cs" />
     <Compile Include="Tagger\ITagger.cs" />
     <Compile Include="Tagger\LastFm\AlbumInfoResponseParser.cs" />
     <Compile Include="Tagger\LastFm\LastFmService.cs" />

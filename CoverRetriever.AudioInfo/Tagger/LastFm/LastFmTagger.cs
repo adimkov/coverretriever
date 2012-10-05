@@ -12,7 +12,6 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     using System;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Reactive;
@@ -26,7 +25,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     /// Provide tags from Last.fm site.
     /// </summary>
     [Export(typeof(ITagger))]
-    public class LastFmTagger : ITagger
+    public class LastFmTagger : EditableObject, ITagger
     {
         /// <summary>
         /// Safe file name in case to copy in temp folder.
@@ -89,76 +88,38 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
         }
 
         /// <summary>
-        /// Gets an album name.
+        /// Gets a value indicating whether this file is changed.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
-            Justification = "Reviewed. Suppression is OK here.")]
-        public string Album
+        /// <value>
+        ///     <c>true</c> if this file is changed; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirty
         {
             get
             {
-                return _trackInfoResponse.SuggestedAlbums.FirstOrDefault();
-            }
-
-            set
-            {
-                throw new InvalidOperationException("Property does not support set value");
+                return IsChanged();
             }
         }
+
+        /// <summary>
+        /// Gets an album name.
+        /// </summary>
+        public string Album { get; set; }
 
         /// <summary>
         /// Gets an artist.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
-            Justification = "Reviewed. Suppression is OK here.")]
-        public string Artist
-        {
-            get
-            {
-                return _fingerprintResponse.SuggestedArtists.FirstOrDefault();
-            }
-
-            set
-            {
-                throw new InvalidOperationException("Property does not support set value");
-            }
-        }
+        public string Artist { get; set; }
 
         /// <summary>
         /// Gets year of album.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
-            Justification = "Reviewed. Suppression is OK here.")]
-        public string Year
-        {
-            get
-            {
-                return _albumInfoResponse.SuggestedYears.FirstOrDefault();
-            }
-
-            set
-            {
-                throw new InvalidOperationException("Property does not support set value");
-            }
-        }
+        public string Year { get; set; }
 
         /// <summary>
         /// Gets name of track.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:PropertySummaryDocumentationMustMatchAccessors",
-            Justification = "Reviewed. Suppression is OK here.")]
-        public string TrackName
-        {
-            get
-            {
-                return _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
-            }
-
-            set
-            {
-                throw new InvalidOperationException("Property does not support set value");
-            }
-        }
+        public string TrackName { get; set; }
 
         /// <summary>
         /// Loads the tags for audio file.
@@ -175,11 +136,25 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
                 .Trace("FingerprintClient");
 
             var operationOpservable = fingerprintObserver
+                .Do(fi =>
+                {
+                    Artist = _fingerprintResponse.SuggestedArtists.FirstOrDefault();
+                    TrackName = _fingerprintResponse.SuggestedTrackNames.FirstOrDefault();
+                })
                 .SelectMany(x => _lastFmService.GetTrackInfo(Artist, TrackName)
-                    .Do(_trackInfoResponse.Parse)
+                    .Do(ti =>
+                    {
+                        _trackInfoResponse.Parse(ti);
+                        Album = _trackInfoResponse.SuggestedAlbums.FirstOrDefault();
+                    })
                     .Trace("TrackInfo"))
                  .SelectMany(x => _lastFmService.GetAlbumInfo(Artist, Album)
-                    .Do(_albumInfoResponse.Parse)
+                    .Do(
+                    ai =>
+                    {
+                        _albumInfoResponse.Parse(ai);
+                        Year = _albumInfoResponse.SuggestedYears.FirstOrDefault();
+                    })
                     .Trace("AlbumInfo"))
                 .Select(_ => new Unit());
 
@@ -280,6 +255,5 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
             _trackInfoResponse.Clear();
             _albumInfoResponse.Clear();
         }
-
     }
 }

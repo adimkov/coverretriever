@@ -20,6 +20,14 @@ namespace CoverRetriever.AudioInfo
         bool IsEmpty { get; }
 
         /// <summary>
+        /// Gets a value indicating whether this file is changed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this file is changed; otherwise, <c>false</c>.
+        /// </value>
+        bool IsDirty { get; }
+
+        /// <summary>
         /// Gets or sets an album name.
         /// </summary>
         string Album { get; set; }

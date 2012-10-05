@@ -11,7 +11,6 @@ namespace CoverRetriever.AudioInfo
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Reactive;
     using System.Reactive.Linq;
 
@@ -24,7 +23,7 @@ namespace CoverRetriever.AudioInfo
     /// <summary>
     /// Base class to obtain Meta info from file name.
     /// </summary>
-    public abstract class AudioFileMetaProvider : IMetaProvider, IActivator, ICoverOrganizer, IDisposable
+    public abstract class AudioFileMetaProvider : EditableObject, IMetaProvider, IActivator, ICoverOrganizer, IDisposable
     {
         /// <summary>
         /// Audio file.
@@ -58,6 +57,20 @@ namespace CoverRetriever.AudioInfo
             {
                 EnsureInstanceWasNotDisposed();
                 return _file.Tag.IsEmpty;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this file is changed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this file is changed; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirty
+        {
+            get
+            {
+                return IsChanged();
             }
         }
 
@@ -117,7 +130,7 @@ namespace CoverRetriever.AudioInfo
             get
             {
                 EnsureInstanceWasNotDisposed();
-                return _file.Tag.Year >= 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
+                return _file.Tag.Year > 0 ? _file.Tag.Year.ToString() : FileNameMetaObtainer.GetYear();
             }
 
             set

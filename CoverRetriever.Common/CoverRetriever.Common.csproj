@@ -78,6 +78,7 @@
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\FormatStringExtensions.cs" />
+    <Compile Include="Extensions\PropertyName.cs" />
     <Compile Include="Validation\Require.cs" />
     <Compile Include="Extensions\TreeViewExtensions.cs" />
     <Compile Include="Infrastructure\AudioFormat.cs" />
