@@ -3,7 +3,7 @@
 //   Copyright (c) Anton Dimkov 2011. All rights reserved.
 // </copyright>
 // <summary>
-//  Tests for LastFmTagger class.
+//  Tests for LastFmTaggerService class.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,9 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
     using System.Configuration;
     using System.Linq;
     using System.Reactive;
+    using System.Reactive.Linq;
 
+    using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger.LastFm;
 
     using Microsoft.Reactive.Testing;
@@ -28,7 +30,7 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
         private readonly string LastfmSericeAddress;
         private readonly string LastfmApiKey;
 
-        private LastFmTagger _lastFmTagger;
+        private LastFmTaggerService _lastFmTaggerService;
 
         public LastFmTaggerTest()
         {
@@ -40,21 +42,20 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
         [SetUp]
         public void TestSetUp()
         {
-            _lastFmTagger = new LastFmTagger(LastfmfpclientUtility, LastfmSericeAddress, LastfmApiKey);    
+            _lastFmTaggerService = new LastFmTaggerService(LastfmfpclientUtility, LastfmSericeAddress, LastfmApiKey);    
         }
 
         [Test]
         public void Should_get_tags_for_file_with_empty_farame()
         {
-            var testSheduler = new TestScheduler();
-            var observer = new MockObserver<Unit>(testSheduler);
+            var suggestedTag = _lastFmTaggerService
+                .LoadTagsForAudioFile(PathUtils.BuildFullResourcePath(FileToRetrieve))
+                .Single();
 
-            _lastFmTagger.LoadTagsForAudioFile(PathUtils.BuildFullResourcePath(FileToRetrieve)).Run(observer);
-
-            Assert.That(_lastFmTagger.Artist, Is.EqualTo("ДДТ"));
-            Assert.That(_lastFmTagger.Album, Is.EqualTo("Город без окон. Вход."));
-            Assert.That(_lastFmTagger.TrackName, Is.EqualTo("Поэт"));
-//            Assert.That(_lastFmTagger.Year, Is.EqualTo(2003));
+            Assert.That(suggestedTag.Artist, Is.EqualTo("ДДТ"));
+            Assert.That(suggestedTag.Album, Is.EqualTo("Город без окон. Вход."));
+            Assert.That(suggestedTag.TrackName, Is.EqualTo("Поэт"));
+//            Assert.That(_lastFmTaggerService.Year, Is.EqualTo(2003));
         }
     }
 }

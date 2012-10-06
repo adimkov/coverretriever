@@ -11,6 +11,7 @@ namespace CoverRetriever.AudioInfo
 {
     using System;
     using System.ComponentModel.Composition;
+    using System.Linq;
 
     using TagLib;
 
@@ -119,7 +120,7 @@ namespace CoverRetriever.AudioInfo
             {
                 EnsureInstanceWasNotDisposed();
                 var id3 = File.GetTag(TagTypes.Id3v2);
-                id3.Year = uint.Parse(value);
+                id3.Year = uint.Parse(value.Return("0"));
             }
         }
 

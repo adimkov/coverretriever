@@ -13,6 +13,8 @@ namespace CoverRetriever.Test.ViewModel
     using System.Reactive;
     using System.Reactive.Linq;
 
+    using CoverRetriever.AudioInfo.Tagger;
+
     public class ViewModelMock
     {
         protected Mock<IFileSystemService> GetFileSystemServiceMock()
@@ -105,6 +107,17 @@ namespace CoverRetriever.Test.ViewModel
             parent.Children.Add(new AudioFile("AudioFile4", parent, new Lazy<IMetaProvider>(() => metaProvider), directoryCoverOrganizer));
 
             return parent.Children.OfType<AudioFile>().First();
+        }
+
+        protected IMetaProvider GetMockedSuggestedTags()
+        {
+            return new SuggestTag()
+                {
+                    Album = "test_album",
+                    Artist = "test_artist",
+                    Year = "2009",
+                    TrackName = "test_trackName"
+                };
         }
     }
 }

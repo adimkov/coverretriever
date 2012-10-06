@@ -1,38 +1,44 @@
-﻿namespace CoverRetriever.AudioInfo
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="EditableObject.cs" author="Anton Dimkov">
+//   Copyright (c) Anton Dimkov 2012. All rights reserved.  
+// </copyright>
+// -----------------------------------------------------------------------------------------------
+
+namespace CoverRetriever.AudioInfo
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
     /// <summary>
-    /// Object that can revert changes
+    /// Object that can revert changes.
     /// </summary>
     public abstract class EditableObject
     {
         /// <summary>
         /// Stored values.
         /// </summary>
-        private readonly Dictionary<string, object> _beforeEditValues = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> beforeEditValues = new Dictionary<string, object>();
 
         /// <summary>
-        /// id object currently in edit mode
+        /// Is object currently in edit mode.
         /// </summary>
-        private bool _isEditing;
+        private bool isEditing;
         
         /// <summary>
         /// Begins the edit.
         /// </summary>
         public virtual void BeginEdit()
         {
-            if (_isEditing)
+            if (isEditing)
             {
                 return;
             }
 
-            _isEditing = true;
+            this.isEditing = true;
             foreach (var property in GetWritableProperties())
             {
-                _beforeEditValues.Add(property.Name, property.GetValue(this, null));
+                beforeEditValues.Add(property.Name, property.GetValue(this, null));
             }
         }
 
@@ -41,8 +47,8 @@
         /// </summary>
         public virtual void EndEdit()
         {
-            _isEditing = false;
-            _beforeEditValues.Clear();
+            this.isEditing = false;
+            this.beforeEditValues.Clear();
         }
 
         /// <summary>
@@ -50,14 +56,16 @@
         /// </summary>
         public virtual void CancelEdit()
         {
-            _isEditing = false;
+            this.isEditing = false;
             var properties = GetWritableProperties().ToArray();
-            foreach (var beforeEditValue in _beforeEditValues)
+            foreach (var beforeEditValue in this.beforeEditValues)
             {
                 properties
                     .Single(x => x.Name == beforeEditValue.Key)
                     .SetValue(this, beforeEditValue.Value, null);
             }
+            
+            beforeEditValues.Clear();
         }
 
         /// <summary>
@@ -68,7 +76,7 @@
         /// </returns>
         public bool IsChanged()
         {
-            if (!_isEditing)
+            if (!this.isEditing)
             {
                 return false;
             }
@@ -78,7 +86,7 @@
 
             foreach (var property in properties)
             {
-                isAllEqual &= property.GetValue(this, null).Equals(_beforeEditValues[property.Name]);
+                isAllEqual &= property.GetValue(this, null).Equals(this.beforeEditValues[property.Name]);
             }
 
             return !isAllEqual;

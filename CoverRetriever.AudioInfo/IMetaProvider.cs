@@ -9,10 +9,12 @@
 
 namespace CoverRetriever.AudioInfo
 {
+    using System;
+
     /// <summary>
     /// Contract to provide audio file summary.
     /// </summary>
-    public interface IMetaProvider
+    public interface IMetaProvider : IEquatable<IMetaProvider>
     {
         /// <summary>
         /// Gets a value indicating whether Meta Data empty.
@@ -51,5 +53,11 @@ namespace CoverRetriever.AudioInfo
         /// Saves tags into file instance.
         /// </summary>
         void Save();
+
+        /// <summary>
+        /// Copies metadata from specified source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        void CopyFrom(IMetaProvider source);
     }
 }

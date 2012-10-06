@@ -69,13 +69,14 @@
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EditableObject.cs" />
-    <Compile Include="Tagger\ITagger.cs" />
+    <Compile Include="Tagger\ITaggerService.cs" />
     <Compile Include="Tagger\LastFm\AlbumInfoResponseParser.cs" />
     <Compile Include="Tagger\LastFm\LastFmService.cs" />
-    <Compile Include="Tagger\LastFm\LastFmTagger.cs" />
+    <Compile Include="Tagger\LastFm\LastFmTaggerService.cs" />
     <Compile Include="Tagger\LastFm\FingerprintResponseParser.cs" />
     <Compile Include="Tagger\LastFm\ResponseParser.cs" />
     <Compile Include="Tagger\LastFm\TrackInfoResponseParser.cs" />
+    <Compile Include="Tagger\SuggestTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoverRetriever.Common\CoverRetriever.Common.csproj">

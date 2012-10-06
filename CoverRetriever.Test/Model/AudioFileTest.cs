@@ -16,6 +16,8 @@ namespace CoverRetriever.Test.Model
 
     using CoverRetriever.AudioInfo.Tagger;
 
+    using FluentAssertions;
+
     [TestFixture]
     public class AudioFileTest : FileSystemItemBaseTest
     {
@@ -131,23 +133,6 @@ namespace CoverRetriever.Test.Model
             var target = new AudioFile("unit", RootFolder, lazyMetaProvider, (DirectoryCoverOrganizer)directoryCoverMock.Object);
 
             Assert.That(target.FrameCover, Is.EqualTo(metaProviderMock.Object));
-        }
-
-        [Test]
-        public void Should_assign_tagger_to_audio_file()
-        {
-            var metaProviderMock = new Mock<IMetaProvider>();
-            metaProviderMock.SetupGet(x => x.TrackName).Returns("Aktrisa_vesna");
-            var lazyMetaProvider = new Lazy<IMetaProvider>(() => metaProviderMock.Object);
-            var tagger = new Mock<ITagger>();
-            tagger.Setup(x => x.LoadTagsForAudioFile(It.IsAny<string>()))
-                .Returns(Observable.Return(new Unit()));
-
-            var target = new AudioFile("unit", RootFolder, lazyMetaProvider);
-
-            target.AssignTagger(tagger.Object).FirstOrDefault();
-
-            Assert.That(target.MetaProvider, Is.EqualTo(tagger.Object));
         }
     }
 }
