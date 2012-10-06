@@ -40,9 +40,9 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
         public void Should_get_track_info_for_PinkFloyd_TheFinalCut()
         {
             var testSheduler = new TestScheduler();
-            var observer = new MockObserver<XDocument>(testSheduler);
+            var observer = testSheduler.CreateObserver<XDocument>();
             _lastFmService.GetTrackInfo("Pink Floyd", "The final cut").Run(observer);
-
+            testSheduler.Start();
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
             Assert.That(observer.Messages[0].Value.Value, Is.Not.Null);
             Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));
@@ -52,9 +52,9 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.LastFm
         public void Should_get_album_info_for_PinkFloyd_TheWall()
         {
             var testSheduler = new TestScheduler();
-            var observer = new MockObserver<XDocument>(testSheduler);
+            var observer = testSheduler.CreateObserver<XDocument>();
             _lastFmService.GetAlbumInfo("Pink Floyd", "Animals").Run(observer);
-
+            testSheduler.Start();
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
             Assert.That(observer.Messages[0].Value.Value, Is.Not.Null);
             Assert.That(observer.Messages[1].Value.Kind, Is.EqualTo(NotificationKind.OnCompleted));

@@ -128,7 +128,6 @@
     </Compile>
     <Compile Include="Controls\ImageAsyncSourceTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
-    <Compile Include="MockObserver.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
     <Compile Include="Model\CachedCoverTest.cs" />
     <Compile Include="Model\FileSystemItemBaseTest.cs" />

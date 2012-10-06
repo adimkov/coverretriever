@@ -14,7 +14,6 @@ namespace CoverRetriever.ViewModel
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reactive;
     using System.Reactive.Concurrency;
@@ -24,7 +23,6 @@ namespace CoverRetriever.ViewModel
     using System.Windows.Input;
 
     using CoverRetriever.AudioInfo;
-    using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Common.Interaction;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
@@ -102,21 +100,6 @@ namespace CoverRetriever.ViewModel
         private readonly DelegateCommand closeErrorMessage;
 
         /// <summary>
-        /// Backing field for GrabTags command.
-        /// </summary>
-        private readonly DelegateCommand grabTagsCommand;
-
-        /// <summary>
-        /// Backing field for RejectSuggestedTag command.
-        /// </summary>
-        private readonly DelegateCommand rejectSuggestedTagCommand;
-
-        /// <summary>
-        /// Backing field for SaveSuggestedTag command.
-        /// </summary>
-        private readonly DelegateCommand saveSuggestedTagCommand;
-
-        /// <summary>
         /// The request to enlarge selected cover.
         /// </summary>
         private readonly InteractionRequest<Notification> previewCoverRequest;
@@ -125,11 +108,6 @@ namespace CoverRetriever.ViewModel
         /// The request to open library window.
         /// </summary>
         private readonly InteractionRequest<Notification> selectRootFolderRequest;
-
-        /// <summary>
-        /// The request to highlight GetTag button.
-        /// </summary>
-        private readonly InteractionRequest<Notification> highlightToGetTags;
 
         /// <summary>
         /// The request to show about window.
@@ -177,11 +155,6 @@ namespace CoverRetriever.ViewModel
         private string newVersion;
 
         /// <summary>
-        /// Backing field for SaveTagMode property.
-        /// </summary>
-        private bool saveTagMode;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CoverRetrieverViewModel"/> class.
         /// </summary>
         /// <param name="fileSystemService">The file system service.</param>
@@ -199,6 +172,7 @@ namespace CoverRetriever.ViewModel
             this.coverRetrieverService = coverRetrieverService;
             this.openFolderViewModel = openFolderViewModel;
             FileConductorViewModel = fileConductorViewModel;
+            FileConductorViewModel.ParentViewModel = this;
             this.fileSystemService = fileSystemService;
 
             openFolderViewModel.PushRootFolder.Subscribe(OnNextPushRootFolder);
@@ -210,13 +184,9 @@ namespace CoverRetriever.ViewModel
             finishCommand = new DelegateCommand(FinishCommandExecute);
             aboutCommand = new DelegateCommand(AboutCommandExecute);
             closeErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
-            grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => FileConductorViewModel.SelectedAudio is AudioFile);
-            rejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
-            saveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
-
+            
             previewCoverRequest = new InteractionRequest<Notification>();
             selectRootFolderRequest = new InteractionRequest<Notification>();
-            highlightToGetTags = new InteractionRequest<Notification>();
             aboutRequest = new InteractionRequest<Notification>();
 
             suggestedCovers.CollectionChanged += SuggestedCoversOnCollectionChanged;
@@ -314,39 +284,6 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Gets the grab tags command.
-        /// </summary>
-        public ICommand GrabTagsCommand
-        {
-            get
-            {
-                return grabTagsCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets the reject suggested tags command.
-        /// </summary>
-        public ICommand RejectSuggestedTagCommand
-        {
-            get
-            {
-                return rejectSuggestedTagCommand;
-            }
-        }
-
-        /// <summary>
-        /// Gets the reject suggested tags command.
-        /// </summary>
-        public ICommand SaveSuggestedTagCommand
-        {
-            get
-            {
-                return saveSuggestedTagCommand;
-            }
-        }
-
-        /// <summary>
         /// Gets preview cover dialog request.
         /// </summary>
         public IInteractionRequest PreviewCoverRequest
@@ -365,17 +302,6 @@ namespace CoverRetriever.ViewModel
             get
             {
                 return selectRootFolderRequest;
-            }
-        }
-
-        /// <summary>
-        /// Gets the request for highlight 'get tags' button.
-        /// </summary>
-        public IInteractionRequest HighlightToGetTags
-        {
-            get
-            {
-                return highlightToGetTags;
             }
         }
 
@@ -523,26 +449,6 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether view in save tag mode.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if view in save tag mode; otherwise, <c>false</c>.
-        /// </value>
-        public bool SaveTagMode
-        {
-            get
-            {
-                return saveTagMode;
-            } 
-
-            set
-            {
-                saveTagMode = value;
-                RaisePropertyChanged("SaveTagMode");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the about view model.
         /// </summary>
         /// <value>
@@ -561,13 +467,37 @@ namespace CoverRetriever.ViewModel
         public Lazy<IVersionControlService> VersionControl { get; set; }
 
         /// <summary>
-        /// Gets or sets the audio tagger.
+        /// Perform search covers in web for audio.
         /// </summary>
-        /// <value>
-        /// The audio tagger.
-        /// </value>
-        [Import(typeof(ITaggerService))]
-        public Lazy<ITaggerService> Tagger { get; set; }
+        /// <param name="fileDetails">The audio file.</param>
+        internal void FindRemoteCovers(IMetaProvider fileDetails)
+        {
+            StartOperation(CoverRetrieverResources.MessageDownloadCover);
+            ResetError();
+            suggestedCovers.Clear();
+            var albumCondition = fileDetails.Album;
+
+            coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
+                .SubscribeOn(SubscribeScheduler)
+                .ObserveOn(ObservableScheduler)
+                .Finally(EndOperation)
+                .Subscribe(
+                x =>
+                {
+                    SuggestedCovers.AddRange(x);
+                    SelectedSuggestedCover = suggestedCovers.Max();
+                },
+                SetError);
+        }
+
+        /// <summary>
+        /// Sets the error cover retrieve.
+        /// </summary>
+        /// <param name="ex">The exception.</param>
+        internal void SetError(Exception ex)
+        {
+            CoverRetrieverErrorMessage = ex.Message;
+        }
 
         /// <summary>
         /// Loads the command execute.
@@ -623,10 +553,7 @@ namespace CoverRetriever.ViewModel
             if (FileConductorViewModel.SelectedAudio != null)
             {
                 FileConductorViewModel.SelectedAudio.ResetTagger();
-                SaveTagMode = false;
             }
-
-            grabTagsCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -713,57 +640,6 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
-        /// Grabs the tags command execute.
-        /// </summary>
-        private void GrabTagsCommandExecute()
-        {
-            StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedFileSystemItem.Name));
-
-            Tagger.Value.LoadTagsForAudioFile(FileConductorViewModel.SelectedAudio.GetFileSystemItemFullPath())
-                .SubscribeOn(SubscribeScheduler)
-                .ObserveOn(ObservableScheduler)
-                .Finally(EndOperation)
-                .Completed(
-                    () =>
-                    {
-                        FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
-                        SaveTagMode = true;
-                        Trace.TraceInformation("Tags received for {0}", FileConductorViewModel.SelectedAudio.Name);
-                    })
-                .Subscribe(
-                    FileConductorViewModel.SelectedAudio.CopyTagsFrom,
-                    SetError);
-        }
-
-        /// <summary>
-        /// Rejects the suggested tag command execute.
-        /// </summary>
-        private void RejectSuggestedTagCommandExecute()
-        {
-            FileConductorViewModel.SelectedAudio.ResetTagger();
-            SaveTagMode = false;
-            FindRemoteCovers(FileConductorViewModel.SelectedAudio.MetaProvider);
-        }
-
-        /// <summary>
-        /// Rejects the suggested tag command execute.
-        /// </summary>
-        private void SaveSuggestedTagCommandExecute()
-        {
-            FileConductorViewModel.SelectedAudio.SaveFromTagger();
-            SaveTagMode = false;
-        }
-
-        /// <summary>
-        /// Sets the error cover retrieve.
-        /// </summary>
-        /// <param name="ex">The exception.</param>
-        private void SetError(Exception ex)
-        {
-            CoverRetrieverErrorMessage = ex.Message;
-        }
-
-        /// <summary>
         /// Clear error message of cover retriever.
         /// </summary>
         private void ResetError()
@@ -790,7 +666,7 @@ namespace CoverRetriever.ViewModel
             {
                 if (audio.IsNeededToRetrieveTags)
                 {
-                    highlightToGetTags.Raise(null);
+                    FileConductorViewModel.HighlightToGetTags.Raise(null);
                 }
 
                 FindRemoteCovers(audio.MetaProvider);
@@ -811,30 +687,6 @@ namespace CoverRetriever.ViewModel
             return FileConductorViewModel.SaveCover(remoteCover)
                 .Do(x => { }, ex => { CoverRetrieverErrorMessage = ex.Message; })
                 .OnErrorResumeNext(Observable.Empty<Unit>());
-        }
-
-        /// <summary>
-        /// Perform search covers in web for audio.
-        /// </summary>
-        /// <param name="fileDetails">The audio file.</param>
-        private void FindRemoteCovers(IMetaProvider fileDetails)
-        {
-            StartOperation(CoverRetrieverResources.MessageDownloadCover);
-            ResetError();
-            suggestedCovers.Clear();
-            var albumCondition = fileDetails.Album;
-
-            coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
-                .SubscribeOn(SubscribeScheduler)
-                .ObserveOn(ObservableScheduler)
-                .Finally(EndOperation)
-                .Subscribe(
-                x =>
-                {
-                    SuggestedCovers.AddRange(x);
-                    SelectedSuggestedCover = suggestedCovers.Max();
-                },
-                SetError);
         }
 
         /// <summary>

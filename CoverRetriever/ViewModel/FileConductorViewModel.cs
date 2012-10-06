@@ -12,12 +12,21 @@ namespace CoverRetriever.ViewModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reactive;
     using System.Reactive.Linq;
+    using System.Windows.Input;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Model;
+    using CoverRetriever.Resources;
+
+    using Microsoft.Practices.Prism.Commands;
+    using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+
+    using Notification = Microsoft.Practices.Prism.Interactivity.InteractionRequest.Notification;
 
     /// <summary>
     /// View model of selected audio file conductor. 
@@ -25,6 +34,11 @@ namespace CoverRetriever.ViewModel
     [Export]
     public class FileConductorViewModel : ViewModelBase
     {
+        /// <summary>
+        /// The request to highlight GetTag button.
+        /// </summary>
+        private readonly InteractionRequest<Notification> highlightToGetTags;
+
         /// <summary>
         /// Backing field for SelectedAudio property.
         /// </summary>
@@ -36,6 +50,11 @@ namespace CoverRetriever.ViewModel
         private CoverRecipient _recipient;
 
         /// <summary>
+        /// Backing field for GrabTagsCommand 
+        /// </summary>
+        private DelegateCommand grabTagsCommand;
+
+        /// <summary>
         /// Backing field for SelectedAudioCover property.
         /// </summary>
         private Cover _selectedAudioCover;
@@ -44,6 +63,47 @@ namespace CoverRetriever.ViewModel
         /// Backing field for ApplyToAllFiles property.
         /// </summary>
         private bool _applyToAllFiles;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileConductorViewModel" /> class.
+        /// </summary>
+        public FileConductorViewModel()
+        {
+            highlightToGetTags = new InteractionRequest<Notification>();
+            grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => SelectedAudio != null);
+            SaveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
+            RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
+        }
+
+        /// <summary>
+        /// Gets the grab tags command.
+        /// </summary>
+        public ICommand GrabTagsCommand
+        {
+            get
+            {
+                return grabTagsCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand SaveSuggestedTagCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand RejectSuggestedTagCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the audio tagger.
+        /// </summary>
+        /// <value>
+        /// The audio tagger.
+        /// </value>
+        [Import(typeof(ITaggerService))]
+        public Lazy<ITaggerService> Tagger { get; set; }
 
         /// <summary>
         /// Gets or sets selected audio. 
@@ -60,6 +120,7 @@ namespace CoverRetriever.ViewModel
                 _selectedAudio = value;
                 SetSelectedAudioCoverIfPosible();
                 RaisePropertyChanged("SelectedAudio");
+                grabTagsCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -128,6 +189,25 @@ namespace CoverRetriever.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the request for highlight 'get tags' button.
+        /// </summary>
+        public InteractionRequest<Notification> HighlightToGetTags
+        {
+            get
+            {
+                return highlightToGetTags;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the parent view model.
+        /// </summary>
+        /// <value>
+        /// The parent view model.
+        /// </value>
+        public CoverRetrieverViewModel ParentViewModel { get; set; }
 
         /// <summary>
         /// Saves the selected cover onto disk.
@@ -200,6 +280,45 @@ namespace CoverRetriever.ViewModel
             }
 
             SelectedAudioCover = cover;
+        }
+
+        /// <summary>
+        /// Grabs the tags command execute.
+        /// </summary>
+        private void GrabTagsCommandExecute()
+        {
+            StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedAudio.Name));
+
+            Tagger.Value.LoadTagsForAudioFile(SelectedAudio.GetFileSystemItemFullPath())
+                .SubscribeOn(ParentViewModel.SubscribeScheduler)
+                .ObserveOn(ParentViewModel.ObservableScheduler)
+                .Finally(EndOperation)
+                .Completed(
+                    () =>
+                    {
+                        ParentViewModel.FindRemoteCovers(SelectedAudio.MetaProvider);
+                        Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
+                    })
+                .Subscribe(
+                    SelectedAudio.CopyTagsFrom,
+                    ParentViewModel.SetError);
+        }
+
+        /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void SaveSuggestedTagCommandExecute()
+        {
+            SelectedAudio.SaveFromTagger();
+        }
+
+        /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void RejectSuggestedTagCommandExecute()
+        {
+            SelectedAudio.ResetTagger();
+            ParentViewModel.FindRemoteCovers(SelectedAudio.MetaProvider);
         }
     }
 }

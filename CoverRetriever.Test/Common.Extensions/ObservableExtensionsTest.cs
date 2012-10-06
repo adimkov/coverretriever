@@ -25,17 +25,16 @@ namespace CoverRetriever.Test.Common.Extensions
         {
             var isCalled = false;
             var scheduler = new TestScheduler();
-            var observer = new MockObserver<Unit>(scheduler);
-            var observable = Observable.Create<Unit>(
-                x =>
-                {
-                    x.OnNext(new Unit());
-                    x.OnNext(new Unit());
-                    x.OnCompleted();
-                    return Disposable.Empty;
-                });
+            var observer = scheduler.CreateObserver<Unit>();
+            var observable =
+                scheduler.CreateColdObservable(
+                    new Recorded<Notification<Unit>>(0, Notification.CreateOnNext(new Unit())),
+                    new Recorded<Notification<Unit>>(1, Notification.CreateOnNext(new Unit())),
+                    new Recorded<Notification<Unit>>(2, Notification.CreateOnCompleted<Unit>()));
 
-            observable.Completed(() => isCalled = true).Run(observer);
+
+            observable.Completed(() => isCalled = true).Subscribe(observer);
+            scheduler.Start();
             
             Assert.IsTrue(isCalled);
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
@@ -48,17 +47,15 @@ namespace CoverRetriever.Test.Common.Extensions
         {
             var isCalled = false;
             var scheduler = new TestScheduler();
-            var observer = new MockObserver<Unit>(scheduler);
-          
-            var observable = Observable.Create<Unit>(
-               x =>
-               {
-                   x.OnNext(new Unit());
-                   x.OnNext(new Unit());
-                   return Disposable.Empty;
-               });
+            var observer = scheduler.CreateObserver<Unit>();
 
-            observable.Completed(() => isCalled = true).Timeout(TimeSpan.FromSeconds(1)).Run(observer);
+            var observable =
+                 scheduler.CreateColdObservable(
+                     new Recorded<Notification<Unit>>(0, Notification.CreateOnNext(new Unit())),
+                     new Recorded<Notification<Unit>>(1, Notification.CreateOnNext(new Unit())));
+
+            observable.Completed(() => isCalled = true).Subscribe(observer);
+            scheduler.Start();
 
             Assert.IsFalse(isCalled);
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));
@@ -70,16 +67,15 @@ namespace CoverRetriever.Test.Common.Extensions
         {
             var isCalled = false;
             var scheduler = new TestScheduler();
-            var observer = new MockObserver<Unit>(scheduler);
-            var observable = Observable.Create<Unit>(
-               x =>
-               {
-                   x.OnNext(new Unit());
-                   x.OnError(new Exception());
-                   return Disposable.Empty;
-               });
+            var observer = scheduler.CreateObserver<Unit>();
 
-            observable.Completed(() => isCalled = true).Run(observer);
+            var observable =
+                 scheduler.CreateColdObservable(
+                     new Recorded<Notification<Unit>>(0, Notification.CreateOnNext(new Unit())),
+                     new Recorded<Notification<Unit>>(1, Notification.CreateOnError<Unit>(new Exception())));
+
+            observable.Completed(() => isCalled = true).Subscribe(observer);
+            scheduler.Start();
 
             Assert.IsFalse(isCalled);
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));

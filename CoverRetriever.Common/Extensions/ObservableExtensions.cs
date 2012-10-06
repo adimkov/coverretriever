@@ -11,6 +11,7 @@ namespace System.Linq
 {
     using System;
     using System.Reactive;
+    using System.Reactive.Concurrency;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Threading;
@@ -57,9 +58,9 @@ namespace System.Linq
             Require.NotNull(completeAction, "completeAction");
 
             var subject = new Subject<TSource>();
-
+            
             source.Subscribe(
-                subject.OnNext,
+               subject.OnNext,
                 subject.OnError,
                 () =>
                 {

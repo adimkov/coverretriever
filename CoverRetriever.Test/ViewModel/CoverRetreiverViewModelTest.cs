@@ -104,13 +104,13 @@ namespace CoverRetriever.Test.ViewModel
             target.FileSystemSelectedItemChangedCommand.Execute(root);
 
             coverRetrieverServiceMock.Verify(x => x.GetCoverFor(It.IsAny<string>(), It.IsAny<string>(), 6), Times.Once());
-            Assert.That(eventCounter, Is.EqualTo(5));
+            Assert.That(eventCounter, Is.EqualTo(4));
         }
 
         [Test]
         public void SavingCoverResult_should_push_begin_on_starting_saving_image()
         {
-            var mockObserver = new MockObserver<ProcessResult>(_testScheduler);
+            var mockObserver = _testScheduler.CreateObserver<ProcessResult>();
             Mock<IFileSystemService> fileSystemServiceMock;
             Mock<FileConductorViewModel> fileConductorViewModelMock;
             Mock<ICoverRetrieverService> coverRetrieverServiceMock;
@@ -124,7 +124,7 @@ namespace CoverRetriever.Test.ViewModel
             fileConductorViewModelMock.Setup(x => x.SaveCover(It.IsAny<RemoteCover>())).Returns(Observable.Empty<Unit>());
 
             target.SavingCoverResult.Subscribe(mockObserver);
-
+            _testScheduler.Start();
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
             Assert.That(mockObserver.Messages[0].Value.Value, Is.EqualTo(ProcessResult.Begin));
@@ -133,7 +133,7 @@ namespace CoverRetriever.Test.ViewModel
         [Test]
         public void SavingCoverResult_should_push_Done_on_image_has_saved()
         {
-            var mockObserver = new MockObserver<ProcessResult>(_testScheduler);
+            var mockObserver = _testScheduler.CreateObserver<ProcessResult>();
             Mock<IFileSystemService> fileSystemServiceMock;
             Mock<FileConductorViewModel> fileConductorViewModelMock;
             Mock<ICoverRetrieverService> coverRetrieverServiceMock;
@@ -147,7 +147,7 @@ namespace CoverRetriever.Test.ViewModel
             fileConductorViewModelMock.Setup(x => x.SaveCover(It.IsAny<RemoteCover>())).Returns(Observable.Empty<Unit>());
 
             target.SavingCoverResult.Subscribe(mockObserver);
-
+            _testScheduler.Start();
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
             Assert.That(mockObserver.Messages[1].Value.Value, Is.EqualTo(ProcessResult.Done));
@@ -156,7 +156,7 @@ namespace CoverRetriever.Test.ViewModel
         [Test]
         public void SavingCoverResult_should_push_Done_and_error_message_on_image_did_not_saved()
         {
-            var mockObserver = new MockObserver<ProcessResult>(_testScheduler);
+            var mockObserver = _testScheduler.CreateObserver<ProcessResult>();
             Mock<IFileSystemService> fileSystemServiceMock;
             Mock<FileConductorViewModel> fileConductorViewModelMock;
             Mock<ICoverRetrieverService> coverRetrieverServiceMock;
@@ -170,6 +170,7 @@ namespace CoverRetriever.Test.ViewModel
             fileConductorViewModelMock.Setup(x => x.SaveCover(It.IsAny<RemoteCover>())).Returns(Observable.Throw<Unit>(new Exception()));
 
             target.SavingCoverResult.Subscribe(mockObserver);
+            _testScheduler.Start();
 
             target.SaveCoverCommand.Execute(GetRemoteCoverStub());
 
@@ -187,7 +188,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
 
-            Assert.IsTrue(target.GrabTagsCommand.CanExecute(null));
+            Assert.IsTrue(target.FileConductorViewModel.GrabTagsCommand.CanExecute(null));
         }
 
         [Test]
@@ -199,7 +200,7 @@ namespace CoverRetriever.Test.ViewModel
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
 
-            Assert.IsFalse(target.GrabTagsCommand.CanExecute(null));
+            Assert.IsFalse(target.FileConductorViewModel.GrabTagsCommand.CanExecute(null));
         }
 
         [Test]
@@ -218,10 +219,10 @@ namespace CoverRetriever.Test.ViewModel
                 .Returns(Observable.Return(GetMockedSuggestedTags()));
 
             var target = GetCoverRetrieverViewModel();
-            target.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
+            target.FileConductorViewModel.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
             
             target.FileSystemSelectedItemChangedCommand.Execute(root);
-            target.GrabTagsCommand.Execute(null);
+            target.FileConductorViewModel.GrabTagsCommand.Execute(null);
             _testScheduler.Start();
 
             var sugesstedTag = GetMockedSuggestedTags();
@@ -242,71 +243,15 @@ namespace CoverRetriever.Test.ViewModel
                 .Returns(Observable.Throw<IMetaProvider>(new Exception()));
 
             var target = GetCoverRetrieverViewModel();
-            target.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
+            target.FileConductorViewModel.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
 
             target.FileSystemSelectedItemChangedCommand.Execute(root);
-            target.GrabTagsCommand.Execute(null);
+            target.FileConductorViewModel.GrabTagsCommand.Execute(null);
 
             _testScheduler.Start();
 
             Assert.That(target.CoverRetrieverErrorMessage, Is.Not.Empty);
         }
-
-        [Test]
-        public void Should_switch_view_model_to_save_tag_mode_in_true_if_success_tag_retrieving()
-        {
-            var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
-            var root = GetAudioMockedFile(mettaProvider.Object);
-            var taggerMock = new Mock<ITaggerService>();
-            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
-                .Returns(Observable.Return(GetMockedSuggestedTags()));
-
-            var target = GetCoverRetrieverViewModel();
-            target.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
-
-            target.FileSystemSelectedItemChangedCommand.Execute(root);
-            target.GrabTagsCommand.Execute(null);
-            _testScheduler.Start();
-
-            Assert.That(target.SaveTagMode, Is.True);
-        }
-
-        [Test]
-        public void Should_switch_view_model_to_save_tag_mode_in_false_if_tag_retrieving_failed()
-        {
-            var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
-            var root = GetAudioMockedFile(mettaProvider.Object);
-            var taggerMock = new Mock<ITaggerService>();
-            taggerMock.Setup(x => x.LoadTagsForAudioFile(It.Is<string>(s => s == root.GetFileSystemItemFullPath())))
-                .Returns(Observable.Throw<IMetaProvider>(new InvalidOperationException()));
-
-            var target = GetCoverRetrieverViewModel();
-            target.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
-
-            target.FileSystemSelectedItemChangedCommand.Execute(root);
-            target.GrabTagsCommand.Execute(null);
-            _testScheduler.Start();
-
-            Assert.That(target.SaveTagMode, Is.False);
-        }
-
-        [Test]
-        public void Should_reset_tag_and_set_save_tag_mode_with_false()
-        {
-            var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
-            var root = GetAudioMockedFile(mettaProvider.Object);
-
-            root.CopyTagsFrom(GetMockedSuggestedTags());
-            var target = GetCoverRetrieverViewModel();
-            target.SaveTagMode = true;
-
-            target.FileSystemSelectedItemChangedCommand.Execute(root);
-            target.RejectSuggestedTagCommand.Execute(null);
-
-            Assert.That(target.SaveTagMode, Is.False);
-            Assert.That(root.MetaProvider, Is.EqualTo(mettaProvider.Object));
-        }
-
 
         private CoverRetrieverViewModel GetCoverRetrieverViewModel(
             out Mock<IFileSystemService> fileSystemServiceMock,

@@ -56,11 +56,13 @@ namespace CoverRetriever.Test.Service
         [Test]
         public void Should_call_one_and_push_completed()
         {
+            var sheduler = new TestScheduler();
             var revisionVersionParserMock = new Mock<RevisionVersionParser>();
             var target = new HttpVersionControlService(VersionFileLocation, revisionVersionParserMock.Object);
 
-            var observer = new MockObserver<RevisionVersion>(new TestScheduler());
+            var observer = sheduler.CreateObserver<RevisionVersion>();
             target.GetLatestVersion().Run(observer);
+            sheduler.Start();
 
             Assert.That(observer.Messages.Count, Is.EqualTo(2));
             Assert.That(observer.Messages[0].Value.Kind, Is.EqualTo(NotificationKind.OnNext));

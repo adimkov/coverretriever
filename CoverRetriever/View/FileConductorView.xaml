@@ -6,7 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:CoverRetriever.Resources"
-             MinHeight="190"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors" MinHeight="190"
              d:DesignWidth="405"
              mc:Ignorable="d">
     <UserControl.Resources>
@@ -17,6 +18,22 @@
         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,4,0" />
+        </Style>
+
+        <Style x:Key="TagButton"
+               BasedOn="{StaticResource {x:Type Button}}"
+               TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,0,0,-3" />
+        </Style>
+
+        <Style x:Key="TaggerHighlight" TargetType="Border">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="{StaticResource ColorAccentHighlightBrush}" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="-3,-3,-3,-6" />
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -144,5 +161,49 @@
                            Text="{Binding Path=SelectedAudioCover.CoverSize.Height}" />
             </StackPanel>
         </StackPanel>
+        <Border x:Name="getTaggerBorder"
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Visibility="{Binding SaveTagMode, Converter={StaticResource invertBoolToVisibilityConverter}}">
+            <Grid>
+                <Button x:Name="getTagButton"
+                                    Command="{Binding GrabTagsCommand}"
+                                    Content="{Binding Path=CoverRetrieverResources.TextGetTagsFromLasrFm,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+                <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:HighlightElementBehavior HighlightRequest="{Binding HighlightToGetTags}" />
+                    </i:Interaction.Behaviors>
+                </Border>
+            </Grid>
+        </Border>
+        <Border x:Name="saveTagBorder" 
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                Visibility="{Binding SaveTagMode, Converter={StaticResource boolToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="saveButton"
+                                    Grid.Column="0"
+                                    Command="{Binding SaveSuggestedTagCommand}"
+                                    Content="{Binding CoverRetrieverResources.TextSave,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+                <Button x:Name="cancelButton"
+                                    Grid.Column="1"
+                                    Command="{Binding RejectSuggestedTagCommand}"
+                                    Content="{Binding CoverRetrieverResources.TextCancel,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
