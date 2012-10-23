@@ -16,6 +16,7 @@ namespace CoverRetriever.ViewModel
     using System.Linq;
     using System.Reactive;
     using System.Reactive.Linq;
+    using System.Reactive.Subjects;
     using System.Windows.Input;
 
     using CoverRetriever.AudioInfo;
@@ -40,29 +41,31 @@ namespace CoverRetriever.ViewModel
         private readonly InteractionRequest<Notification> highlightToGetTags;
 
         /// <summary>
+        /// Backing field for GrabTagsCommand. 
+        /// </summary>
+        private readonly DelegateCommand grabTagsCommand;
+
+        private Subject<Unit> grabCoverSubject = new Subject<Unit>();
+
+        /// <summary>
         /// Backing field for SelectedAudio property.
         /// </summary>
-        private AudioFile _selectedAudio;
+        private AudioFile selectedAudio;
 
         /// <summary>
         /// Backing field for Recipient property.
         /// </summary>
-        private CoverRecipient _recipient;
-
-        /// <summary>
-        /// Backing field for GrabTagsCommand 
-        /// </summary>
-        private DelegateCommand grabTagsCommand;
+        private CoverRecipient recipient;
 
         /// <summary>
         /// Backing field for SelectedAudioCover property.
         /// </summary>
-        private Cover _selectedAudioCover;
+        private Cover selectedAudioCover;
 
         /// <summary>
         /// Backing field for ApplyToAllFiles property.
         /// </summary>
-        private bool _applyToAllFiles;
+        private bool applyToAllFiles;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileConductorViewModel" /> class.
@@ -73,6 +76,11 @@ namespace CoverRetriever.ViewModel
             grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => SelectedAudio != null);
             SaveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
             RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
+
+            grabCoverSubject
+                .Throttle(TimeSpan.FromMilliseconds(1000))
+                .ObserveOnDispatcher()
+                .Subscribe(x => GrabCoversForAudio());
         }
 
         /// <summary>
@@ -112,14 +120,24 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _selectedAudio;
+                return this.selectedAudio;
             }
 
             set
             {
-                _selectedAudio = value;
+                if (selectedAudio != null)
+                {
+                    selectedAudio.CancelEditTags();
+                }
+                                                   
+                selectedAudio = value;
+                if (selectedAudio != null)
+                {
+                    selectedAudio.BeginEditTags();
+                }
+
                 SetSelectedAudioCoverIfPosible();
-                RaisePropertyChanged("SelectedAudio");
+                RaisePropertyChanged(string.Empty);
                 grabTagsCommand.RaiseCanExecuteChanged();
             }
         }
@@ -131,13 +149,111 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _selectedAudioCover;
+                return this.selectedAudioCover;
             }
 
             private set
             {
-                _selectedAudioCover = value;
+                this.selectedAudioCover = value;
                 RaisePropertyChanged("SelectedAudioCover");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the artist of composition.
+        /// </summary>
+        public string Artist
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Artist : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Artist = value;
+                    grabCoverSubject.OnNext(new Unit());
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets album name.
+        /// </summary>
+        public string Album
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Album : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Album = value;
+                    grabCoverSubject.OnNext(new Unit());
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets of year.
+        /// </summary>
+        public string Year
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Year : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Year = value;
+                    grabCoverSubject.OnNext(new Unit());
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets name of composition.
+        /// </summary>
+        public string TrackName
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.TrackName : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.TrackName = value;
+                    grabCoverSubject.OnNext(new Unit());
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is dirty.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is dirty; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirty
+        {
+            get
+            {
+                return SelectedAudio != null && SelectedAudio.MetaProvider.IsDirty;
             }
         }
 
@@ -148,12 +264,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _applyToAllFiles;
+                return this.applyToAllFiles;
             }
 
             set
             {
-                _applyToAllFiles = value;
+                this.applyToAllFiles = value;
                 RaisePropertyChanged("ApplyToAllFiles");
             }
         }
@@ -166,16 +282,16 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _recipient;
+                return this.recipient;
             }
 
             set
             {
-                if (_recipient != value)
+                if (this.recipient != value)
                 {
-                    _recipient = value;
+                    this.recipient = value;
 
-                    if (_recipient == CoverRecipient.Directory)
+                    if (this.recipient == CoverRecipient.Directory)
                     {
                         ApplyToAllFiles = false;
                     }
@@ -191,6 +307,20 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is needed to retrieve tags.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> If this instance is needed to retrieve tags; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsNeededToRetrieveTags
+        {
+            get
+            {
+                return String.IsNullOrWhiteSpace(this.Artist);
+            }
+        }
+
+        /// <summary>
         /// Gets the request for highlight 'get tags' button.
         /// </summary>
         public InteractionRequest<Notification> HighlightToGetTags
@@ -200,14 +330,6 @@ namespace CoverRetriever.ViewModel
                 return highlightToGetTags;
             }
         }
-
-        /// <summary>
-        /// Gets or sets the parent view model.
-        /// </summary>
-        /// <value>
-        /// The parent view model.
-        /// </value>
-        public CoverRetrieverViewModel ParentViewModel { get; set; }
 
         /// <summary>
         /// Saves the selected cover onto disk.
@@ -290,18 +412,21 @@ namespace CoverRetriever.ViewModel
             StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedAudio.Name));
 
             Tagger.Value.LoadTagsForAudioFile(SelectedAudio.GetFileSystemItemFullPath())
-                .SubscribeOn(ParentViewModel.SubscribeScheduler)
-                .ObserveOn(ParentViewModel.ObservableScheduler)
+                .SubscribeOn(((CoverRetrieverViewModel)ParentViewModel).SubscribeScheduler)
+                .ObserveOn(((CoverRetrieverViewModel)ParentViewModel).ObservableScheduler)
                 .Finally(EndOperation)
-                .Completed(
-                    () =>
+                .Completed(() =>
                     {
-                        ParentViewModel.FindRemoteCovers(SelectedAudio.MetaProvider);
                         Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
+                        grabCoverSubject.OnNext(new Unit());
                     })
                 .Subscribe(
-                    SelectedAudio.CopyTagsFrom,
-                    ParentViewModel.SetError);
+                    x =>
+                    {
+                        SelectedAudio.CopyTagsFrom(x);
+                        RaisePropertyChanged(string.Empty);
+                    },
+                    ((CoverRetrieverViewModel)ParentViewModel).SetError);
         }
 
         /// <summary>
@@ -310,6 +435,9 @@ namespace CoverRetriever.ViewModel
         private void SaveSuggestedTagCommandExecute()
         {
             SelectedAudio.SaveFromTagger();
+            SelectedAudio.EndEditTags();
+            SelectedAudio.BeginEditTags();
+            RaisePropertyChanged(string.Empty);
         }
 
         /// <summary>
@@ -317,8 +445,18 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void RejectSuggestedTagCommandExecute()
         {
-            SelectedAudio.ResetTagger();
-            ParentViewModel.FindRemoteCovers(SelectedAudio.MetaProvider);
+            SelectedAudio.CancelEditTags();
+            grabCoverSubject.OnNext(new Unit()); 
+            SelectedAudio.BeginEditTags();
+            RaisePropertyChanged(string.Empty);
+        }
+
+        /// <summary>
+        /// Grabs the covers for audio.
+        /// </summary>
+        private void GrabCoversForAudio()
+        {
+            ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(SelectedAudio.MetaProvider);
         }
     }
 }

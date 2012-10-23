@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib"
-                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors">
 
     <!--
         ***************************************************************************
@@ -117,7 +118,7 @@
                                         Content="{TemplateBinding Content}"
                                         ContentTemplate="{TemplateBinding ContentTemplate}" />
                         <Rectangle x:Name="overlay" Style="{TemplateBinding OverlayStyle}" />
-                        <ContentControl x:Name="busycontent">
+                        <ContentControl x:Name="busycontent" IsHitTestVisible="False">
                             <Border MinWidth="160"
                                     MinHeight="60"
                                     Margin="10"
@@ -140,10 +141,11 @@
                                     <ContentPresenter VerticalAlignment="Center"
                                                       Content="{TemplateBinding BusyContent}"
                                                       ContentTemplate="{TemplateBinding BusyContentTemplate}" />
-                                    <ProgressBar Grid.Row="1" Style="{TemplateBinding ProgressBarStyle}" />
+                                    <ProgressBar Grid.Row="1" Style="{TemplateBinding ProgressBarStyle}" IsTabStop="False"/>
                                 </Grid>
                             </Border>
                         </ContentControl>
+                        <behaviors:FocusableBusyBehavior AssociatedObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" IsBusy="{TemplateBinding IsBusy}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

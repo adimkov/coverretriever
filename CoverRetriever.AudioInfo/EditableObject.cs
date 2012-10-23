@@ -86,7 +86,16 @@ namespace CoverRetriever.AudioInfo
 
             foreach (var property in properties)
             {
-                isAllEqual &= property.GetValue(this, null).Equals(this.beforeEditValues[property.Name]);
+                var propertyValue = property.GetValue(this, null);
+                var beforePropertyValue = beforeEditValues[property.Name];
+                if (propertyValue != null)
+                {
+                    isAllEqual &= propertyValue.Equals(beforePropertyValue);
+                }
+                else if (beforePropertyValue == null)
+                {
+                    isAllEqual = true;
+                }
             }
 
             return !isAllEqual;

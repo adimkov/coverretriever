@@ -59,7 +59,7 @@ namespace CoverRetriever.Test.Model
 
             Assert.That(target, Is.Not.Null);
             Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
-            Assert.That(target.Album, Is.EqualTo("Это_все"));
+            Assert.That(target.MetaProvider.Album, Is.EqualTo("Это_все"));
             Assert.That(lazyMetaProvider.IsValueCreated, Is.True);
         }
 
@@ -75,7 +75,7 @@ namespace CoverRetriever.Test.Model
 
             Assert.That(target, Is.Not.Null);
             Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
-            Assert.That(target.Artist, Is.EqualTo("DDT"));
+            Assert.That(target.MetaProvider.Artist, Is.EqualTo("DDT"));
             Assert.That(lazyMetaProvider.IsValueCreated, Is.True);
         }
 
@@ -91,7 +91,7 @@ namespace CoverRetriever.Test.Model
 
             Assert.That(target, Is.Not.Null);
             Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
-            Assert.That(target.Year, Is.EqualTo("1995"));
+            Assert.That(target.MetaProvider.Year, Is.EqualTo("1995"));
             Assert.That(lazyMetaProvider.IsValueCreated, Is.True);
         }
 
@@ -107,7 +107,7 @@ namespace CoverRetriever.Test.Model
 
             Assert.That(target, Is.Not.Null);
             Assert.That(lazyMetaProvider.IsValueCreated, Is.False);
-            Assert.That(target.TrackName, Is.EqualTo("Aktrisa_vesna"));
+            Assert.That(target.MetaProvider.TrackName, Is.EqualTo("Aktrisa_vesna"));
             Assert.That(lazyMetaProvider.IsValueCreated, Is.True);
         }
 

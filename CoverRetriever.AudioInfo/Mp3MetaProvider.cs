@@ -79,7 +79,7 @@ namespace CoverRetriever.AudioInfo
             set
             {
                 EnsureInstanceWasNotDisposed();
-                var id3 = File.GetTag(TagTypes.Id3v2);
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Album));
                 id3.Album = value;
             }
         }
@@ -99,7 +99,7 @@ namespace CoverRetriever.AudioInfo
             set
             {
                 EnsureInstanceWasNotDisposed();
-                var id3 = File.GetTag(TagTypes.Id3v2);
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.FirstPerformer));
                 id3.Performers = new[] { value };
             }
         }
@@ -119,7 +119,7 @@ namespace CoverRetriever.AudioInfo
             set
             {
                 EnsureInstanceWasNotDisposed();
-                var id3 = File.GetTag(TagTypes.Id3v2);
+                var id3 = GetAudioTag(File, x => x.Year > 0);
                 id3.Year = uint.Parse(value.Return("0"));
             }
         }
@@ -139,7 +139,7 @@ namespace CoverRetriever.AudioInfo
             set
             {
                 EnsureInstanceWasNotDisposed();
-                var id3 = File.GetTag(TagTypes.Id3v2);
+                var id3 = GetAudioTag(File, x => !string.IsNullOrEmpty(x.Title));
                 id3.Title = value;
             }
         }

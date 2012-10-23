@@ -14,7 +14,9 @@ namespace CoverRetriever.ViewModel
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
+    using System.Diagnostics;
     using System.Linq;
+    using System.Net;
     using System.Reactive;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
@@ -472,6 +474,7 @@ namespace CoverRetriever.ViewModel
         /// <param name="fileDetails">The audio file.</param>
         internal void FindRemoteCovers(IMetaProvider fileDetails)
         {
+            Trace.WriteLine("Get covers for: [{0}]".FormatString(fileDetails));
             StartOperation(CoverRetrieverResources.MessageDownloadCover);
             ResetError();
             suggestedCovers.Clear();
@@ -511,6 +514,7 @@ namespace CoverRetriever.ViewModel
                 VersionControl.Value
                     .GetLatestVersion()
                     .Delay(TimeSpan.FromSeconds(DelayToCheckUpdate))
+                    .Catch<RevisionVersion, WebException>(x => Observable.Empty<RevisionVersion>())
                     .Subscribe(GetLatestApplicatioVersion);
             }
         }
@@ -550,10 +554,6 @@ namespace CoverRetriever.ViewModel
         {
             SelectedFileSystemItem = file;
             SetAudioFile(file);
-            if (FileConductorViewModel.SelectedAudio != null)
-            {
-                FileConductorViewModel.SelectedAudio.ResetTagger();
-            }
         }
 
         /// <summary>
@@ -577,8 +577,8 @@ namespace CoverRetriever.ViewModel
             previewCoverRequest.Raise(new Notification
             {
                 Title = CoverRetrieverResources.CoverPreviewTitle.FormatUIString(
-                FileConductorViewModel.SelectedAudio.Artist, 
-                FileConductorViewModel.SelectedAudio.Album),
+                FileConductorViewModel.Artist, 
+                FileConductorViewModel.Album),
                 Content = viewModel 
             });
         }
@@ -664,7 +664,7 @@ namespace CoverRetriever.ViewModel
             
             if (audio != null)
             {
-                if (audio.IsNeededToRetrieveTags)
+                if (FileConductorViewModel.IsNeededToRetrieveTags)
                 {
                     FileConductorViewModel.HighlightToGetTags.Raise(null);
                 }

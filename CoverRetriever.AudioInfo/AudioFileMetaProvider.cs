@@ -278,6 +278,22 @@ namespace CoverRetriever.AudioInfo
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return "TrackName: {0}, Artist: {1}, Album {2}, Year: {3}"
+                .FormatString(
+                TrackName, 
+                Artist, 
+                Album, 
+                Year);
+        }
+
+        /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>

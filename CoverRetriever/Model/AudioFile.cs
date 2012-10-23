@@ -79,81 +79,14 @@ namespace CoverRetriever.Model
         }
 
         /// <summary>
-        /// Gets the artist of composition.
-        /// </summary>
-        public string Artist
-        {
-            get
-            {
-                return MetaProvider.Artist;
-            }
-        }
-
-        /// <summary>
-        /// Gets album of composition.
-        /// </summary>
-        public string Album
-        {
-            get
-            {
-                return MetaProvider.Album;
-            }
-        }
-
-        /// <summary>
-        /// Gets year of composition.
-        /// </summary>
-        public string Year
-        {
-            get
-            {
-                return MetaProvider.Year;
-            }
-        }
-
-        /// <summary>
-        /// Gets name of composition.
-        /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return MetaProvider.TrackName;
-            }
-        }
-
-        /// <summary>
         /// Gets an audio tag provider.
         /// </summary>
         public IMetaProvider MetaProvider
         {
             get
             {
-                return this.metaProvider.Value;
+                return metaProvider.Value;
             }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is needed to retrieve tags.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> If this instance is needed to retrieve tags; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsNeededToRetrieveTags
-        {
-            get
-            {
-                return String.IsNullOrWhiteSpace(Artist);
-            }
-        }
-
-        /// <summary>
-        /// Resets the taggerService.
-        /// </summary>
-        public void ResetTagger()
-        {
-            ((EditableObject)this.metaProvider.Value).CancelEdit();
-            RaisePropertyChanged(String.Empty);
         }
 
         /// <summary>
@@ -161,7 +94,6 @@ namespace CoverRetriever.Model
         /// </summary>
         public void SaveFromTagger()
         {
-            ((EditableObject)this.metaProvider.Value).EndEdit();
             metaProvider.Value.Save();
         }
 
@@ -172,7 +104,30 @@ namespace CoverRetriever.Model
         public void CopyTagsFrom(IMetaProvider source)
         {
             MetaProvider.CopyFrom(source);
-            RaisePropertyChanged(String.Empty);
+        }
+
+        /// <summary>
+        /// Begins the edit tags.
+        /// </summary>
+        public void BeginEditTags()
+        {
+            ((EditableObject)MetaProvider).BeginEdit();
+        }
+
+        /// <summary>
+        /// Ends the edit tags.
+        /// </summary>
+        public void EndEditTags()
+        {
+           ((EditableObject)MetaProvider).EndEdit();
+        }
+
+        /// <summary>
+        /// Cancels the edit tags.
+        /// </summary>
+        public void CancelEditTags()
+        {
+            ((EditableObject)MetaProvider).CancelEdit();
         }
     }
 }

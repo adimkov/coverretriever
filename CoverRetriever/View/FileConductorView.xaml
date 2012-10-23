@@ -81,9 +81,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.TrackName,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -93,9 +91,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Artist,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -105,9 +101,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Album,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Margin="0"
@@ -120,9 +114,7 @@
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Year,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Border Grid.Row="1"
                 Grid.RowSpan="4"
                 HorizontalAlignment="Left"
@@ -167,7 +159,7 @@
                 Grid.Row="5"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Visibility="{Binding SaveTagMode, Converter={StaticResource invertBoolToVisibilityConverter}}">
+                Visibility="{Binding IsDirty, Converter={StaticResource invertBoolToVisibilityConverter}}">
             <Grid>
                 <Button x:Name="getTagButton"
                                     Command="{Binding GrabTagsCommand}"
@@ -185,7 +177,7 @@
                 Grid.Column="2"
                 Grid.ColumnSpan="3"
                 Grid.Row="5"
-                Visibility="{Binding SaveTagMode, Converter={StaticResource boolToVisibilityConverter}}">
+                Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />

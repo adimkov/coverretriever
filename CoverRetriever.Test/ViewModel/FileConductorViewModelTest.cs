@@ -175,7 +175,7 @@ namespace CoverRetriever.Test.ViewModel
 
         private Mock<ICoverOrganizer> GetFrameCoverOrganizerMock()
         {
-            var mock = new Mock<ICoverOrganizer>();
+            var mock = new Mock<EditableObject>().As<ICoverOrganizer>();
 
             return SetupEmptyCallResult(mock);
         }

@@ -79,6 +79,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Behavior\TemplatedBehavior.cs" />
+    <Compile Include="Behavior\TemplatedBehavior{TElement}.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
