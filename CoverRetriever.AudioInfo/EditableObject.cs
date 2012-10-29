@@ -35,7 +35,7 @@ namespace CoverRetriever.AudioInfo
                 return;
             }
 
-            this.isEditing = true;
+            isEditing = true;
             foreach (var property in GetWritableProperties())
             {
                 beforeEditValues.Add(property.Name, property.GetValue(this, null));
@@ -47,8 +47,8 @@ namespace CoverRetriever.AudioInfo
         /// </summary>
         public virtual void EndEdit()
         {
-            this.isEditing = false;
-            this.beforeEditValues.Clear();
+            isEditing = false;
+            beforeEditValues.Clear();
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace CoverRetriever.AudioInfo
         /// </summary>
         public virtual void CancelEdit()
         {
-            this.isEditing = false;
+            isEditing = false;
             var properties = GetWritableProperties().ToArray();
-            foreach (var beforeEditValue in this.beforeEditValues)
+            foreach (var beforeEditValue in beforeEditValues)
             {
                 properties
                     .Single(x => x.Name == beforeEditValue.Key)
@@ -76,7 +76,7 @@ namespace CoverRetriever.AudioInfo
         /// </returns>
         public bool IsChanged()
         {
-            if (!this.isEditing)
+            if (!isEditing)
             {
                 return false;
             }
@@ -95,6 +95,10 @@ namespace CoverRetriever.AudioInfo
                 else if (beforePropertyValue == null)
                 {
                     isAllEqual = true;
+                }
+                else
+                {
+                    isAllEqual = false;
                 }
             }
 

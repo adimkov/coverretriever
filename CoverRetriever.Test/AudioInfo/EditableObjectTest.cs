@@ -40,7 +40,7 @@
         }
 
         [Test]
-        public void Should_indicate_that_object_is_not_changed()
+        public void Should_indicate_not_changed()
         {
             var revertableObject = new MockEditableObject("Test", true);
             revertableObject.BeginEdit();
@@ -49,7 +49,7 @@
         }
 
         [Test]
-        public void Should_indicate_that_object_is_changed()
+        public void Should_indicate_changed()
         {
             var revertableObject = new MockEditableObject("Test", true);
             revertableObject.BeginEdit();
@@ -57,6 +57,18 @@
             revertableObject.StringValue = "Data";
 
             revertableObject.IsChanged().Should().BeTrue();
+        }
+
+        [Test]
+        public void Should_indicate_changed_if_title_reset_null()
+        {
+            var revertableObject = new MockEditableObject("Test", true);
+            revertableObject.BeginEdit();
+
+            revertableObject.StringValue = null;
+
+            revertableObject.IsChanged().Should().BeTrue();
+    
         }
     }
 
