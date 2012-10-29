@@ -245,7 +245,11 @@ namespace CoverRetriever.AudioInfo
             {
                 var filePath = (string)param[0];
                 file = GetTagFile(filePath);
-                FileNameMetaObtainer.ParseFileName(Path.GetFileNameWithoutExtension(filePath));
+                if (IsEmpty)
+                {
+                    FileNameMetaObtainer.ParseFileName(Path.GetFileNameWithoutExtension(filePath));
+                }
+
                 initialized = true;
             }
             else

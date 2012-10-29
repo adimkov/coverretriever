@@ -128,9 +128,9 @@ namespace CoverRetriever.AudioInfo
         /// <param name="fileName">File name to parse.</param>
         public void ParseFileName(string fileName)
         {
-            var groupedRegexByMatches =
-                this.fileNameParsers.Where(parser => parser.Regex.IsMatch(fileName)).GroupBy(
-                    parser => parser.Regex.Match(fileName).Groups.Count);
+            var groupedRegexByMatches = fileNameParsers
+                .Where(parser => parser.Regex.IsMatch(fileName))
+                .GroupBy(parser => parser.Regex.Match(fileName).Groups.Count);
 
             var maxMatches = groupedRegexByMatches.Max(x => x.Key);
             var prioritizedRegexes = groupedRegexByMatches.Single(x => x.Key == maxMatches).ToList();
@@ -138,9 +138,9 @@ namespace CoverRetriever.AudioInfo
             var regexWithMaxMatches = prioritizedRegexes.First();
 
             var groups = regexWithMaxMatches.Regex.Match(fileName).Groups;
-            this.artist = groups[TrimTemplateSymbol(ArtistBlock)].Value.Trim();
-            this.trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
-            this.trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
+            artist = groups[TrimTemplateSymbol(ArtistBlock)].Value.Trim();
+            trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
+            trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The album name.</returns>
         public virtual string GetAlbum()
         {
-            return this.album;
+            return album;
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The artist name.</returns>
         public virtual string GetArtist()
         {
-            return this.artist;
+            return artist;
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The year of album release.</returns>
         public virtual string GetYear()
         {
-            return this.year;
+            return year;
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The name of track.</returns>
         public virtual string GetTrackName()
         {
-            return this.trackName;
+            return trackName;
         }
 
         /// <summary>
@@ -206,7 +206,8 @@ namespace CoverRetriever.AudioInfo
 
                 regexList.Add(new PrioritizedRegex(new Regex(BuildRegexp(pattern), RegexOptions.IgnoreCase), prority));
             }
-            this.fileNameParsers = regexList;
+            
+            fileNameParsers = regexList;
         }
 
         /// <summary>
