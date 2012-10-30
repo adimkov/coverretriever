@@ -21,6 +21,7 @@ namespace CoverRetriever.ViewModel
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;
+    using CoverRetriever.AudioInfo.Utility;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
 
@@ -45,7 +46,10 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private readonly DelegateCommand grabTagsCommand;
 
-        private Subject<Unit> grabCoverSubject = new Subject<Unit>();
+        /// <summary>
+        /// Get covers subject.
+        /// </summary>
+        private readonly Subject<IMetaProvider> grabCoverSubject = new Subject<IMetaProvider>();
 
         /// <summary>
         /// Backing field for SelectedAudio property.
@@ -78,9 +82,9 @@ namespace CoverRetriever.ViewModel
             RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
 
             grabCoverSubject
-                .Throttle(TimeSpan.FromMilliseconds(1000))
+                .Throttle(TimeSpan.FromMilliseconds(1400))
                 .ObserveOnDispatcher()
-                .Subscribe(x => GrabCoversForAudio());
+                .Subscribe(GrabCoversForAudio);
         }
 
         /// <summary>
@@ -120,7 +124,7 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return this.selectedAudio;
+                return selectedAudio;
             }
 
             set
@@ -149,12 +153,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return this.selectedAudioCover;
+                return selectedAudioCover;
             }
 
             private set
             {
-                this.selectedAudioCover = value;
+                selectedAudioCover = value;
                 RaisePropertyChanged("SelectedAudioCover");
             }
         }
@@ -174,7 +178,7 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Artist = value;
-                    grabCoverSubject.OnNext(new Unit());
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -195,7 +199,7 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Album = value;
-                    grabCoverSubject.OnNext(new Unit());
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -216,7 +220,7 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Year = value;
-                    grabCoverSubject.OnNext(new Unit());
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -237,7 +241,7 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.TrackName = value;
-                    grabCoverSubject.OnNext(new Unit());
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -264,12 +268,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return this.applyToAllFiles;
+                return applyToAllFiles;
             }
 
             set
             {
-                this.applyToAllFiles = value;
+                applyToAllFiles = value;
                 RaisePropertyChanged("ApplyToAllFiles");
             }
         }
@@ -282,16 +286,16 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return this.recipient;
+                return recipient;
             }
 
             set
             {
-                if (this.recipient != value)
+                if (recipient != value)
                 {
-                    this.recipient = value;
+                    recipient = value;
 
-                    if (this.recipient == CoverRecipient.Directory)
+                    if (recipient == CoverRecipient.Directory)
                     {
                         ApplyToAllFiles = false;
                     }
@@ -316,7 +320,7 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return String.IsNullOrWhiteSpace(this.Artist);
+                return String.IsNullOrWhiteSpace(Artist);
             }
         }
 
@@ -418,7 +422,7 @@ namespace CoverRetriever.ViewModel
                 .Completed(() =>
                     {
                         Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
-                        grabCoverSubject.OnNext(new Unit());
+                        grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     })
                 .Subscribe(
                     x =>
@@ -446,7 +450,7 @@ namespace CoverRetriever.ViewModel
         private void RejectSuggestedTagCommandExecute()
         {
             SelectedAudio.CancelEditTags();
-            grabCoverSubject.OnNext(new Unit()); 
+            grabCoverSubject.OnNext(SelectedAudio.MetaProvider); 
             SelectedAudio.BeginEditTags();
             RaisePropertyChanged(string.Empty);
         }
@@ -454,9 +458,10 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Grabs the covers for audio.
         /// </summary>
-        private void GrabCoversForAudio()
+        /// <param name="metaProvider">The meta provider.</param>
+        private void GrabCoversForAudio(IMetaProvider metaProvider)
         {
-            ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(SelectedAudio.MetaProvider);
+            ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(metaProvider);
         }
     }
 }

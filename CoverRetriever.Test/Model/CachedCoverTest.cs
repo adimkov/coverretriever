@@ -30,7 +30,7 @@ namespace CoverRetriever.Test.Model
         public void Should_create_cached_cover()
         {
             var coverStream = Observable.Return(new Mock<Stream>().Object);
-            var source = this.GenerateCoverStub(coverStream);
+            var source = GenerateCoverStub(coverStream);
             var target = new CachedCover(source);
 
             Assert.AreEqual(source.Name, target.Name);

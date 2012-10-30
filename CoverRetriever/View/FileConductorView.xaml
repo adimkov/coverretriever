@@ -81,7 +81,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -91,7 +95,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -101,7 +109,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Margin="0"
@@ -114,7 +126,11 @@
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <Border Grid.Row="1"
                 Grid.RowSpan="4"
                 HorizontalAlignment="Left"

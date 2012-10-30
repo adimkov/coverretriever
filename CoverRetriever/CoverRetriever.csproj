@@ -204,6 +204,7 @@
     </Compile>
     <Compile Include="Behaviors\HighlightElementBehavior.cs" />
     <Compile Include="Behaviors\FocusableBusyBehavior.cs" />
+    <Compile Include="Behaviors\SelectAllOnGotFocusBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Caching\CacheItem.cs" />
     <Compile Include="Caching\CacheMode.cs" />

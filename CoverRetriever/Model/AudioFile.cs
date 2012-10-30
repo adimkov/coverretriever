@@ -64,7 +64,7 @@ namespace CoverRetriever.Model
         /// </summary>
         public ICoverOrganizer DirectoryCover
         {
-            get { return this.directoryCoverOrganizer; }
+            get { return directoryCoverOrganizer; }
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return this.metaProvider.Value as ICoverOrganizer;
+                return metaProvider.Value as ICoverOrganizer;
             }
         }
 

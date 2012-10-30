@@ -60,16 +60,21 @@ namespace CoverRetriever.Behaviors
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         protected virtual void OnIsBusyChanged(DependencyPropertyChangedEventArgs e)
         {
-           if (IsBusy)
-           {
-               focusedElement = (UIElement)FocusManager.GetFocusedElement(Application.Current.MainWindow);
-           }
-           else
-           {
-               Dispatcher.BeginInvoke(
-                   DispatcherPriority.Input, 
-                   new Action(() => focusedElement.With(x => x.Focus())));
-           }
+            if (Application.Current.MainWindow == null)
+            {
+                return;
+            }
+
+            if (IsBusy)
+            {
+                focusedElement = (UIElement)FocusManager.GetFocusedElement(Application.Current.MainWindow);
+            }
+            else
+            {
+                Dispatcher.BeginInvoke(
+                    DispatcherPriority.Input,
+                    new Action(() => focusedElement.With(x => x.Focus())));
+            }
         }
 
         /// <summary>

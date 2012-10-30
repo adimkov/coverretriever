@@ -89,7 +89,7 @@ namespace CoverRetriever.Service
                                         throw new CoverSearchException("Unable to get response from google", jsonResponce.EventArgs.Error);
                                     }
 
-                                    return this.ParseGoogleImageResponse(jsonResponce.EventArgs.Result).Take(coverCount);
+                                    return ParseGoogleImageResponse(jsonResponce.EventArgs.Result).Take(coverCount);
                                 }),
                 () => googleClient.DownloadStringAsync(new Uri(requestedUri))).Take(1);
         }
