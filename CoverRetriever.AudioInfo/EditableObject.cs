@@ -90,15 +90,15 @@ namespace CoverRetriever.AudioInfo
                 var beforePropertyValue = beforeEditValues[property.Name];
                 if (propertyValue != null)
                 {
-                    isAllEqual &= propertyValue.Equals(beforePropertyValue);
+                    isAllEqual &= propertyValue.Equals(beforePropertyValue);    
                 }
                 else if (beforePropertyValue == null)
                 {
-                    isAllEqual = true;
+                    isAllEqual &= true;
                 }
                 else
                 {
-                    isAllEqual = false;
+                    isAllEqual &= false;
                 }
             }
 

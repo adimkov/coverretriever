@@ -70,6 +70,17 @@
             revertableObject.IsChanged().Should().BeTrue();
     
         }
+
+        [Test]
+        public void Should_indicate_changed_if_set_title_from_null_to_value()
+        {
+            var revertableObject = new MockEditableObject(null, null, true);
+            revertableObject.BeginEdit();
+
+            revertableObject.StringValue = "Test";
+
+            revertableObject.IsChanged().Should().BeTrue();
+        }
     }
 
     class MockEditableObject : EditableObject
@@ -80,7 +91,15 @@
             BoolValue = boolValue;
         }
 
+        public MockEditableObject(string stringValue, object data, bool boolValue)
+        {
+            StringValue = stringValue;
+            AData = data;
+            BoolValue = boolValue;
+        }
+
         public string StringValue { get; set; }
+        public object AData { get; set; }
         public bool BoolValue { get; set; }
     }
 }
