@@ -223,7 +223,8 @@
     <Compile Include="Converter\CoverRecipientToBoolConverter.cs" />
     <Compile Include="Converter\CoverToImageConverter.cs" />
     <Compile Include="Converter\FolderImageConverter.cs" />
-    <Compile Include="Converter\NullToBoolConverter.cs" />
+    <Compile Include="Converter\NullToBooleanConverter.cs" />
+    <Compile Include="Converter\NullToRecipientConverter.cs" />
     <Compile Include="Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Converter\SelectedFileSystemItemConverter.cs" />
     <Compile Include="Converter\TreePathContructor.cs" />
