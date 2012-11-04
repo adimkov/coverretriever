@@ -12,12 +12,23 @@ namespace CoverRetriever.ViewModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reactive;
     using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Windows.Input;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.AudioInfo.Tagger;
+    using CoverRetriever.AudioInfo.Utility;
     using CoverRetriever.Model;
+    using CoverRetriever.Resources;
+
+    using Microsoft.Practices.Prism.Commands;
+    using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+
+    using Notification = Microsoft.Practices.Prism.Interactivity.InteractionRequest.Notification;
 
     /// <summary>
     /// View model of selected audio file conductor. 
@@ -26,24 +37,85 @@ namespace CoverRetriever.ViewModel
     public class FileConductorViewModel : ViewModelBase
     {
         /// <summary>
+        /// The request to highlight GetTag button.
+        /// </summary>
+        private readonly InteractionRequest<Notification> highlightToGetTags;
+
+        /// <summary>
+        /// Backing field for GrabTagsCommand. 
+        /// </summary>
+        private readonly DelegateCommand grabTagsCommand;
+
+        /// <summary>
+        /// Get covers subject.
+        /// </summary>
+        private readonly Subject<IMetaProvider> grabCoverSubject = new Subject<IMetaProvider>();
+
+        /// <summary>
         /// Backing field for SelectedAudio property.
         /// </summary>
-        private AudioFile _selectedAudio;
+        private AudioFile selectedAudio;
 
         /// <summary>
         /// Backing field for Recipient property.
         /// </summary>
-        private CoverRecipient _recipient;
+        private CoverRecipient recipient;
 
         /// <summary>
         /// Backing field for SelectedAudioCover property.
         /// </summary>
-        private Cover _selectedAudioCover;
+        private Cover selectedAudioCover;
 
         /// <summary>
         /// Backing field for ApplyToAllFiles property.
         /// </summary>
-        private bool _applyToAllFiles;
+        private bool applyToAllFiles;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileConductorViewModel" /> class.
+        /// </summary>
+        public FileConductorViewModel()
+        {
+            highlightToGetTags = new InteractionRequest<Notification>();
+            grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => SelectedAudio != null);
+            SaveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
+            RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
+
+            grabCoverSubject
+                .Throttle(TimeSpan.FromMilliseconds(1400))
+                .ObserveOnDispatcher()
+                .Subscribe(GrabCoversForAudio);
+        }
+
+        /// <summary>
+        /// Gets the grab tags command.
+        /// </summary>
+        public ICommand GrabTagsCommand
+        {
+            get
+            {
+                return grabTagsCommand;
+            }
+        }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand SaveSuggestedTagCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the reject suggested tags command.
+        /// </summary>
+        public ICommand RejectSuggestedTagCommand { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the audio tagger.
+        /// </summary>
+        /// <value>
+        /// The audio tagger.
+        /// </value>
+        [Import(typeof(ITaggerService))]
+        public Lazy<ITaggerService> Tagger { get; set; }
 
         /// <summary>
         /// Gets or sets selected audio. 
@@ -52,14 +124,25 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _selectedAudio;
+                return selectedAudio;
             }
 
             set
             {
-                _selectedAudio = value;
+                if (selectedAudio != null)
+                {
+                    selectedAudio.CancelEditTags();
+                }
+                                                   
+                selectedAudio = value;
+                if (selectedAudio != null)
+                {
+                    selectedAudio.BeginEditTags();
+                }
+
                 SetSelectedAudioCoverIfPosible();
-                RaisePropertyChanged("SelectedAudio");
+                RaisePropertyChanged(string.Empty);
+                grabTagsCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -70,13 +153,111 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _selectedAudioCover;
+                return selectedAudioCover;
             }
 
             private set
             {
-                _selectedAudioCover = value;
+                selectedAudioCover = value;
                 RaisePropertyChanged("SelectedAudioCover");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the artist of composition.
+        /// </summary>
+        public string Artist
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Artist : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Artist = value;
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets album name.
+        /// </summary>
+        public string Album
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Album : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Album = value;
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets of year.
+        /// </summary>
+        public string Year
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.Year : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.Year = value;
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets name of composition.
+        /// </summary>
+        public string TrackName
+        {
+            get
+            {
+                return SelectedAudio != null ? SelectedAudio.MetaProvider.TrackName : string.Empty;
+            }
+
+            set
+            {
+                if (SelectedAudio != null)
+                {
+                    SelectedAudio.MetaProvider.TrackName = value;
+                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                    RaisePropertyChanged("IsDirty");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is dirty.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is dirty; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirty
+        {
+            get
+            {
+                return SelectedAudio != null && SelectedAudio.MetaProvider.IsDirty;
             }
         }
 
@@ -87,12 +268,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _applyToAllFiles;
+                return applyToAllFiles;
             }
 
             set
             {
-                _applyToAllFiles = value;
+                applyToAllFiles = value;
                 RaisePropertyChanged("ApplyToAllFiles");
             }
         }
@@ -105,16 +286,16 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _recipient;
+                return recipient;
             }
 
             set
             {
-                if (_recipient != value)
+                if (recipient != value)
                 {
-                    _recipient = value;
+                    recipient = value;
 
-                    if (_recipient == CoverRecipient.Directory)
+                    if (recipient == CoverRecipient.Directory)
                     {
                         ApplyToAllFiles = false;
                     }
@@ -126,6 +307,31 @@ namespace CoverRetriever.ViewModel
 
                     RaisePropertyChanged("Recipient");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is needed to retrieve tags.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> If this instance is needed to retrieve tags; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsNeededToRetrieveTags
+        {
+            get
+            {
+                return String.IsNullOrWhiteSpace(Artist);
+            }
+        }
+
+        /// <summary>
+        /// Gets the request for highlight 'get tags' button.
+        /// </summary>
+        public InteractionRequest<Notification> HighlightToGetTags
+        {
+            get
+            {
+                return highlightToGetTags;
             }
         }
 
@@ -200,6 +406,62 @@ namespace CoverRetriever.ViewModel
             }
 
             SelectedAudioCover = cover;
+        }
+
+        /// <summary>
+        /// Grabs the tags command execute.
+        /// </summary>
+        private void GrabTagsCommandExecute()
+        {
+            StartOperation(CoverRetrieverResources.GrabTagMessage.FormatString(SelectedAudio.Name));
+
+            Tagger.Value.LoadTagsForAudioFile(SelectedAudio.GetFileSystemItemFullPath())
+                .SubscribeOn(((CoverRetrieverViewModel)ParentViewModel).SubscribeScheduler)
+                .ObserveOn(((CoverRetrieverViewModel)ParentViewModel).ObservableScheduler)
+                .Finally(EndOperation)
+                .Completed(() =>
+                    {
+                        Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
+                        grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                    })
+                .Subscribe(
+                    x =>
+                    {
+                        SelectedAudio.CopyTagsFrom(x);
+                        RaisePropertyChanged(string.Empty);
+                    },
+                    ((CoverRetrieverViewModel)ParentViewModel).SetError);
+        }
+
+        /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void SaveSuggestedTagCommandExecute()
+        {
+            SelectedAudio.SaveFromTagger();
+            SelectedAudio.EndEditTags();
+            SelectedAudio.BeginEditTags();
+            RaisePropertyChanged(string.Empty);
+        }
+
+        /// <summary>
+        /// Rejects the suggested tag command execute.
+        /// </summary>
+        private void RejectSuggestedTagCommandExecute()
+        {
+            SelectedAudio.CancelEditTags();
+            grabCoverSubject.OnNext(SelectedAudio.MetaProvider); 
+            SelectedAudio.BeginEditTags();
+            RaisePropertyChanged(string.Empty);
+        }
+
+        /// <summary>
+        /// Grabs the covers for audio.
+        /// </summary>
+        /// <param name="metaProvider">The meta provider.</param>
+        private void GrabCoversForAudio(IMetaProvider metaProvider)
+        {
+            ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(metaProvider);
         }
     }
 }

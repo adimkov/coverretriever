@@ -10,11 +10,8 @@
 namespace CoverRetriever.Model
 {
     using System;
-    using System.Linq;
-    using System.Reactive;
 
     using CoverRetriever.AudioInfo;
-    using CoverRetriever.AudioInfo.Tagger;
     using CoverRetriever.Common.Validation;
     using CoverRetriever.Service;
 
@@ -27,17 +24,12 @@ namespace CoverRetriever.Model
         /// <summary>
         /// Audio tag provider.
         /// </summary>
-        private readonly Lazy<IMetaProvider> _metaProvider;
+        private readonly Lazy<IMetaProvider> metaProvider;
 
         /// <summary>
         /// Service that saves cover into folder.
         /// </summary>
-        private readonly DirectoryCoverOrganizer _directoryCoverOrganizer;
-
-        /// <summary>
-        /// The audio file meta data obtainer.
-        /// </summary>
-        private ITagger _tagger;
+        private readonly DirectoryCoverOrganizer directoryCoverOrganizer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioFile"/> class.
@@ -51,7 +43,7 @@ namespace CoverRetriever.Model
             Require.NotNull(parent, "parent");
             Require.NotNull(metaProvider, "metaProvider");
             
-            _metaProvider = metaProvider;
+            this.metaProvider = metaProvider;
         }
 
         /// <summary>
@@ -64,7 +56,7 @@ namespace CoverRetriever.Model
         public AudioFile(string name, FileSystemItem parent, Lazy<IMetaProvider> metaProvider, DirectoryCoverOrganizer directoryCoverOrganizer)
             : this(name, parent, metaProvider)
         {
-            _directoryCoverOrganizer = directoryCoverOrganizer;
+            this.directoryCoverOrganizer = directoryCoverOrganizer;
         }
 
         /// <summary>
@@ -72,7 +64,7 @@ namespace CoverRetriever.Model
         /// </summary>
         public ICoverOrganizer DirectoryCover
         {
-            get { return _directoryCoverOrganizer; }
+            get { return directoryCoverOrganizer; }
         }
 
         /// <summary>
@@ -82,51 +74,7 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return _metaProvider.Value as ICoverOrganizer;
-            }
-        }
-
-        /// <summary>
-        /// Gets the artist of composition.
-        /// </summary>
-        public string Artist
-        {
-            get
-            {
-                return GetMetaProvider().Artist;
-            }
-        }
-
-        /// <summary>
-        /// Gets album of composition.
-        /// </summary>
-        public string Album
-        {
-            get
-            {
-                return GetMetaProvider().Album;
-            }
-        }
-
-        /// <summary>
-        /// Gets year of composition.
-        /// </summary>
-        public string Year
-        {
-            get
-            {
-                return GetMetaProvider().Year;
-            }
-        }
-
-        /// <summary>
-        /// Gets name of composition.
-        /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return GetMetaProvider().TrackName;
+                return metaProvider.Value as ICoverOrganizer;
             }
         }
 
@@ -137,82 +85,49 @@ namespace CoverRetriever.Model
         {
             get
             {
-                return GetMetaProvider();
+                return metaProvider.Value;
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether this instance is needed to retrieve tags.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> If this instance is needed to retrieve tags; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsNeededToRetrieveTags
-        {
-            get
-            {
-                return String.IsNullOrWhiteSpace(Artist);
-            }
-        }
-
-        /// <summary>
-        /// Assigns the tagger.
-        /// </summary>
-        /// <param name="tagger">The tagger.</param>
-        /// <returns>Operation observer.</returns>
-        public IObservable<Unit> AssignTagger(ITagger tagger)
-        {
-            return tagger
-                .LoadTagsForAudioFile(GetFileSystemItemFullPath())
-                .Completed(
-                () =>
-                    {
-                        _tagger = tagger;
-                        RaisePropertyChanged(String.Empty);
-                    });
-        }
-
-        /// <summary>
-        /// Resets the tagger.
-        /// </summary>
-        public void ResetTagger()
-        {
-            _tagger = null;
-            RaisePropertyChanged(String.Empty);
-        }
-
-        /// <summary>
-        /// Saves tag from tagger.
+        /// Saves tag from taggerService.
         /// </summary>
         public void SaveFromTagger()
         {
-            if (_tagger == null)
-            {
-                throw new InvalidOperationException("Tagger was not assigned. Assign the tagger first");
-            }
-
-            _tagger.Album.With(x => _metaProvider.Value.Album = x);
-            _tagger.Artist.With(x => _metaProvider.Value.Artist = x);
-            _tagger.Year.With(x => _metaProvider.Value.Year = x);
-            _tagger.TrackName.With(x => _metaProvider.Value.TrackName = x);
-
-            _metaProvider.Value.Save();
-            RaisePropertyChanged(String.Empty);
+            metaProvider.Value.Save();
         }
 
         /// <summary>
-        /// Gets the meta provider from file or from tagger.
+        /// Copies the tags from.
         /// </summary>
-        /// <returns>The meta provider.</returns>
-        private IMetaProvider GetMetaProvider()
+        /// <param name="source">The source.</param>
+        public void CopyTagsFrom(IMetaProvider source)
         {
-            if (_tagger != null)
-            {
-                return _tagger;
-            }
-
-            return _metaProvider.Value;
+            MetaProvider.CopyFrom(source);
         }
 
+        /// <summary>
+        /// Begins the edit tags.
+        /// </summary>
+        public void BeginEditTags()
+        {
+            ((EditableObject)MetaProvider).BeginEdit();
+        }
+
+        /// <summary>
+        /// Ends the edit tags.
+        /// </summary>
+        public void EndEditTags()
+        {
+           ((EditableObject)MetaProvider).EndEdit();
+        }
+
+        /// <summary>
+        /// Cancels the edit tags.
+        /// </summary>
+        public void CancelEditTags()
+        {
+            ((EditableObject)MetaProvider).CancelEdit();
+        }
     }
 }

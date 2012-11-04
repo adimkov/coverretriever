@@ -48,32 +48,32 @@ namespace CoverRetriever.AudioInfo
         /// <summary>
         /// Collection of file name parsers.
         /// </summary>
-        private IEnumerable<PrioritizedRegex> _fileNameParsers;
+        private IEnumerable<PrioritizedRegex> fileNameParsers;
 
         /// <summary>
         /// Backing field Album property.
         /// </summary>
-        private string _album;
+        private string album;
 
         /// <summary>
         /// Backing field Artist property.
         /// </summary>
-        private string _artist;
+        private string artist;
 
         /// <summary>
         /// Backing field Year property.
         /// </summary>
-        private string _year;
+        private string year;
 
         /// <summary>
         /// Backing field  property.
         /// </summary>
-        private string _trackName;
+        private string trackName;
 
         /// <summary>
         /// Backing field TrackNumber property.
         /// </summary>
-        private string _trackNumber;
+        private string trackNumber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileNameMetaObtainer"/> class.
@@ -128,9 +128,9 @@ namespace CoverRetriever.AudioInfo
         /// <param name="fileName">File name to parse.</param>
         public void ParseFileName(string fileName)
         {
-            var groupedRegexByMatches =
-                _fileNameParsers.Where(parser => parser.Regex.IsMatch(fileName)).GroupBy(
-                    parser => parser.Regex.Match(fileName).Groups.Count);
+            var groupedRegexByMatches = fileNameParsers
+                .Where(parser => parser.Regex.IsMatch(fileName))
+                .GroupBy(parser => parser.Regex.Match(fileName).Groups.Count);
 
             var maxMatches = groupedRegexByMatches.Max(x => x.Key);
             var prioritizedRegexes = groupedRegexByMatches.Single(x => x.Key == maxMatches).ToList();
@@ -138,9 +138,9 @@ namespace CoverRetriever.AudioInfo
             var regexWithMaxMatches = prioritizedRegexes.First();
 
             var groups = regexWithMaxMatches.Regex.Match(fileName).Groups;
-            _artist = groups[TrimTemplateSymbol(ArtistBlock)].Value.Trim();
-            _trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
-            _trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
+            artist = groups[TrimTemplateSymbol(ArtistBlock)].Value.Trim();
+            trackName = groups[TrimTemplateSymbol(TitleBlock)].Value.Trim();
+            trackNumber = groups[TrimTemplateSymbol(TrackNumberBlock)].Value.Trim();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The album name.</returns>
         public virtual string GetAlbum()
         {
-            return _album;
+            return album;
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The artist name.</returns>
         public virtual string GetArtist()
         {
-            return _artist;
+            return artist;
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The year of album release.</returns>
         public virtual string GetYear()
         {
-            return _year;
+            return year;
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace CoverRetriever.AudioInfo
         /// <returns>The name of track.</returns>
         public virtual string GetTrackName()
         {
-            return _trackName;
+            return trackName;
         }
 
         /// <summary>
@@ -206,7 +206,8 @@ namespace CoverRetriever.AudioInfo
 
                 regexList.Add(new PrioritizedRegex(new Regex(BuildRegexp(pattern), RegexOptions.IgnoreCase), prority));
             }
-            _fileNameParsers = regexList;
+            
+            fileNameParsers = regexList;
         }
 
         /// <summary>

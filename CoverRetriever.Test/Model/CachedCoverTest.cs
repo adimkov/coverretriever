@@ -30,7 +30,7 @@ namespace CoverRetriever.Test.Model
         public void Should_create_cached_cover()
         {
             var coverStream = Observable.Return(new Mock<Stream>().Object);
-            var source = this.GenerateCoverStub(coverStream);
+            var source = GenerateCoverStub(coverStream);
             var target = new CachedCover(source);
 
             Assert.AreEqual(source.Name, target.Name);
@@ -52,8 +52,8 @@ namespace CoverRetriever.Test.Model
             });
 
             var scheduler = new TestScheduler();
-            var mockObserver1 = new MockObserver<Stream>(scheduler);
-            var mockObserver2 = new MockObserver<Stream>(scheduler);
+            var mockObserver1 = scheduler.CreateObserver<Stream>();
+            var mockObserver2 = scheduler.CreateObserver<Stream>();
 
             var target = new CachedCover(GenerateCoverStub(coverStream));
            
@@ -78,8 +78,8 @@ namespace CoverRetriever.Test.Model
             });
 
             var scheduler = new TestScheduler();
-            var mockObserver1 = new MockObserver<Stream>(scheduler);
-            var mockObserver2 = new MockObserver<Stream>(scheduler);
+            var mockObserver1 = scheduler.CreateObserver<Stream>();
+            var mockObserver2 = scheduler.CreateObserver<Stream>();
 
             var target = new CachedCover(GenerateCoverStub(coverStream));
 
@@ -108,8 +108,8 @@ namespace CoverRetriever.Test.Model
             });
 
             var scheduler = new TestScheduler();
-            var mockObserver1 = new MockObserver<Stream>(scheduler);
-            var mockObserver2 = new MockObserver<Stream>(scheduler);
+            var mockObserver1 = scheduler.CreateObserver<Stream>();
+            var mockObserver2 = scheduler.CreateObserver<Stream>();
 
             var target = new CachedCover(GenerateCoverStub(coverStream));
            

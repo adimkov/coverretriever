@@ -106,12 +106,12 @@ namespace CoverRetriever.Test.Service
         {
             var testTuple = this.PrepareService();
             var scheduler = new TestScheduler();
-            var testObserver = new MockObserver<FileSystemItem>(scheduler);
+            var testObserver = scheduler.CreateObserver<FileSystemItem>();
             var service = testTuple.Item1;
             var rootFolder = testTuple.Item2;
 
             service.GetChildrenForRootFolder(rootFolder).Run(testObserver);
-
+            scheduler.Start();
             var countOfOnNextMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnNext);
             var countOfOnCompleteMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnCompleted);
             var countOfOnErrorMessages = testObserver.Messages.Count(x => x.Value.Kind == NotificationKind.OnError);

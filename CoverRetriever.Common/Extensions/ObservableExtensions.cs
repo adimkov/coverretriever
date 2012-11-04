@@ -10,6 +10,8 @@
 namespace System.Linq
 {
     using System;
+    using System.Reactive;
+    using System.Reactive.Concurrency;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Threading;
@@ -33,9 +35,14 @@ namespace System.Linq
             Require.NotNull(observable, "observable");
             Require.NotNull(doAction, "doAction");
 
-            var actionObservable = Observable.Timer(TimeSpan.FromMilliseconds(1)).Do(_ => doAction());
-
-            return Observable.Empty<T>().Do(x => { }, () => actionObservable.Subscribe()).Concat(observable);
+            return Observable.Defer(
+                () =>
+                {
+                    Observable.Empty<Unit>()
+                        .Delay(TimeSpan.FromMilliseconds(1))
+                        .Completed(doAction);
+                    return observable;
+                });
         }
 
         /// <summary>
@@ -51,9 +58,9 @@ namespace System.Linq
             Require.NotNull(completeAction, "completeAction");
 
             var subject = new Subject<TSource>();
-
+            
             source.Subscribe(
-                subject.OnNext,
+               subject.OnNext,
                 subject.OnError,
                 () =>
                 {

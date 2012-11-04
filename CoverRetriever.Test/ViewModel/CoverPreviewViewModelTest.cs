@@ -54,7 +54,7 @@ namespace CoverRetriever.Test.ViewModel
             var target = new CoverPreviewViewModel(remoteCover);
             
             var testScheduler = new TestScheduler();
-            var mockObservable = new MockObserver<Cover>(testScheduler);
+            var mockObservable = testScheduler.CreateObserver<Cover>();
 
             target.SaveCover.Subscribe(mockObservable);
 

@@ -63,13 +63,28 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets the parent view model.
+        /// </summary>
+        /// <value>
+        /// The parent view model.
+        /// </value>
+        public ViewModelBase ParentViewModel { get; set; }
+
+        /// <summary>
         /// Set start of operation.
         /// </summary>
         /// <param name="operationName">Name of started operation.</param>
         protected void StartOperation(string operationName)
         {
-            OperationName = operationName;
-            IsBusy = true;
+            if (ParentViewModel != null)
+            {
+                ParentViewModel.StartOperation(operationName);    
+            }
+            else
+            {
+                OperationName = operationName;
+                IsBusy = true;    
+            }
         }
 
         /// <summary>
@@ -77,8 +92,16 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         protected void EndOperation()
         {
-            IsBusy = false;
-            OperationName = String.Empty;
+            if (ParentViewModel != null)
+            {
+                ParentViewModel.IsBusy = false;
+                ParentViewModel.OperationName = String.Empty;
+            }
+            else
+            {
+                IsBusy = false;
+                OperationName = String.Empty;
+            }
         }
     }
 }

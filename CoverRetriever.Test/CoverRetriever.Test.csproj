@@ -128,6 +128,7 @@
     <Compile Include="AudioInfo\FileNameMetaProviderTest.cs" />
     <Compile Include="AudioInfo\FlacMetaProviderTest.cs" />
     <Compile Include="AudioInfo\Mp3MetaProviderTest.cs" />
+    <Compile Include="AudioInfo\EditableObjectTest.cs" />
     <Compile Include="CacheService\adding_new_cache_item.cs" />
     <Compile Include="CacheService\cache_service_runtime.cs" />
     <Compile Include="CacheService\reading_cache_item.cs" />
@@ -136,7 +137,6 @@
     </Compile>
     <Compile Include="Controls\ImageAsyncSourceTest.cs" />
     <Compile Include="Converters\FolderImageConverterTest.cs" />
-    <Compile Include="MockObserver.cs" />
     <Compile Include="Model\AudioFileTest.cs" />
     <Compile Include="Model\CachedCoverTest.cs" />
     <Compile Include="Model\FileSystemItemBaseTest.cs" />

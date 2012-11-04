@@ -7,6 +7,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace CoverRetriever.Test.CacheService
 {
+    using System.IO;
+
     using CoverRetriever.Caching;
     using NUnit.Framework;
 
@@ -47,6 +49,7 @@ namespace CoverRetriever.Test.CacheService
         [TearDown] 
         public void Cleanup()
         {
+            File.Delete(".\\cache.tmp");
             CacheService = null;
         }
     }

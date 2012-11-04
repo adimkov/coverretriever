@@ -151,13 +151,14 @@ namespace CoverRetriever.Test.AudioInfo
 //			long fileSizeBefore = new FileInfo(BuildFullResourcePath(EmptyFrameFileForImageSave)).Length;
             
             var testScheduler = new TestScheduler();
-            var mockObservable = new MockObserver<Unit>(testScheduler);
+            var mockObservable = testScheduler.CreateObserver<Unit>();
             using (var target = new Mp3MetaProvider(PathUtils.BuildFullResourcePath(EmptyFrameFileForImageSave)))
             using (var stream = File.OpenRead(PathUtils.BuildFullResourcePath(ImageFileWithÄÄÒ)))
             {
                 var cover = new Cover("FrontCover.jpg", new Size(598, 600), 113337, Observable.Return(stream));
 
-                target.SaveCover(cover).Run(mockObservable);
+                target.SaveCover(cover).Subscribe(mockObservable);
+                testScheduler.Start();
             }
 
 //			long fileSizeAfter = new FileInfo(BuildFullResourcePath(EmptyFrameFileForImageSave)).Length;

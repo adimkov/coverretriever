@@ -6,9 +6,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:CoverRetriever.Resources"
-             MinHeight="190"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors" MinHeight="190"
              d:DesignWidth="405"
-             mc:Ignorable="d">
+             mc:Ignorable="d" IsEnabled="{Binding SelectedAudio, Converter={StaticResource nullToBoolConverter}}">
     <UserControl.Resources>
         <resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources" />
         <converter:CoverToImageConverter x:Key="coverToImageConverter" />
@@ -17,6 +18,22 @@
         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,4,0" />
+        </Style>
+
+        <Style x:Key="TagButton"
+               BasedOn="{StaticResource {x:Type Button}}"
+               TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,0,0,-3" />
+        </Style>
+
+        <Style x:Key="TaggerHighlight" TargetType="Border">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="{StaticResource ColorAccentHighlightBrush}" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="-3,-3,-3,-6" />
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -64,9 +81,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.TrackName,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -76,9 +95,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Artist,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -88,9 +109,11 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Album,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Margin="0"
@@ -103,9 +126,11 @@
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 IsReadOnly="True"
-                 Text="{Binding Path=SelectedAudio.Year,
-                                Mode=OneWay}" />
+                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <i:Interaction.Behaviors>
+                <behaviors:SelectAllOnGotFocusBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <Border Grid.Row="1"
                 Grid.RowSpan="4"
                 HorizontalAlignment="Left"
@@ -144,5 +169,49 @@
                            Text="{Binding Path=SelectedAudioCover.CoverSize.Height}" />
             </StackPanel>
         </StackPanel>
+        <Border x:Name="getTaggerBorder"
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Visibility="{Binding IsDirty, Converter={StaticResource invertBoolToVisibilityConverter}}">
+            <Grid>
+                <Button x:Name="getTagButton"
+                                    Command="{Binding GrabTagsCommand}"
+                                    Content="{Binding Path=CoverRetrieverResources.TextGetTagsFromLasrFm,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+                <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:HighlightElementBehavior HighlightRequest="{Binding HighlightToGetTags}" />
+                    </i:Interaction.Behaviors>
+                </Border>
+            </Grid>
+        </Border>
+        <Border x:Name="saveTagBorder" 
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="saveButton"
+                                    Grid.Column="0"
+                                    Command="{Binding SaveSuggestedTagCommand}"
+                                    Content="{Binding CoverRetrieverResources.TextSave,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+                <Button x:Name="cancelButton"
+                                    Grid.Column="1"
+                                    Command="{Binding RejectSuggestedTagCommand}"
+                                    Content="{Binding CoverRetrieverResources.TextCancel,
+                                                      Source={StaticResource coverRetrieverResources}}"
+                                    Style="{StaticResource TagButton}" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
