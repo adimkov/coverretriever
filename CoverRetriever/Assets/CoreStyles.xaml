@@ -161,13 +161,13 @@
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <ContentPresenter.Effect>
-                                <DropShadowEffect BlurRadius="1"
-                                                  Direction="-90"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="1"
-                                                  Color="{StaticResource ColorForegroundShadowColor}" />
-                            </ContentPresenter.Effect>
+<!--                            <ContentPresenter.Effect>-->
+<!--                                <DropShadowEffect BlurRadius="1"-->
+<!--                                                  Direction="-90"-->
+<!--                                                  Opacity="0.5"-->
+<!--                                                  ShadowDepth="1"-->
+<!--                                                  Color="{StaticResource ColorForegroundShadowColor}" />-->
+<!--                            </ContentPresenter.Effect>-->
                         </ContentPresenter>
                         <Rectangle x:Name="FocusVisualElement"
                                    Margin="1"
@@ -298,13 +298,13 @@
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <ContentPresenter.Effect>
-                                <DropShadowEffect BlurRadius="1"
-                                                  Direction="90"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="1"
-                                                  Color="{StaticResource ColorForegroundShadowColorGreen}" />
-                            </ContentPresenter.Effect>
+<!--                            <ContentPresenter.Effect>-->
+<!--                                <DropShadowEffect BlurRadius="1"-->
+<!--                                                  Direction="90"-->
+<!--                                                  Opacity="0.5"-->
+<!--                                                  ShadowDepth="1"-->
+<!--                                                  Color="{StaticResource ColorForegroundShadowColorGreen}" />-->
+<!--                            </ContentPresenter.Effect>-->
                         </ContentPresenter>
                         <Rectangle x:Name="FocusVisualElement"
                                    Margin="1"
@@ -436,13 +436,13 @@
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <ContentPresenter.Effect>
-                                <DropShadowEffect BlurRadius="1"
-                                                  Direction="90"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="1"
-                                                  Color="{StaticResource ColorForegroundShadowColorOrange}" />
-                            </ContentPresenter.Effect>
+<!--                            <ContentPresenter.Effect>-->
+<!--                                <DropShadowEffect BlurRadius="1"-->
+<!--                                                  Direction="90"-->
+<!--                                                  Opacity="0.5"-->
+<!--                                                  ShadowDepth="1"-->
+<!--                                                  Color="{StaticResource ColorForegroundShadowColorOrange}" />-->
+<!--                            </ContentPresenter.Effect>-->
                         </ContentPresenter>
                         <Rectangle x:Name="FocusVisualElement"
                                    Margin="1"
@@ -574,13 +574,13 @@
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <ContentPresenter.Effect>
-                                <DropShadowEffect BlurRadius="1"
-                                                  Direction="90"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="1"
-                                                  Color="{StaticResource ColorForegroundShadowColorBlue}" />
-                            </ContentPresenter.Effect>
+<!--                            <ContentPresenter.Effect>-->
+<!--                                <DropShadowEffect BlurRadius="1"-->
+<!--                                                  Direction="90"-->
+<!--                                                  Opacity="0.5"-->
+<!--                                                  ShadowDepth="1"-->
+<!--                                                  Color="{StaticResource ColorForegroundShadowColorBlue}" />-->
+<!--                            </ContentPresenter.Effect>-->
                         </ContentPresenter>
                         <Rectangle x:Name="FocusVisualElement"
                                    Margin="1"
