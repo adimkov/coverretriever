@@ -7,7 +7,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:CoverRetriever.Resources"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors" MinHeight="190"
+             xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" MinHeight="190"
              d:DesignWidth="405"
              mc:Ignorable="d" IsEnabled="{Binding SelectedAudio, Converter={StaticResource nullToBoolConverter}}">
     <UserControl.Resources>
@@ -15,9 +16,15 @@
         <converter:CoverToImageConverter x:Key="coverToImageConverter" />
         <converter:CoverRecipientToBoolConverter x:Key="coverRecipientToBoolConverter" />
 
-        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}" >
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,4,0" />
+        </Style>
+        
+        <Style TargetType="xctk:SplitButton" BasedOn="{StaticResource {x:Type xctk:SplitButton}}">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,0,8,-3"/>
         </Style>
 
         <Style x:Key="TagButton"
@@ -196,21 +203,22 @@
                 Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="saveButton"
-                                    Grid.Column="0"
-                                    Command="{Binding SaveSuggestedTagCommand}"
-                                    Content="{Binding CoverRetrieverResources.TextSave,
-                                                      Source={StaticResource coverRetrieverResources}}"
-                                    Style="{StaticResource TagButton}" />
+                <xctk:SplitButton x:Name="saveButton"
+                                  Grid.Column="0"
+                                  Command="{Binding SaveSuggestedTagCommand}"
+                                  Content="{Binding CoverRetrieverResources.TextSave, Source={StaticResource coverRetrieverResources}}">
+                    <xctk:SplitButton.DropDownContent>
+                        <Button Margin="8">Save to all in folder</Button>
+                    </xctk:SplitButton.DropDownContent>
+                </xctk:SplitButton>
                 <Button x:Name="cancelButton"
-                                    Grid.Column="1"
-                                    Command="{Binding RejectSuggestedTagCommand}"
-                                    Content="{Binding CoverRetrieverResources.TextCancel,
-                                                      Source={StaticResource coverRetrieverResources}}"
-                                    Style="{StaticResource TagButton}" />
+                        Grid.Column="1"
+                        Command="{Binding RejectSuggestedTagCommand}"
+                        Content="{Binding CoverRetrieverResources.TextCancel, Source={StaticResource coverRetrieverResources}}"
+                        Style="{StaticResource TagButton}" />
             </Grid>
         </Border>
     </Grid>
