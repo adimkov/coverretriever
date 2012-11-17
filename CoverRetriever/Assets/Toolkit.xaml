@@ -412,7 +412,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style TargetType="{x:Type xctk:SplitButton}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="IsTabStop" Value="False" />
@@ -481,6 +480,116 @@
                             <Border BorderThickness="1" Background="{StaticResource PopupBackgroundBrush}" BorderBrush="{StaticResource ColorPickerDarkBorderBrush}">
                                 <ContentPresenter Content="{TemplateBinding DropDownContent}" />
                             </Border>
+                            <Popup.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Padding" Value="16,6" />
+                                    <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+                                    <Setter Property="Foreground" Value="{StaticResource ControlForeground}" />
+                                    <Setter Property="MinWidth" Value="75" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid x:Name="Root">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualStateGroup.Transitions>
+                                                                <VisualTransition GeneratedDuration="0:0:0.1" />
+                                                                <VisualTransition To="Pressed" />
+                                                                <VisualTransition From="Pressed" />
+                                                            </VisualStateGroup.Transitions>
+                                                            <VisualState x:Name="Normal" />
+                                                            <VisualState x:Name="MouseOver">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="PressedElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="0" />
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="MouseOverElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="1" />
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Pressed">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="PressedElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="1" />
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="MouseOverElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="0" />
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="DisabledElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="1" />
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="HighlightElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="0.5" />
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="ContentHost"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="0.75" />
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                        <VisualStateGroup x:Name="FocusStates">
+                                                            <VisualState x:Name="Focused">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0"
+                                                                                     Storyboard.TargetName="FocusVisualElement"
+                                                                                     Storyboard.TargetProperty="(FrameworkElement.Opacity)"
+                                                                                     To="1" />
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Unfocused" />
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <Border x:Name="DisabledElement"
+                                                            Background="{StaticResource DisabledBrush}"
+                                                            CornerRadius="2"
+                                                            Opacity="0">
+                                                        <Border BorderBrush="{StaticResource DisabledBorderBrush}"
+                                                                BorderThickness="0,0,1,1"
+                                                                CornerRadius="2" />
+                                                    </Border>
+                                                    <Border x:Name="MouseOverElement"
+                                                            Background="{StaticResource ControlBackgroundOver}"
+                                                            CornerRadius="2"
+                                                            Opacity="0" />
+                                                    <Border x:Name="PressedElement"
+                                                            Background="{StaticResource ControlBackgroundPressed}"
+                                                            CornerRadius="2"
+                                                            Opacity="0" />
+                                                    <Border x:Name="HighlightElement"
+                                                            BorderBrush="{StaticResource ControlHighlight}"
+                                                            BorderThickness="1,1,0,0"
+                                                            CornerRadius="2" />
+                                                    <ContentPresenter x:Name="ContentHost"
+                                                                      Margin="{TemplateBinding Padding}"
+                                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                    </ContentPresenter>
+                                                    <Rectangle x:Name="FocusVisualElement"
+                                                               Margin="1"
+                                                               IsHitTestVisible="False"
+                                                               Opacity="0"
+                                                               RadiusX="1"
+                                                               RadiusY="1"
+                                                               Stroke="{StaticResource FocusVisualBrush}"
+                                                               StrokeThickness="{StaticResource FocusVisualStrokeThickness}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Popup.Resources>
                         </Popup>
                     </Grid>
                 </ControlTemplate>

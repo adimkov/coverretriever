@@ -242,7 +242,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Resources\CoverRetrieverResources1.Designer.cs">
+    <Compile Include="Resources\CoverRetrieverResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CoverRetrieverResources.resx</DependentUpon>

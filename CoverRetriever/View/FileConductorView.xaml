@@ -211,7 +211,7 @@
                                   Command="{Binding SaveSuggestedTagCommand}"
                                   Content="{Binding CoverRetrieverResources.TextSave, Source={StaticResource coverRetrieverResources}}">
                     <xctk:SplitButton.DropDownContent>
-                        <Button Margin="8">Save to all in folder</Button>
+                        <Button Margin="1,1" Width="177" Content="{Binding CoverRetrieverResources.FlagApplyToAll, Source={StaticResource coverRetrieverResources}}"/>
                     </xctk:SplitButton.DropDownContent>
                 </xctk:SplitButton>
                 <Button x:Name="cancelButton"
