@@ -72,6 +72,11 @@ namespace CoverRetriever.ViewModel
         private bool applyToAllFiles;
 
         /// <summary>
+        /// Backing field for Save
+        /// </summary>
+        private bool saveTagsOptionsIsOpened;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FileConductorViewModel" /> class.
         /// </summary>
         public FileConductorViewModel()
@@ -334,6 +339,26 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether save tags options is opened.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> If save tags options is opened; otherwise, <c>false</c>.
+        /// </value>
+        public bool SaveTagsOptionsIsOpened
+        {
+            get
+            {
+                return saveTagsOptionsIsOpened;
+            }
+
+            set
+            {
+                saveTagsOptionsIsOpened = value;
+                RaisePropertyChanged("SaveTagsOptionsIsOpened");
+            }
+        }
+
+        /// <summary>
         /// Gets the request for highlight 'get tags' button.
         /// </summary>
         public InteractionRequest<Notification> HighlightToGetTags
@@ -460,6 +485,7 @@ namespace CoverRetriever.ViewModel
         {
             var parentFolder = SelectedAudio.Parent as Folder;
             var tag = SelectedAudio.MetaProvider;
+            SaveTagsOptionsIsOpened = false;
             if (parentFolder != null)
             {
                 var audioFiles = parentFolder.Children
@@ -470,11 +496,11 @@ namespace CoverRetriever.ViewModel
                 {
                     StartOperation(CoverRetrieverResources.MessageSaveTagsInContext.FormatString(audioFile.Name));
                     
-                    //audioFile.CopyTagsFrom(tag);
+                    audioFile.CopyTagsFrom(tag);
                     //audioFile.SaveFromTagger();
                 }
 
-                //EndOperation();
+                EndOperation();
             }
         }
 
