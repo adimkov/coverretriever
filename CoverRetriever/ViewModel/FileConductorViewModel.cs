@@ -79,6 +79,7 @@ namespace CoverRetriever.ViewModel
             highlightToGetTags = new InteractionRequest<Notification>();
             grabTagsCommand = new DelegateCommand(GrabTagsCommandExecute, () => SelectedAudio != null);
             SaveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
+            SaveSuggestedTagsInContextCommand = new DelegateCommand(SaveSuggestedTagsInContextCommandExecute);
             RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
 
             grabCoverSubject
@@ -107,6 +108,14 @@ namespace CoverRetriever.ViewModel
         /// Gets the reject suggested tags command.
         /// </summary>
         public ICommand RejectSuggestedTagCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the save suggested tags in context command.
+        /// </summary>
+        /// <value>
+        /// The save suggested tags in context command.
+        /// </value>
+        public ICommand SaveSuggestedTagsInContextCommand { get; private set; }
 
         /// <summary>
         /// Gets or sets the audio tagger.
@@ -442,6 +451,31 @@ namespace CoverRetriever.ViewModel
             SelectedAudio.EndEditTags();
             SelectedAudio.BeginEditTags();
             RaisePropertyChanged(string.Empty);
+        }
+
+        /// <summary>
+        /// Saves the suggested tags in context command execute.
+        /// </summary>
+        private void SaveSuggestedTagsInContextCommandExecute()
+        {
+            var parentFolder = SelectedAudio.Parent as Folder;
+            var tag = SelectedAudio.MetaProvider;
+            if (parentFolder != null)
+            {
+                var audioFiles = parentFolder.Children
+                    .OfType<AudioFile>()
+                    .ToArray(); // copy data in memory
+
+                foreach (var audioFile in audioFiles)
+                {
+                    StartOperation(CoverRetrieverResources.MessageSaveTagsInContext.FormatString(audioFile.Name));
+                    
+                    //audioFile.CopyTagsFrom(tag);
+                    //audioFile.SaveFromTagger();
+                }
+
+                //EndOperation();
+            }
         }
 
         /// <summary>

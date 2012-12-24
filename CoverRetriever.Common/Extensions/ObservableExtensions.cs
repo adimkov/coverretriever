@@ -39,7 +39,7 @@ namespace System.Linq
                 () =>
                 {
                     Observable.Empty<Unit>()
-                        .Delay(TimeSpan.FromMilliseconds(1))
+                        .Delay(TimeSpan.FromMilliseconds(5))
                         .Completed(doAction);
                     return observable;
                 });

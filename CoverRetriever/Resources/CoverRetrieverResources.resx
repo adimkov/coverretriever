@@ -153,6 +153,10 @@
     <value>Saving the cover...</value>
     <comment>Operation message</comment>
   </data>
+  <data name="MessageSaveTagsInContext" xml:space="preserve">
+    <value>Save tags in '{0}'</value>
+    <comment>File сonductor view</comment>
+  </data>
   <data name="TextAbout" xml:space="preserve">
     <value>About</value>
     <comment>Shell</comment>

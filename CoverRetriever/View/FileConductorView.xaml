@@ -211,7 +211,10 @@
                                   Command="{Binding SaveSuggestedTagCommand}"
                                   Content="{Binding CoverRetrieverResources.TextSave, Source={StaticResource coverRetrieverResources}}">
                     <xctk:SplitButton.DropDownContent>
-                        <Button Margin="1,1" Width="177" Content="{Binding CoverRetrieverResources.FlagApplyToAll, Source={StaticResource coverRetrieverResources}}"/>
+                        <Button Margin="1,1" 
+                                Width="177" 
+                                Command="{Binding SaveSuggestedTagsInContextCommand}"
+                                Content="{Binding CoverRetrieverResources.FlagApplyToAll, Source={StaticResource coverRetrieverResources}}"/>
                     </xctk:SplitButton.DropDownContent>
                 </xctk:SplitButton>
                 <Button x:Name="cancelButton"
