@@ -74,6 +74,7 @@
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EditableObject.cs" />
+    <Compile Include="Tagger\AcousticId\AcousticIdTagger.cs" />
     <Compile Include="Tagger\ITaggerService.cs" />
     <Compile Include="Tagger\LastFm\AlbumInfoResponseParser.cs" />
     <Compile Include="Tagger\LastFm\LastFmService.cs" />
