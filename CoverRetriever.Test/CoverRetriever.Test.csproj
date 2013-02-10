@@ -119,6 +119,8 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AudioInfo.Helper\PictureHelperTest.cs" />
+    <Compile Include="AudioInfo.Tagger\AcousticId\AcousticIdServiceTest.cs" />
+    <Compile Include="AudioInfo.Tagger\AcousticId\FingerprintParserTest.cs" />
     <Compile Include="AudioInfo.Tagger\LastFm\AlbumInfoResponseParserTest.cs" />
     <Compile Include="AudioInfo.Tagger\LastFm\LastFmServiceTest.cs" />
     <Compile Include="AudioInfo.Tagger\LastFm\LastFmTaggerTest.cs" />
@@ -173,6 +175,8 @@
     <Resource Include="Input.AudioInfo.Tagger.LastFm\ValidAlbumInfoResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Input.AudioInfo.Tagger.AcousticId\AcDc_Fingerprint.txt" />
+    <Resource Include="Input.AudioInfo.Tagger.AcousticId\acdc_fingerprint_full.txt" />
     <Content Include="Input.AudioInfo\1.flac">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

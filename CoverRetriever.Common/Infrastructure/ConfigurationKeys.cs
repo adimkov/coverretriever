@@ -34,7 +34,7 @@ namespace CoverRetriever.Common.Infrastructure
         /// </summary>
         public const string GetNewVersionUri = "GetNewVersionUri";
 
-	/// <summary>
+	    /// <summary>
         /// Path to the cache file.
         /// </summary>
         public const string CacheFilePath = "CacheFilePath";
@@ -53,5 +53,15 @@ namespace CoverRetriever.Common.Infrastructure
         /// Last fm fingerprint client path.
         /// </summary>
         public const string LastFmFingerprintClientPath = "LastFmFingerprintClientPath";
+
+        /// <summary>
+        /// Acoustic ID API key.
+        /// </summary>
+        public const string AccousticIdApiKey = "AccousticIdApiKey";
+
+        /// <summary>
+        /// Last acoustic id client path.
+        /// </summary>
+        public const string AccousticIdFingerprintClientPath = "AccousticIdFingerprintClientPath";
     }
 }

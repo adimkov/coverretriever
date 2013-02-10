@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -74,7 +77,17 @@
     <Compile Include="Mp3MetaProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EditableObject.cs" />
-    <Compile Include="Tagger\AcousticId\AcousticIdTagger.cs" />
+    <Compile Include="Tagger\AcousticId\AcousticIdService.cs" />
+    <Compile Include="Tagger\AcousticId\AcousticIdTaggerService.cs" />
+    <Compile Include="Tagger\AcousticId\Fingerprint.cs" />
+    <Compile Include="Tagger\AcousticId\FingerprintParser.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Artist.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Date.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Medium.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Release.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Result.cs" />
+    <Compile Include="Tagger\AcousticId\Model\AcousticResponse.cs" />
+    <Compile Include="Tagger\AcousticId\Model\Track.cs" />
     <Compile Include="Tagger\ITaggerService.cs" />
     <Compile Include="Tagger\LastFm\AlbumInfoResponseParser.cs" />
     <Compile Include="Tagger\LastFm\LastFmService.cs" />
