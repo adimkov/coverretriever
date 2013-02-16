@@ -14,14 +14,11 @@
     <Setting Name="CacheFilePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">./CoverRetriever.cache</Value>
     </Setting>
-    <Setting Name="LastFmApiKey" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">d33202221533846659200a867cafcc81</Value>
+    <Setting Name="AcousticIdApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">rAFaRxdy</Value>
     </Setting>
-    <Setting Name="LastFmServiceBaseAddress" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://ws.audioscrobbler.com/2.0</Value>
-    </Setting>
-    <Setting Name="LastFmFingerprintClientPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">./LfmFpClient/lastfmfpclient.exe</Value>
+    <Setting Name="AcousticIdFingerprintClientPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">./AcoustId/fpcalc.exe</Value>
     </Setting>
   </Settings>
 </SettingsFile>

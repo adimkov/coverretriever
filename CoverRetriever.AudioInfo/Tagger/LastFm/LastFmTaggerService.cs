@@ -25,7 +25,7 @@ namespace CoverRetriever.AudioInfo.Tagger.LastFm
     /// Provide tags from Last.fm site.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    [Export(typeof(ITaggerService))]
+    //[Export(typeof(ITaggerService))]
     public class LastFmTaggerService : ITaggerService
     {
         /// <summary>

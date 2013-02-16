@@ -37,6 +37,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\CoverRetriever.Test\bin\Debug\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -79,6 +82,7 @@
     <Compile Include="EditableObject.cs" />
     <Compile Include="Tagger\AcousticId\AcousticIdService.cs" />
     <Compile Include="Tagger\AcousticId\AcousticIdTaggerService.cs" />
+    <Compile Include="Tagger\AcousticId\AcousticResponseHelper.cs" />
     <Compile Include="Tagger\AcousticId\Fingerprint.cs" />
     <Compile Include="Tagger\AcousticId\FingerprintParser.cs" />
     <Compile Include="Tagger\AcousticId\Model\Artist.cs" />

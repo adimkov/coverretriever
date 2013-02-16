@@ -434,8 +434,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)LfmFpClient"
-copy "$(ProjectDir)..\tools\lastfm.fpclient.beta2.2.win32" "$(TargetDir)LfmFpClient"</PostBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)AcoustId"
+copy "$(ProjectDir)..\tools\AcoustId" "$(TargetDir)AcoustId"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

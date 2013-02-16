@@ -15,6 +15,10 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
 
     using CoverRetriever.Common.Infrastructure;
 
+    /// <summary>
+    /// Declaration of the <see cref="AcousticIdTaggerService" /> tagger service.
+    /// </summary>
+    [Export(typeof(ITaggerService))]
     public class AcousticIdTaggerService : ITaggerService
     {
         /// <summary>
@@ -37,9 +41,10 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
         /// </summary>
         /// <param name="apiKey">The API key.</param>
         /// <param name="fingerprintUtility">The fingerprint utility.</param>
+        [ImportingConstructor]
         public AcousticIdTaggerService(
-            [Import(ConfigurationKeys.AccousticIdApiKey)] string apiKey,
-            [Import(ConfigurationKeys.AccousticIdFingerprintClientPath)] string fingerprintUtility)
+            [Import(ConfigurationKeys.AcousticIdApiKey)] string apiKey,
+            [Import(ConfigurationKeys.AcousticIdFingerprintClientPath)] string fingerprintUtility)
         {
             acousticIdService = new AcousticIdService(apiKey);
             this.fingerprintUtility = fingerprintUtility;
@@ -54,14 +59,23 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
         /// </returns>
         public IObservable<IMetaProvider> LoadTagsForAudioFile(string fileName)
         {
-            var suggestedTag = new SuggestTag();
             var fingerprintObserver = GetFingerprint(fileName)
-                .Catch<string, IOException>(ex => GetFingerprint(MakeSafeFileCopy(fileName)))
+                .Catch<Fingerprint, IOException>(ex => GetFingerprint(MakeSafeFileCopy(fileName)))
                 .Trace("FingerprintClient");
 
-            //fingerprintUtility.SelectMany()
+            return fingerprintObserver
+                .SelectMany(x => acousticIdService.Lookup(x))
+                .Select(
+                    x =>
+                        {
+                            var tag = new SuggestTag();
+                            tag.Artist = AcousticResponseHelper.AggrigateArtist(x);
+                            tag.TrackName = AcousticResponseHelper.AggrigateTrackName(x, tag.Artist);
+                            tag.Album = AcousticResponseHelper.AggrigateAlbum(x, tag.Artist, tag.TrackName);
+                            tag.Year = AcousticResponseHelper.AggrigateYear(x, tag.Artist, tag.Album, tag.TrackName).ToString();
 
-            throw new NotImplementedException();
+                            return tag;
+                        });
         }
 
         /// <summary>
@@ -71,7 +85,7 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
         /// <returns>Response of fingerprint utility.</returns>
         /// <exception cref="System.IO.IOException">Error file access.</exception>
         /// <exception cref="MetaProviderException">Utility error.</exception>
-        private IObservable<string> GetFingerprint(string fileName)
+        private IObservable<Fingerprint> GetFingerprint(string fileName)
         {
             return Observable.Start(
                 () =>
@@ -89,7 +103,8 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
                                 ErrorDialog = false,
                                 RedirectStandardOutput = true,
                                 RedirectStandardError = true,
-                                StandardOutputEncoding = Encoding.UTF8
+                                StandardOutputEncoding = Encoding.UTF8,
+                                //Arguments = "-length 40"
                             };
 
                             fingerprintProcess = new Process { StartInfo = processStartInfo };
@@ -99,7 +114,7 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
 
                             if (fingerprintProcess.ExitCode == 0)
                             {
-                                return fingerprintProcess.StandardOutput.ReadToEnd();
+                                return FingerprintParser.Parse(fingerprintProcess.StandardOutput.ReadToEnd());
                             }
 
                             var error =
@@ -132,7 +147,7 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
                         }
                     }
 
-                    throw new MetaProviderException("lastfmfpclient.exe not found");
+                    throw new MetaProviderException("{0} not found".FormatString(fingerprintUtility));
                 });
         }
 

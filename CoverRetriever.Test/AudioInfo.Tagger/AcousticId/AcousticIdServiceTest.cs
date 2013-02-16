@@ -24,7 +24,7 @@ namespace CoverRetriever.Test.AudioInfo.Tagger.AcousticId
             using (var fingerprint = ResourceUtils.GetTestInputStream("AcDc_Fingerprint.txt"))
             using (var reader = new StreamReader((fingerprint)))
             {
-                service.Lookup(252, reader.ReadToEnd())
+                service.Lookup(new Fingerprint(252, reader.ReadToEnd()))
                     .ForEach(x =>
                         {
                             x.Status.Should().Be("ok");
