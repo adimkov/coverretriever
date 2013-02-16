@@ -36,9 +36,8 @@ namespace CoverRetriever
             BlogUri = new Uri("http://anton-dimkov.blogspot.com/");
             GetNewVersionUri = new Uri("http://sourceforge.net/projects/coverretriever/files/");
             CacheFilePath = Settings.Default.CacheFilePath;
-            LastFmApiKey = Settings.Default.LastFmApiKey;
-            LastFmFingerprintClientPath = Settings.Default.LastFmFingerprintClientPath;
-            LastFmServiceBaseAddress = Settings.Default.LastFmServiceBaseAddress;
+            AcousticIdApiKey = Settings.Default.AcousticIdApiKey;
+            AcousticIdFingerprintClientPath = Settings.Default.AcousticIdFingerprintClientPath;
         }
 
         /// <summary>
@@ -72,22 +71,22 @@ namespace CoverRetriever
         public string CacheFilePath { get; private set; }
 
         /// <summary>
-        /// Gets the last fm API key.
+        /// Gets the acoustic id API key.
         /// </summary>
-        [Export(ConfigurationKeys.LastFmApiKey)]
-        public string LastFmApiKey { get; private set; }
-        
-        /// <summary>
-        /// Gets the last fm service base address.
-        /// </summary>
-        [Export(ConfigurationKeys.LastFmServiceBaseAddress)]
-        public string LastFmServiceBaseAddress { get; private set; }
+        /// <value>
+        /// The acoustic id API key.
+        /// </value>
+        [Export(ConfigurationKeys.AcousticIdApiKey)]
+        public string AcousticIdApiKey { get; private set; }
 
         /// <summary>
-        /// Gets the last fm fingerprint client path.
+        /// Gets the acoustic id fingerprint client path.
         /// </summary>
-        [Export(ConfigurationKeys.LastFmFingerprintClientPath)]
-        public string LastFmFingerprintClientPath { get; private set; }
+        /// <value>
+        /// The acoustic id fingerprint client path.
+        /// </value>
+        [Export(ConfigurationKeys.AcousticIdFingerprintClientPath)]
+        public string AcousticIdFingerprintClientPath { get; private set; }
 
         /// <summary>
         /// Creates the shell or main window of the application.

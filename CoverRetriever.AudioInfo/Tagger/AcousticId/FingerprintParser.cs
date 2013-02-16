@@ -24,7 +24,7 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
         /// Parses the specified fingerprint output.
         /// </summary>
         /// <param name="fingerprintOutput">The fingerprint output.</param>
-        /// <returns></returns>
+        /// <returns>Parsed fingerprint.</returns>
         /// <exception cref="System.ArgumentException">Unable to parse file fingerprint</exception>
         public static Fingerprint Parse(string fingerprintOutput)
         {

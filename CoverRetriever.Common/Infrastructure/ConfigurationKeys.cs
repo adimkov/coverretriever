@@ -57,11 +57,11 @@ namespace CoverRetriever.Common.Infrastructure
         /// <summary>
         /// Acoustic ID API key.
         /// </summary>
-        public const string AccousticIdApiKey = "AccousticIdApiKey";
+        public const string AcousticIdApiKey = "AcousticIdApiKey";
 
         /// <summary>
         /// Last acoustic id client path.
         /// </summary>
-        public const string AccousticIdFingerprintClientPath = "AccousticIdFingerprintClientPath";
+        public const string AcousticIdFingerprintClientPath = "AcousticIdFingerprintClientPath";
     }
 }

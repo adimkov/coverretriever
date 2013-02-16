@@ -38,10 +38,11 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
         /// <summary>
         /// Lookups the specified duration.
         /// </summary>
-        /// <param name="duration">The duration.</param>
         /// <param name="fingerprint">The fingerprint.</param>
-        /// <returns>Acoustic response.</returns>
-        public IObservable<AcousticResponse> Lookup(int duration, string fingerprint)
+        /// <returns>
+        /// Acoustic response.
+        /// </returns>
+        public IObservable<AcousticResponse> Lookup(Fingerprint fingerprint)
         {
             var accousticIdServiceClient = new WebClient();
             var observableJson = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(accousticIdServiceClient, "DownloadStringCompleted");
@@ -57,7 +58,7 @@ namespace CoverRetriever.AudioInfo.Tagger.AcousticId
                     })
                     .Take(1);
 
-            accousticIdServiceClient.DownloadStringAsync(new Uri(requestTemplate.FormatString(serviceKey, duration, fingerprint)));
+            accousticIdServiceClient.DownloadStringAsync(new Uri(requestTemplate.FormatString(serviceKey, fingerprint.Duration, fingerprint.FingerprintString)));
             return result;
         }      
     }
