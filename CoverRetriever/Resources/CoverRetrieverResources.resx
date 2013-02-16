@@ -206,7 +206,7 @@
     <comment>Shell</comment>
   </data>
   <data name="TextGetTagsFromLasrFm" xml:space="preserve">
-    <value>Get tag from Last.fm</value>
+    <value>Retrieve tags</value>
     <comment>Shell</comment>
   </data>
   <data name="TextNewVersion" xml:space="preserve">

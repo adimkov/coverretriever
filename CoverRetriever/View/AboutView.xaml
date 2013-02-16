@@ -198,7 +198,7 @@
                             HorizontalAlignment="Left"
                             Background="White"
                             Padding="2">
-                        <Image Source="/CoverRetriever;component/Assets/Lastfm_logo.png" />
+                        <Image Source="/CoverRetriever;component/Assets/AcousticId.gif" />
                     </Border>
                 </Grid>
             </Grid>
