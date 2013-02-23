@@ -93,7 +93,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                 Text="{Binding Path=TrackName, Mode=TwoWay}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
@@ -108,7 +108,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                 Text="{Binding Path=Artist, Mode=TwoWay}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
@@ -123,7 +123,7 @@
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                 Text="{Binding Path=Album, Mode=TwoWay}" >
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
@@ -141,12 +141,12 @@
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                 Text="{Binding Path=Year, Mode=TwoWay}" >
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <controls:FocusLostNotifier>
+        <controls:FocusLostNotifier LostFocusCommand="{Binding Path=LoadCaversCommand}">
             <controls:FocusLostNotifier.FocusableElements>
                 <controls:UIElementItem Element="{x:Reference trackName}"/>
                 <controls:UIElementItem Element="{x:Reference artist}"/>

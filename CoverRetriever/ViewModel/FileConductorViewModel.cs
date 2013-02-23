@@ -21,7 +21,6 @@ namespace CoverRetriever.ViewModel
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;
-    using CoverRetriever.AudioInfo.Utility;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
 
@@ -49,7 +48,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Get covers subject.
         /// </summary>
-        private readonly Subject<IMetaProvider> grabCoverSubject = new Subject<IMetaProvider>();
+        private readonly Subject<Tuple<bool, IMetaProvider>> grabCoverSubject = new Subject<Tuple<bool, IMetaProvider>>();
 
         /// <summary>
         /// Backing field for SelectedAudio property.
@@ -86,9 +85,10 @@ namespace CoverRetriever.ViewModel
             SaveSuggestedTagCommand = new DelegateCommand(SaveSuggestedTagCommandExecute);
             SaveSuggestedTagsInContextCommand = new DelegateCommand(SaveSuggestedTagsInContextCommandExecute);
             RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
+            LoadCaversCommand = new DelegateCommand(LoadCaversCommandExecute);
 
             grabCoverSubject
-                .Throttle(TimeSpan.FromMilliseconds(1400))
+                .Throttle(TimeSpan.FromMilliseconds(200))
                 .ObserveOnDispatcher()
                 .Subscribe(GrabCoversForAudio);
         }
@@ -121,6 +121,14 @@ namespace CoverRetriever.ViewModel
         /// The save suggested tags in context command.
         /// </value>
         public ICommand SaveSuggestedTagsInContextCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the load cavers command.
+        /// </summary>
+        /// <value>
+        /// The load cavers command.
+        /// </value>
+        public ICommand LoadCaversCommand { get; private set; }
 
         /// <summary>
         /// Gets or sets the audio tagger.
@@ -192,7 +200,6 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Artist = value;
-                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -213,7 +220,6 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Album = value;
-                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -234,7 +240,6 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.Year = value;
-                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -255,7 +260,6 @@ namespace CoverRetriever.ViewModel
                 if (SelectedAudio != null)
                 {
                     SelectedAudio.MetaProvider.TrackName = value;
-                    grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
                     RaisePropertyChanged("IsDirty");
                 }
             }
@@ -456,7 +460,7 @@ namespace CoverRetriever.ViewModel
                 .Completed(() =>
                     {
                         Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
-                        grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                        grabCoverSubject.OnNext(Tuple.Create(false, SelectedAudio.MetaProvider));
                     })
                 .Subscribe(
                     x =>
@@ -510,18 +514,29 @@ namespace CoverRetriever.ViewModel
         private void RejectSuggestedTagCommandExecute()
         {
             SelectedAudio.CancelEditTags();
-            grabCoverSubject.OnNext(SelectedAudio.MetaProvider); 
+            grabCoverSubject.OnNext(Tuple.Create(true, SelectedAudio.MetaProvider)); 
             SelectedAudio.BeginEditTags();
             RaisePropertyChanged(string.Empty);
+        }
+
+        /// <summary>
+        /// Loads the cavers command execute.
+        /// </summary>
+        private void LoadCaversCommandExecute()
+        {
+            grabCoverSubject.OnNext(Tuple.Create(false, SelectedAudio.MetaProvider)); 
         }
 
         /// <summary>
         /// Grabs the covers for audio.
         /// </summary>
         /// <param name="metaProvider">The meta provider.</param>
-        private void GrabCoversForAudio(IMetaProvider metaProvider)
+        private void GrabCoversForAudio(Tuple<bool, IMetaProvider> metaProvider)
         {
-            ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(metaProvider);
+            if (metaProvider.Item1 || metaProvider.Item2.IsDirty)
+            {
+                ((CoverRetrieverViewModel)ParentViewModel).FindRemoteCovers(metaProvider.Item2);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace CoverRetriever.Controls
     /// <summary>
     /// Declaration of the <see cref="FocusLostNotifier" /> class.
     /// </summary>
-    public class FocusLostNotifier : UIElement
+    public class FocusLostNotifier : FrameworkElement
     {
         /// <summary>
         /// The focusable elements property.
@@ -26,6 +26,12 @@ namespace CoverRetriever.Controls
             typeof(ObservableCollection<UIElementItem>), 
             typeof(FocusLostNotifier),
             new PropertyMetadata(FocusableElementsPropertyChangedCallback));
+
+        /// <summary>
+        /// The lost focus command property.
+        /// </summary>
+        public static readonly DependencyProperty LostFocusCommandProperty = DependencyProperty.Register(
+            "LostFocusCommand", typeof(ICommand), typeof(FocusLostNotifier), new PropertyMetadata(null));
 
         /// <summary>
         /// The focus lost event listener.
@@ -39,18 +45,6 @@ namespace CoverRetriever.Controls
         {
             FocusableElements = new ObservableCollection<UIElementItem>();
             focusLostEventListener = new FocusLostEventListener(this);
-        }
-
-        /// <summary>
-        /// Gets or sets the lost focus command.
-        /// </summary>
-        /// <value>
-        /// The lost focus command.
-        /// </value>
-        public ICommand LostFocusCommand
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -68,6 +62,26 @@ namespace CoverRetriever.Controls
                 SetValue(FocusableElementsProperty, value);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the lost focus command.
+        /// </summary>
+        /// <value>
+        /// The lost focus command.
+        /// </value>
+        public ICommand LostFocusCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(LostFocusCommandProperty);
+            }
+
+            set
+            {
+                SetValue(LostFocusCommandProperty, value);
+            }
+        }
+
 
         /// <summary>
         /// Focusable the elements property changed callback.
