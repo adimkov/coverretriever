@@ -83,7 +83,7 @@
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextTrackName,
                                   Source={StaticResource coverRetrieverResources}}" />
-        <TextBox x:Name="textBox"
+        <TextBox x:Name="trackName"
                  Grid.Row="1"
                  Grid.Column="2"
                  VerticalAlignment="Center"
@@ -98,7 +98,8 @@
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextArtist,
                                   Source={StaticResource coverRetrieverResources}}" />
-        <TextBox Grid.Row="2"
+        <TextBox x:Name="artist"
+                 Grid.Row="2"
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
@@ -112,7 +113,8 @@
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextAlbum,
                                   Source={StaticResource coverRetrieverResources}}" />
-        <TextBox Grid.Row="3"
+        <TextBox x:Name="album"
+                 Grid.Row="3"
                  Grid.Column="2"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
@@ -127,7 +129,8 @@
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextYear,
                                   Source={StaticResource coverRetrieverResources}}" />
-        <TextBox Grid.Row="4"
+        <TextBox x:Name="year"
+                 Grid.Row="4"
                  Grid.Column="2"
                  Width="45"
                  HorizontalAlignment="Left"
@@ -138,6 +141,14 @@
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
+        <controls:FocusLostNotifier>
+            <controls:FocusLostNotifier.FocusableElements>
+                <controls:UIElementItem Element="{x:Reference trackName}"/>
+                <controls:UIElementItem Element="{x:Reference artist}"/>
+                <controls:UIElementItem Element="{x:Reference album}"/>
+                <controls:UIElementItem Element="{x:Reference year}"/>
+            </controls:FocusLostNotifier.FocusableElements>
+        </controls:FocusLostNotifier>
         <Border Grid.Row="1"
                 Grid.RowSpan="4"
                 HorizontalAlignment="Left"

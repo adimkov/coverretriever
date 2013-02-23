@@ -477,7 +477,6 @@ namespace CoverRetriever.ViewModel
             Trace.WriteLine("Get covers for: [{0}]".FormatString(fileDetails));
             StartOperation(CoverRetrieverResources.MessageDownloadCover);
             ResetError();
-            suggestedCovers.Clear();
             var albumCondition = fileDetails.Album;
 
             coverRetrieverService.GetCoverFor(fileDetails.Artist, albumCondition, SuggestedCountOfCovers)
@@ -487,6 +486,7 @@ namespace CoverRetriever.ViewModel
                 .Subscribe(
                 x =>
                 {
+                    SuggestedCovers.Clear();
                     SuggestedCovers.AddRange(x);
                     SelectedSuggestedCover = suggestedCovers.Max();
                 },
