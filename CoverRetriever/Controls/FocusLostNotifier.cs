@@ -16,7 +16,7 @@ namespace CoverRetriever.Controls
     /// <summary>
     /// Declaration of the <see cref="FocusLostNotifier" /> class.
     /// </summary>
-    public class FocusLostNotifier : DependencyObject
+    public class FocusLostNotifier : UIElement
     {
         /// <summary>
         /// The focusable elements property.
@@ -177,15 +177,18 @@ namespace CoverRetriever.Controls
             /// </returns>
             public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
             {
-                var elements = focusLostNotifier.FocusableElements.Select(x => x.Element).OfType<UIElement>();
-                if (elements.All(x => x.IsFocused))
-                {
-                    var command = focusLostNotifier.LostFocusCommand;
-                    if (command != null && command.CanExecute(null))
+                focusLostNotifier.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        command.Execute(null);
-                    }
-                }
+                        var elements = focusLostNotifier.FocusableElements.Select(x => x.Element).OfType<UIElement>();
+                        if (elements.All(x => !x.IsFocused))
+                        {
+                            var command = focusLostNotifier.LostFocusCommand;
+                            if (command != null && command.CanExecute(null))
+                            {
+                                command.Execute(null);
+                            }
+                        }
+                    }));
                 return true;
             }
         }

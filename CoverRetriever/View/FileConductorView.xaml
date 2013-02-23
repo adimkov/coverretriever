@@ -10,7 +10,9 @@
              xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" MinHeight="190"
              d:DesignWidth="405"
-             mc:Ignorable="d" IsEnabled="{Binding SelectedAudio, Converter={StaticResource nullToBoolConverter}}">
+             mc:Ignorable="d" 
+             Background="Transparent"
+             IsEnabled="{Binding SelectedAudio, Converter={StaticResource nullToBoolConverter}}">
     <UserControl.Resources>
         <resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources" />
         <converter:CoverToImageConverter x:Key="coverToImageConverter" />
@@ -43,6 +45,9 @@
             <Setter Property="Margin" Value="-3,-3,-3,-6" />
         </Style>
     </UserControl.Resources>
+    <i:Interaction.Behaviors>
+        <behaviors:SetFocusOnMouseDown/>
+    </i:Interaction.Behaviors>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />

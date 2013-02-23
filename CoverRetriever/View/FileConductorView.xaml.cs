@@ -2,7 +2,10 @@
 
 namespace CoverRetriever.View
 {
-	/// <summary>
+    using System.Windows;
+    using System.Windows.Input;
+
+    /// <summary>
 	/// Interaction logic for FileConductorView.xaml
 	/// </summary>
 	public partial class FileConductorView : UserControl
@@ -11,5 +14,10 @@ namespace CoverRetriever.View
 		{
 			InitializeComponent();
 		}
+
+        private void FileConductorView_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ((UIElement)sender).Focus();
+        }
 	}
 }
