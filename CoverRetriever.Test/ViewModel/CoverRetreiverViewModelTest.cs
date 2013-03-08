@@ -208,7 +208,7 @@ namespace CoverRetriever.Test.ViewModel
         {
             IMetaProvider copiedTag;
             var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
-            mettaProvider.Setup(x => x.CopyFrom(It.IsAny<IMetaProvider>())).Callback<IMetaProvider>(x =>
+            mettaProvider.Setup(x => x.CopyFrom(It.IsAny<IMetaProvider>(), null)).Callback<IMetaProvider, SaveSettings>((x, settings) =>
                 {
                     copiedTag = x;
                 });

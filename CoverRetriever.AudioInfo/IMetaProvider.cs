@@ -52,12 +52,14 @@ namespace CoverRetriever.AudioInfo
         /// <summary>
         /// Saves tags into file instance.
         /// </summary>
-        void Save();
+        /// <param name="settings">The settings.</param>
+        void Save(SaveSettings settings = null);
 
         /// <summary>
         /// Copies metadata from specified source.
         /// </summary>
         /// <param name="source">The source.</param>
-        void CopyFrom(IMetaProvider source);
+        /// <param name="settings">The settings.</param>
+        void CopyFrom(IMetaProvider source, SaveSettings settings = null);
     }
 }

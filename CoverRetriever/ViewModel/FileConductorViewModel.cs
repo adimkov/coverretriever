@@ -91,9 +91,17 @@ namespace CoverRetriever.ViewModel
                 .Throttle(TimeSpan.FromMilliseconds(200))
                 .ObserveOnDispatcher()
                 .Subscribe(GrabCoversForAudio);
+
+            SaveTagsSettings = new SaveSettings
+                                   {
+                                       Album = true,
+                                       Artist = true,
+                                       Year = true,
+                                       TrackName = true
+                                   };
         }
 
-        /// <summary>
+        /// <summary>           
         /// Gets the grab tags command.
         /// </summary>
         public ICommand GrabTagsCommand
@@ -374,6 +382,14 @@ namespace CoverRetriever.ViewModel
         }
 
         /// <summary>
+        /// Gets the save tags settings.
+        /// </summary>
+        /// <value>
+        /// The save tags settings.
+        /// </value>
+        public SaveSettings SaveTagsSettings { get; private set; }
+
+        /// <summary>
         /// Saves the selected cover onto disk.
         /// </summary>
         /// <param name="remoteCover">The remote cover.</param>
@@ -465,7 +481,7 @@ namespace CoverRetriever.ViewModel
                 .Subscribe(
                     x =>
                     {
-                        SelectedAudio.CopyTagsFrom(x);
+                        SelectedAudio.CopyTagsFrom(x, SaveTagsSettings);
                         RaisePropertyChanged(string.Empty);
                     },
                     ((CoverRetrieverViewModel)ParentViewModel).SetError);
@@ -476,8 +492,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void SaveSuggestedTagCommandExecute()
         {
-            SelectedAudio.SaveFromTagger();
-            SelectedAudio.EndEditTags();
+            SelectedAudio.SaveFromTagger(SaveTagsSettings);
             SelectedAudio.BeginEditTags();
             RaisePropertyChanged(string.Empty);
         }
@@ -488,8 +503,10 @@ namespace CoverRetriever.ViewModel
         private void SaveSuggestedTagsInContextCommandExecute()
         {
             var parentFolder = SelectedAudio.Parent as Folder;
-            var tag = SelectedAudio.MetaProvider;
             SaveTagsOptionsIsOpened = false;
+
+            SelectedAudio.SaveFromTagger(SaveTagsSettings);
+
             if (parentFolder != null)
             {
                 var audioFiles = parentFolder.Children
@@ -499,9 +516,9 @@ namespace CoverRetriever.ViewModel
                 foreach (var audioFile in audioFiles)
                 {
                     StartOperation(CoverRetrieverResources.MessageSaveTagsInContext.FormatString(audioFile.Name));
-                    
-                    audioFile.CopyTagsFrom(tag);
-                    //audioFile.SaveFromTagger();
+
+                    audioFile.CopyTagsFrom(SelectedAudio.MetaProvider, SaveTagsSettings);
+                    audioFile.SaveFromTagger();
                 }
 
                 EndOperation();

@@ -175,8 +175,32 @@ namespace CoverRetriever.AudioInfo
         /// <summary>
         /// Saves tags into file instance.
         /// </summary>
-        public virtual void Save()
+        /// <param name="settings">The settings.</param>
+        public virtual void Save(SaveSettings settings = null)
         {
+            if (settings != null)
+            {
+                if (!settings.TrackName)
+                {
+                    RevertProperty("TrackName");
+                }
+
+                if (!settings.Album)
+                {
+                    RevertProperty("Album");
+                }
+
+                if (!settings.Artist)
+                {
+                    RevertProperty("Artist");
+                }
+
+                if (!settings.Year)
+                {
+                    RevertProperty("Year");
+                }
+            }
+
             File.Save();
         }
 
@@ -184,13 +208,39 @@ namespace CoverRetriever.AudioInfo
         /// Copies metadata from specified source.
         /// </summary>
         /// <param name="source">The source.</param>
-        public void CopyFrom(IMetaProvider source)
+        /// <param name="settings">The settings.</param>
+        public void CopyFrom(IMetaProvider source, SaveSettings settings = null)
         {
             BeginEdit();
-            Album = source.Album;
-            Artist = source.Artist;
-            Year = source.Year;
-            TrackName = source.TrackName;
+            if (settings == null)
+            {
+                Album = source.Album;
+                Artist = source.Artist;
+                Year = source.Year;
+                TrackName = source.TrackName;    
+            }
+            else
+            {
+                if (settings.Album)
+                {
+                    Album = source.Album;
+                }
+
+                if (settings.Artist)
+                {
+                    Artist = source.Artist;
+                }
+
+                if (settings.Year)
+                {
+                    Year = source.Year;
+                }
+
+                if (settings.TrackName)
+                {
+                    TrackName = source.TrackName;
+                }
+            }                                 
         }
 
         /// <summary>

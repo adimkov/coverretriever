@@ -14,10 +14,5 @@ namespace CoverRetriever.View
 		{
 			InitializeComponent();
 		}
-
-        private void FileConductorView_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ((UIElement)sender).Focus();
-        }
-	}
+    }
 }

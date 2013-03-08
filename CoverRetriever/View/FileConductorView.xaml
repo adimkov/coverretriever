@@ -44,6 +44,10 @@
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Margin" Value="-3,-3,-3,-6" />
         </Style>
+        
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+           <Setter Property="Margin" Value="0,0,4,0"/>
+        </Style>
     </UserControl.Resources>
     <i:Interaction.Behaviors>
         <behaviors:SetFocusOnMouseDown/>
@@ -52,6 +56,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />
             <ColumnDefinition Width="55" />
+            <ColumnDefinition Width="20" />
             <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -72,7 +77,7 @@
                                       Mode=TwoWay,
                                       Converter={StaticResource coverRecipientToBoolConverter}}" />
         <StackPanel Grid.Column="1"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="3"
                     Orientation="Horizontal"
                     Visibility="{Binding ElementName=embedCheckBox,
                                          Path=IsChecked,
@@ -90,14 +95,16 @@
                                   Source={StaticResource coverRetrieverResources}}" />
         <TextBox x:Name="trackName"
                  Grid.Row="1"
-                 Grid.Column="2"
+                 Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=TrackName, Mode=TwoWay}">
+                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding SaveTagsSettings.TrackName, Converter={StaticResource InverseBoolConverter}}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
+        <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.TrackName}"/>
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -105,14 +112,16 @@
                                   Source={StaticResource coverRetrieverResources}}" />
         <TextBox x:Name="artist"
                  Grid.Row="2"
-                 Grid.Column="2"
+                 Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Artist, Mode=TwoWay}">
+                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding SaveTagsSettings.Artist, Converter={StaticResource InverseBoolConverter}}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
+        <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Artist}"/>
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
@@ -120,14 +129,16 @@
                                   Source={StaticResource coverRetrieverResources}}" />
         <TextBox x:Name="album"
                  Grid.Row="3"
-                 Grid.Column="2"
+                 Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Album, Mode=TwoWay}" >
+                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding SaveTagsSettings.Album, Converter={StaticResource InverseBoolConverter}}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
+        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Album}"/>
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Margin="0"
@@ -136,16 +147,18 @@
                                   Source={StaticResource coverRetrieverResources}}" />
         <TextBox x:Name="year"
                  Grid.Row="4"
-                 Grid.Column="2"
+                 Grid.Column="3"
                  Width="45"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Year, Mode=TwoWay}" >
+                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding SaveTagsSettings.Year, Converter={StaticResource InverseBoolConverter}}">
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
+        <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Year}"/>
         <controls:FocusLostNotifier LostFocusCommand="{Binding Path=LoadCaversCommand}">
             <controls:FocusLostNotifier.FocusableElements>
                 <controls:UIElementItem Element="{x:Reference trackName}"/>

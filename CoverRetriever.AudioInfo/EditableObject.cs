@@ -24,7 +24,12 @@ namespace CoverRetriever.AudioInfo
         /// Is object currently in edit mode.
         /// </summary>
         private bool isEditing;
-        
+
+        /// <summary>
+        /// The writable properties
+        /// </summary>
+        private IEnumerable<PropertyInfo> writableProperties;
+
         /// <summary>
         /// Begins the edit.
         /// </summary>
@@ -106,14 +111,32 @@ namespace CoverRetriever.AudioInfo
         }
 
         /// <summary>
+        /// Reverts the property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        protected void RevertProperty(string name)
+        {
+            if (beforeEditValues.ContainsKey(name))
+            {
+                GetWritableProperties().Single(x => x.Name == name)
+                    .SetValue(this, beforeEditValues[name], null);
+            }
+        }
+
+        /// <summary>
         /// Gets the writable properties.
         /// </summary>
         /// <returns>Writable objects.</returns>
         private IEnumerable<PropertyInfo> GetWritableProperties()
         {
-            return GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(x => x.CanWrite);
+            if (writableProperties == null)
+            {
+                writableProperties = GetType()
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    .Where(x => x.CanWrite);
+            }
+
+            return writableProperties;
         }
     }
 }

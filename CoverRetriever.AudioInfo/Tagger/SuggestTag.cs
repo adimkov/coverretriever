@@ -133,7 +133,9 @@ namespace CoverRetriever.AudioInfo.Tagger
         /// <summary>
         /// Saves tags into file instance.
         /// </summary>
-        public void Save()
+        /// <param name="settings">The settings.</param>
+        /// <exception cref="System.NotSupportedException">Suggested tag does not support this operation</exception>
+        public void Save(SaveSettings settings)
         {
             throw new NotSupportedException("Suggested tag does not support this operation");
         }
@@ -142,7 +144,9 @@ namespace CoverRetriever.AudioInfo.Tagger
         /// Copies metadata from specified source.
         /// </summary>
         /// <param name="source">The source.</param>
-        public void CopyFrom(IMetaProvider source)
+        /// <param name="settings">The settings.</param>
+        /// <exception cref="System.NotSupportedException">Suggested tag does not support this operation</exception>
+        public void CopyFrom(IMetaProvider source, SaveSettings settings)
         {
             throw new NotSupportedException("Suggested tag does not support this operation");
         }

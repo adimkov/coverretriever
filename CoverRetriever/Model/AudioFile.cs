@@ -92,18 +92,21 @@ namespace CoverRetriever.Model
         /// <summary>
         /// Saves tag from taggerService.
         /// </summary>
-        public void SaveFromTagger()
+        /// <param name="settings">The settings.</param>
+        public void SaveFromTagger(SaveSettings settings = null)
         {
-            metaProvider.Value.Save();
+            MetaProvider.Save(settings);
+            EndEditTags();
         }
 
         /// <summary>
         /// Copies the tags from.
         /// </summary>
         /// <param name="source">The source.</param>
-        public void CopyTagsFrom(IMetaProvider source)
+        /// <param name="settings">The settings.</param>
+        public void CopyTagsFrom(IMetaProvider source, SaveSettings settings = null)
         {
-            MetaProvider.CopyFrom(source);
+            MetaProvider.CopyFrom(source, settings);
         }
 
         /// <summary>
