@@ -14,9 +14,10 @@
              Background="Transparent"
              IsEnabled="{Binding SelectedAudio, Converter={StaticResource nullToBoolConverter}}">
     <UserControl.Resources>
-        <resources:CoverRetrieverResourcesWrapper x:Key="coverRetrieverResources" />
-        <converter:CoverToImageConverter x:Key="coverToImageConverter" />
-        <converter:CoverRecipientToBoolConverter x:Key="coverRecipientToBoolConverter" />
+        <resources:CoverRetrieverResourcesWrapper x:Key="CoverRetrieverResources" />
+        <converter:CoverToImageConverter x:Key="CoverToImageConverter" />
+        <converter:CoverRecipientToBoolConverter x:Key="CoverRecipientToBoolConverter" />
+        <converter:IsDirtySaveSettingToReadonlyConverter x:Key="IsDirtySaveSettingConverter"/>
 
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}" >
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -55,7 +56,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />
-            <ColumnDefinition Width="55" />
+            <ColumnDefinition Width="50" />
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="*" />
@@ -65,17 +66,17 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="35.1066666666667" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <CheckBox x:Name="embedCheckBox"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Center"
                   Content="{Binding CoverRetrieverResources.FlagEmbedCover,
-                                    Source={StaticResource coverRetrieverResources}}"
+                                    Source={StaticResource CoverRetrieverResources}}"
                   IsChecked="{Binding Path=Recipient,
                                       Mode=TwoWay,
-                                      Converter={StaticResource coverRecipientToBoolConverter}}" />
+                                      Converter={StaticResource CoverRecipientToBoolConverter}}" />
         <StackPanel Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Orientation="Horizontal"
@@ -84,67 +85,91 @@
                                          Converter={StaticResource boolToVisibilityConverter}}">
             <CheckBox VerticalAlignment="Center"
                       Content="{Binding CoverRetrieverResources.FlagApplyToAll,
-                                        Source={StaticResource coverRetrieverResources}}"
+                                        Source={StaticResource CoverRetrieverResources}}"
                       IsChecked="{Binding Path=ApplyToAllFiles,
                                           Mode=TwoWay}" />
         </StackPanel>
+        
         <TextBlock Grid.Row="1"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextTrackName,
-                                  Source={StaticResource coverRetrieverResources}}" />
+                                  Source={StaticResource CoverRetrieverResources}}" />
+        <CheckBox x:Name="saveTrackName" Grid.Row="1" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.TrackName}" 
+                  Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}"/>
         <TextBox x:Name="trackName"
                  Grid.Row="1"
                  Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding SaveTagsSettings.TrackName, Converter={StaticResource InverseBoolConverter}}">
+                 Text="{Binding Path=TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.IsReadOnly>
+                <MultiBinding Converter="{StaticResource IsDirtySaveSettingConverter}">
+                    <Binding Path="IsDirty"/>
+                    <Binding Path="SaveTagsSettings.TrackName" Converter="{StaticResource InverseBoolConverter}"/>
+                </MultiBinding>
+            </TextBox.IsReadOnly>
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.TrackName}"/>
+
+        <CheckBox x:Name="saveArtist" Grid.Row="2" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Artist}" 
+                  Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}"/>
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextArtist,
-                                  Source={StaticResource coverRetrieverResources}}" />
+                                  Source={StaticResource CoverRetrieverResources}}" />
         <TextBox x:Name="artist"
                  Grid.Row="2"
                  Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding SaveTagsSettings.Artist, Converter={StaticResource InverseBoolConverter}}">
+                 Text="{Binding Path=Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.IsReadOnly>
+                <MultiBinding Converter="{StaticResource IsDirtySaveSettingConverter}">
+                    <Binding Path="IsDirty"/>
+                    <Binding Path="SaveTagsSettings.Artist" Converter="{StaticResource InverseBoolConverter}"/>
+                </MultiBinding>
+            </TextBox.IsReadOnly>
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Artist}"/>
+
+        <CheckBox x:Name="saveAlbum" Grid.Row="3" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Album}" 
+                  Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}"/>
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextAlbum,
-                                  Source={StaticResource coverRetrieverResources}}" />
+                                  Source={StaticResource CoverRetrieverResources}}" />
         <TextBox x:Name="album"
                  Grid.Row="3"
                  Grid.Column="3"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding SaveTagsSettings.Album, Converter={StaticResource InverseBoolConverter}}">
+                 Text="{Binding Path=Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.IsReadOnly>
+                <MultiBinding Converter="{StaticResource IsDirtySaveSettingConverter}">
+                    <Binding Path="IsDirty"/>
+                    <Binding Path="SaveTagsSettings.Album" Converter="{StaticResource InverseBoolConverter}"/>
+                </MultiBinding>
+            </TextBox.IsReadOnly>
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Album}"/>
+
+        <CheckBox x:Name="saveYear" Grid.Row="4" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Year}" 
+                  Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}"/>
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Margin="0"
                    Style="{DynamicResource ContentTextStyle}"
                    Text="{Binding CoverRetrieverResources.TextYear,
-                                  Source={StaticResource coverRetrieverResources}}" />
+                                  Source={StaticResource CoverRetrieverResources}}" />
         <TextBox x:Name="year"
                  Grid.Row="4"
                  Grid.Column="3"
@@ -152,19 +177,28 @@
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
                  controls:TextValidator.NotifyIfEmpty="True"
-                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding SaveTagsSettings.Year, Converter={StaticResource InverseBoolConverter}}">
+                 Text="{Binding Path=Year, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.IsReadOnly>
+                <MultiBinding Converter="{StaticResource IsDirtySaveSettingConverter}">
+                    <Binding Path="IsDirty"/>
+                    <Binding Path="SaveTagsSettings.Year" Converter="{StaticResource InverseBoolConverter}"/>
+                </MultiBinding>
+            </TextBox.IsReadOnly>
             <i:Interaction.Behaviors>
                 <behaviors:SelectAllOnGotFocusBehavior/>
             </i:Interaction.Behaviors>
         </TextBox>
-        <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding SaveTagsSettings.Year}"/>
+        
         <controls:FocusLostNotifier LostFocusCommand="{Binding Path=LoadCaversCommand}">
             <controls:FocusLostNotifier.FocusableElements>
                 <controls:UIElementItem Element="{x:Reference trackName}"/>
                 <controls:UIElementItem Element="{x:Reference artist}"/>
                 <controls:UIElementItem Element="{x:Reference album}"/>
                 <controls:UIElementItem Element="{x:Reference year}"/>
+                <controls:UIElementItem Element="{x:Reference saveTrackName}"/>
+                <controls:UIElementItem Element="{x:Reference saveArtist}"/>
+                <controls:UIElementItem Element="{x:Reference saveAlbum}"/>
+                <controls:UIElementItem Element="{x:Reference saveYear}"/>
             </controls:FocusLostNotifier.FocusableElements>
         </controls:FocusLostNotifier>
         <Border Grid.Row="1"
@@ -180,7 +214,7 @@
                 <Image x:Name="CurrentCoverImage"
                        Margin="0,-1,0,1"
                        controls:ImageAsyncSource.AsyncSource="{Binding Path=SelectedAudioCover,
-                                                                       Converter={StaticResource coverToImageConverter}}"
+                                                                       Converter={StaticResource CoverToImageConverter}}"
                        Visibility="{Binding Path=SelectedAudioCover,
                                             Converter={StaticResource notNullToVisibilityConverter}}" />
             </Grid>
@@ -193,20 +227,20 @@
                                          Converter={StaticResource notNullToVisibilityConverter}}"
                     d:LayoutOverrides="GridBox">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{DynamicResource ContentTextStyle}" Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource coverRetrieverResources}}" />
+                <TextBlock Style="{DynamicResource ContentTextStyle}" Text="{Binding CoverRetrieverResources.TextCoverSixeWidth, Source={StaticResource CoverRetrieverResources}}" />
                 <TextBlock Margin="2,0,8,0"
                            Style="{DynamicResource ContentTextStyle}"
                            Text="{Binding Path=SelectedAudioCover.CoverSize.Width}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{DynamicResource ContentTextStyle}" Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource coverRetrieverResources}}" />
+                <TextBlock Style="{DynamicResource ContentTextStyle}" Text="{Binding CoverRetrieverResources.TextCoverSixeHeight, Source={StaticResource CoverRetrieverResources}}" />
                 <TextBlock Margin="2,0,8,0"
                            Style="{DynamicResource ContentTextStyle}"
                            Text="{Binding Path=SelectedAudioCover.CoverSize.Height}" />
             </StackPanel>
         </StackPanel>
         <Border x:Name="getTaggerBorder"
-                Grid.Column="2"
+                Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Grid.Row="5"
                 HorizontalAlignment="Left"
@@ -216,7 +250,7 @@
                 <Button x:Name="getTagButton"
                                     Command="{Binding GrabTagsCommand}"
                                     Content="{Binding Path=CoverRetrieverResources.TextGetTagsFromLasrFm,
-                                                      Source={StaticResource coverRetrieverResources}}"
+                                                      Source={StaticResource CoverRetrieverResources}}"
                                     Style="{StaticResource TagButton}" />
                 <Border Opacity="0" Style="{StaticResource TaggerHighlight}">
                     <i:Interaction.Behaviors>
@@ -226,7 +260,7 @@
             </Grid>
         </Border>
         <Border x:Name="saveTagBorder" 
-                Grid.Column="2"
+                Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Grid.Row="5"
                 Visibility="{Binding IsDirty, Converter={StaticResource boolToVisibilityConverter}}">
@@ -238,20 +272,20 @@
                 <xctk:SplitButton x:Name="saveButton"
                                   Grid.Column="0"
                                   Command="{Binding SaveSuggestedTagCommand}"
-                                  Content="{Binding CoverRetrieverResources.TextSave, Source={StaticResource coverRetrieverResources}}"
+                                  Content="{Binding CoverRetrieverResources.TextSave, Source={StaticResource CoverRetrieverResources}}"
                                   IsOpen="{Binding SaveTagsOptionsIsOpened, Mode=TwoWay}">
                     <xctk:SplitButton.DropDownContent>
                         <Button Margin="1,1" 
                                 Width="177"
                                 Command="{Binding SaveSuggestedTagsInContextCommand}"
-                                Content="{Binding CoverRetrieverResources.FlagApplyToAll, Source={StaticResource coverRetrieverResources}}">
+                                Content="{Binding CoverRetrieverResources.FlagApplyToAll, Source={StaticResource CoverRetrieverResources}}">
                         </Button>
                     </xctk:SplitButton.DropDownContent>
                 </xctk:SplitButton>
                 <Button x:Name="cancelButton"
                         Grid.Column="1"
                         Command="{Binding RejectSuggestedTagCommand}"
-                        Content="{Binding CoverRetrieverResources.TextCancel, Source={StaticResource coverRetrieverResources}}"
+                        Content="{Binding CoverRetrieverResources.TextCancel, Source={StaticResource CoverRetrieverResources}}"
                         Style="{StaticResource TagButton}" />
             </Grid>
         </Border>

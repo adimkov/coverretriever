@@ -226,6 +226,7 @@
     <Compile Include="Converter\CoverRecipientToBoolConverter.cs" />
     <Compile Include="Converter\CoverToImageConverter.cs" />
     <Compile Include="Converter\FolderImageConverter.cs" />
+    <Compile Include="Converter\IsDirtySaveSettingToReadonlyConverter.cs" />
     <Compile Include="Converter\NullToBooleanConverter.cs" />
     <Compile Include="Converter\NullToRecipientConverter.cs" />
     <Compile Include="Converter\NullToVisibilityConverter.cs" />
