@@ -26,6 +26,7 @@ namespace CoverRetriever.ViewModel
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.Common.Interaction;
+    using CoverRetriever.Common.ViewModel;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
     using CoverRetriever.Service;

@@ -5,13 +5,10 @@
         xmlns:interact="clr-namespace:CoverRetriever.Common.Interaction;assembly=CoverRetriever.Common"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resources="clr-namespace:CoverRetriever.Resources"
-        Width="459"
-        Height="180"
-        Background="{DynamicResource Background}"
-        Icon="/CoverRetriever;component/CoverRetriever.ico"
+        Style="{StaticResource DialogWindow}"
         interact:WindowExtensions.HideOnClose="True"
         Loaded="WindowLoaded"
-        ResizeMode="NoResize"
+        Height="180"
         WindowStartupLocation="CenterOwner"
         mc:Ignorable="d">
     <Window.Resources>
@@ -27,7 +24,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="40" />
-                <RowDefinition Height="35" />
+                <RowDefinition Height="{StaticResource ButtonsRowHeight}" />
             </Grid.RowDefinitions>
             <Image Grid.RowSpan="2" Source="/CoverRetriever;component/Assets/OpenFolder.png" />
             <TextBlock Grid.Column="1"

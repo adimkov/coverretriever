@@ -4,7 +4,9 @@ using NUnit.Framework;
 
 namespace CoverRetriever.Test.ViewModel
 {
-	[TestFixture]
+    using CoverRetriever.Common.ViewModel;
+
+    [TestFixture]
 	public class ViewModelBaseTest
 	{
 		[Test]

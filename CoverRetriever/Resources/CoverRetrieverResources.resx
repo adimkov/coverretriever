@@ -214,7 +214,7 @@
     <comment>About</comment>
   </data>
   <data name="TextOk" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
     <comment>Button</comment>
   </data>
   <data name="TextOpenFolder" xml:space="preserve">

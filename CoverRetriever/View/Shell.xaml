@@ -16,15 +16,13 @@
         xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity"
         xmlns:resources="clr-namespace:CoverRetriever.Resources"
         xmlns:view="clr-namespace:CoverRetriever.View" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="Shell"
+        Style="{StaticResource DefaultWindowStyle}"
         Width="760"
         Height="560"
         MinWidth="760"
         MinHeight="560"
-        Background="{DynamicResource Background}"
         cmd:Closing.Command="{Binding FinishCommand}"
         cmd:Loaded.Command="{Binding LoadedCommand}"
-        Icon="/CoverRetriever;component/CoverRetriever.ico"
         mc:Ignorable="d">
     <Window.Resources>
         <converter:TreePathContructor x:Key="treePathContructor" />
@@ -156,7 +154,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="170" />
                 <RowDefinition />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="{StaticResource ButtonsRowHeight}" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30*" MinWidth="200" />

@@ -25,7 +25,7 @@
         <Grid RenderTransformOrigin="0.5,0.5">
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="{StaticResource ButtonsRowHeight}" />
             </Grid.RowDefinitions>
             <Border>
                 <Border.Background>

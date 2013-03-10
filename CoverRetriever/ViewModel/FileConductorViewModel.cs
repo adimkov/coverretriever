@@ -21,6 +21,7 @@ namespace CoverRetriever.ViewModel
 
     using CoverRetriever.AudioInfo;
     using CoverRetriever.AudioInfo.Tagger;
+    using CoverRetriever.Common.ViewModel;
     using CoverRetriever.Model;
     using CoverRetriever.Resources;
 
@@ -91,6 +92,7 @@ namespace CoverRetriever.ViewModel
             SaveSuggestedTagsInContextCommand = new DelegateCommand(SaveSuggestedTagsInContextCommandExecute);
             RejectSuggestedTagCommand = new DelegateCommand(RejectSuggestedTagCommandExecute);
             LoadCaversCommand = new DelegateCommand(LoadCaversCommandExecute);
+            ConfirmationRequest = new InteractionRequest<Confirmation>();
 
             grabCoverSubject
                 .Throttle(TimeSpan.FromMilliseconds(200))
@@ -405,6 +407,14 @@ namespace CoverRetriever.ViewModel
         public SaveSettings SaveTagsSettings { get; private set; }
 
         /// <summary>
+        /// Gets the confirmation request.
+        /// </summary>
+        /// <value>
+        /// The confirmation request.
+        /// </value>
+        public InteractionRequest<Confirmation> ConfirmationRequest { get; private set; } 
+
+        /// <summary>
         /// Saves the selected cover onto disk.
         /// </summary>
         /// <param name="remoteCover">The remote cover.</param>
@@ -545,6 +555,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void RejectSuggestedTagCommandExecute()
         {
+////            ConfirmationRequest.Raise(new Confirmation{ Title = "Cancel", Content = "Tag editing was canceled." });
             SelectedAudio.CancelEditTags();
             wasSearched = false;
             grabCoverSubject.OnNext(SelectedAudio.MetaProvider); 

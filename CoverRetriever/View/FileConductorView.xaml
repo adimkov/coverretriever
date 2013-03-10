@@ -8,7 +8,10 @@
              xmlns:resources="clr-namespace:CoverRetriever.Resources"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:behaviors="clr-namespace:CoverRetriever.Behaviors"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" MinHeight="190"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:interaction="clr-namespace:CoverRetriever.Common.Interaction;assembly=CoverRetriever.Common"
+             xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Interactivity.InteractionRequest;assembly=Microsoft.Practices.Prism.Interactivity"
+             MinHeight="190"
              d:DesignWidth="405"
              mc:Ignorable="d" 
              Background="Transparent"
@@ -53,6 +56,11 @@
     <i:Interaction.Behaviors>
         <behaviors:SetFocusOnMouseDown/>
     </i:Interaction.Behaviors>
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
+            <interaction:ConfirmationWindowTrigger />
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />

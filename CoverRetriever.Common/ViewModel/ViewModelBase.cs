@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CoverRetriever.ViewModel
+namespace CoverRetriever.Common.ViewModel
 {
     using System;
 
@@ -21,12 +21,12 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Backing field for IsBusy property.
         /// </summary>
-        private bool _isBusy;
+        private bool isBusy;
 
         /// <summary>
         /// Backing field for OperationName property.
         /// </summary>
-        private string _operationName;
+        private string operationName;
         
         /// <summary>
         /// Gets a value indicating whether is view model is busy.
@@ -35,12 +35,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _isBusy;
+                return isBusy;
             }
 
             private set
             {
-                _isBusy = value;
+                isBusy = value;
                 RaisePropertyChanged("IsBusy");
             }
         }
@@ -52,12 +52,12 @@ namespace CoverRetriever.ViewModel
         {
             get
             {
-                return _operationName;
+                return operationName;
             }
 
             private set
             {
-                _operationName = value;
+                operationName = value;
                 RaisePropertyChanged("OperationName");
             }
         }

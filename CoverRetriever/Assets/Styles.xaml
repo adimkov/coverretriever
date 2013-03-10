@@ -3,6 +3,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:System="clr-namespace:System;assembly=mscorlib"
+                    xmlns:controls="clr-namespace:CoverRetriever.Common.Controls;assembly=CoverRetriever.Common"
                     mc:Ignorable="d">
     <!--  xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation" xmlns:uriMapper="clr-namespace:System.Windows.Navigation;assembly=System.Windows.Controls.Navigation"  -->
 
@@ -23,6 +24,7 @@
     -->
 
     <System:Double x:Key="ContentMaxWidth">960</System:Double>
+    <GridLength x:Key="ButtonsRowHeight">40</GridLength>
 
     <!--
         ***************************************************************************
@@ -418,5 +420,19 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     -->
+    
+    <!--Global window styles-->
+    <Style TargetType="{x:Type Window}" x:Key="DefaultWindowStyle">
+        <Setter Property="Background" Value="{DynamicResource Background}"></Setter>
+        <Setter Property="Icon" Value="/CoverRetriever;component/CoverRetriever.ico"></Setter>
+    </Style>
 
+   <Style x:Key="DialogWindow" TargetType="{x:Type Window}" BasedOn="{StaticResource DefaultWindowStyle}">
+        <Setter Property="Width" Value="459"/>
+        <Setter Property="MinHeight" Value="130"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="SizeToContent" Value="Height"/>
+    </Style>
+
+    <Style TargetType="controls:ConfirmationWindow" BasedOn="{StaticResource DialogWindow}"></Style>
 </ResourceDictionary>

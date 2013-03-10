@@ -13,6 +13,7 @@ namespace CoverRetriever.ViewModel
     using System.ComponentModel.Composition;
     using System.Reactive.Subjects;
 
+    using CoverRetriever.Common.ViewModel;
     using CoverRetriever.Model;
     using CoverRetriever.Service;
 

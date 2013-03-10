@@ -16,6 +16,7 @@ namespace CoverRetriever.ViewModel
     using System.Windows;
 
     using CoverRetriever.AudioInfo;
+    using CoverRetriever.Common.ViewModel;
     using CoverRetriever.Resources;
 
     using Microsoft.Practices.Prism.Commands;

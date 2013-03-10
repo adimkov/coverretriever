@@ -40,6 +40,8 @@ namespace CoverRetriever.Common.Interaction
                 return;
             }
 
+            var confirmation = args.Context as Confirmation;
+
             var callback = args.Callback;
             
             CancelEventHandler handler = null;
@@ -47,6 +49,11 @@ namespace CoverRetriever.Common.Interaction
                 (o, e) =>
                 {
                     window.Closing -= handler;
+                    if (confirmation != null)
+                    {
+                        confirmation.Confirmed = window.DialogResult ?? false;
+                    }
+
                     callback();
                 };
 
@@ -57,7 +64,7 @@ namespace CoverRetriever.Common.Interaction
                 window.Title = args.Context.Title;
             }
 
-            window.DataContext = args.Context.Content;
+            ConfigureWindow(window, args.Context);
             window.ShowDialog();
         }
 
@@ -66,5 +73,15 @@ namespace CoverRetriever.Common.Interaction
         /// </summary>
         /// <returns>The window.</returns>
         protected abstract Window ProvideWindow();
+
+        /// <summary>
+        /// Configures the window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="context">The context.</param>
+        protected virtual void ConfigureWindow(Window window, Notification context)
+        {
+            window.DataContext = context.Content;
+        }
     }
 }

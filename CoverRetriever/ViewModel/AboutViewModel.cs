@@ -9,8 +9,8 @@ using Microsoft.Practices.Prism.Commands;
 
 namespace CoverRetriever.ViewModel
 {
-    using CoverRetriever.Common.Extensions;
     using CoverRetriever.Common.Infrastructure;
+    using CoverRetriever.Common.ViewModel;
 
     [Export(typeof(AboutViewModel))]
 	public partial class AboutViewModel : ViewModelBase
