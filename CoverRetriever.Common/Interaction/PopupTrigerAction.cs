@@ -64,6 +64,8 @@ namespace CoverRetriever.Common.Interaction
                 window.Title = args.Context.Title;
             }
 
+            window.Owner = Application.Current.MainWindow;
+            
             ConfigureWindow(window, args.Context);
             window.ShowDialog();
         }

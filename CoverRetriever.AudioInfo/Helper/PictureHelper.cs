@@ -45,9 +45,10 @@ namespace CoverRetriever.AudioInfo.Helper
         /// <returns>The Mime type.</returns>
         public static string GetMimeTipeFromFileExtension(string fileExtension)
         {
-            if (MimeTipeDictionary.ContainsKey(fileExtension))
+            var lowerCaseFileExtension = fileExtension.ToLower();
+            if (MimeTipeDictionary.ContainsKey(lowerCaseFileExtension))
             {
-                return MimeTipeDictionary[fileExtension];
+                return MimeTipeDictionary[lowerCaseFileExtension];
             }
 
             throw new MetaProviderException("MimeType for extension '{0}' was not found");

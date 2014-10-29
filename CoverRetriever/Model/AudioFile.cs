@@ -110,6 +110,21 @@ namespace CoverRetriever.Model
         }
 
         /// <summary>
+        /// Determines whether the specified other is equals.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
+        public bool IsEquals(IMetaProvider other) 
+        {
+            var current = MetaProvider;
+
+            return current.Album == other.Album &&
+                current.Artist == other.Artist &&
+                current.TrackName == other.TrackName &&
+                current.Year == other.Year;
+        }
+
+        /// <summary>
         /// Begins the edit tags.
         /// </summary>
         public void BeginEditTags()

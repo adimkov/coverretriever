@@ -498,15 +498,21 @@ namespace CoverRetriever.ViewModel
                 .SubscribeOn(((CoverRetrieverViewModel)ParentViewModel).SubscribeScheduler)
                 .ObserveOn(((CoverRetrieverViewModel)ParentViewModel).ObservableScheduler)
                 .Finally(EndOperation)
-                .Completed(() =>
-                    {
-                        Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
-                        grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
-                    })
                 .Subscribe(
                     x =>
                     {
-                        SelectedAudio.CopyTagsFrom(x, SaveTagsSettings);
+                        Trace.TraceInformation("Tags received for {0}", SelectedAudio.Name);
+
+                        if (!SelectedAudio.IsEquals(x))
+                        {
+                            SelectedAudio.CopyTagsFrom(x, SaveTagsSettings);
+                            grabCoverSubject.OnNext(SelectedAudio.MetaProvider);
+                        }
+                        else
+                        {
+                            ConfirmationRequest.Raise(new Confirmation { Title = "Tag finder", Content = string.Format("Found tags for file {0} ate same.", SelectedAudio.Name) });
+                        }
+
                         RaisePropertyChanged(string.Empty);
                     },
                     ((CoverRetrieverViewModel)ParentViewModel).SetError);

@@ -31,6 +31,8 @@ namespace CoverRetriever.Common.Controls
         public ConfirmationWindow()
         {
             DefaultStyleKey = typeof(ConfirmationWindow);
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            this.Owner = Application.Current.MainWindow;
         }
 
         /// <summary>
