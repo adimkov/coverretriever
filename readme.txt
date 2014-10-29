@@ -32,3 +32,8 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 	*Bug fixing
 0.8.1.0 (2012-04-9)
 	*Fixed crashes during file switching
+1.0.0	(2014-10-29)
+	*Used [AcoustID](https://acoustid.org) as tag finder (more stable then LastFM)
+	*Added manual editing of tag
+	*Added possibility to save a particular Tag (Artist, Album) for file or for Folder
+	*Other minor improvements
