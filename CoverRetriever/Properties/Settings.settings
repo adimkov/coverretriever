@@ -3,13 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="SearhGoogle" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://ajax.googleapis.com/ajax/services/search/images</Value>
+      <Value Profile="(Default)">https://www.googleapis.com/customsearch/v1</Value>
     </Setting>
     <Setting Name="SearhGooglePattern" Type="System.String" Scope="Application">
       <Value Profile="(Default)">{0} - {1}</Value>
     </Setting>
     <Setting Name="KeyGoogle" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">ABQIAAAAyJOVurPXLFVPtU1RN7FF_RT1b26EPce9DeOid2McjHSSSzE4jRRSIw3t1tJbbma6w0bpHwFki780Aw</Value>
+      <Value Profile="(Default)">AIzaSyCPJqOuWozFjSw0pqp8eosBBssh2Oa7jAc</Value>
     </Setting>
     <Setting Name="CacheFilePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">./CoverRetriever.cache</Value>
@@ -19,6 +19,9 @@
     </Setting>
     <Setting Name="AcousticIdFingerprintClientPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">./AcoustId/fpcalc.exe</Value>
+    </Setting>
+    <Setting Name="SearchGoogleCX" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">016946005127462810279:k1mbjuwdts8</Value>
     </Setting>
   </Settings>
 </SettingsFile>

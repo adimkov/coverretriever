@@ -34,7 +34,7 @@ namespace CoverRetriever.Service
         /// <summary>
         /// Template to search covers.
         /// </summary>
-        private const string BaseAddressParam = "?v=1.0&key={0}&rsz={1}&q={2}";
+        private const string BaseAddressParam = "?key={0}&cx={1}&num={2}&q={3}&searchType=image";
 
         /// <summary>
         /// Google search address.
@@ -52,6 +52,10 @@ namespace CoverRetriever.Service
         private readonly string _googleKey;
 
         /// <summary>
+        /// Google developer key.
+        /// </summary>
+        private readonly string _googleCX;
+        /// <summary>
         /// Initializes a new instance of the <see cref="GoogleCoverRetrieverService"/> class.
         /// </summary>
         public GoogleCoverRetrieverService()
@@ -59,6 +63,7 @@ namespace CoverRetriever.Service
             _baseAddress = Settings.Default.SearhGoogle + BaseAddressParam;
             _searchPattern = Settings.Default.SearhGooglePattern;
             _googleKey = Settings.Default.KeyGoogle;
+            _googleCX = Settings.Default.SearchGoogleCX;
         }
 
         /// <summary>
@@ -78,7 +83,7 @@ namespace CoverRetriever.Service
             var googleClient = new WebClient();
             var observableJson = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(googleClient, "DownloadStringCompleted");
 
-            var requestedUri = _baseAddress.FormatString(_googleKey, coverCount, _searchPattern.FormatString(artist, album));
+            var requestedUri = _baseAddress.FormatString(_googleKey, _googleCX, coverCount, _searchPattern.FormatString(artist, album));
 
             return ObservableExtensions.Defer(
                 observableJson.Finally(googleClient.Dispose).Select(
@@ -105,7 +110,7 @@ namespace CoverRetriever.Service
             var downloader = new WebClient();
             var downloadOpservable = ObservableExtensions.Defer(Observable.FromEventPattern<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
                     .Select(
-                        x => 
+                        x =>
                             {
                                 if (x.EventArgs.Error != null)
                                 {
@@ -115,7 +120,7 @@ namespace CoverRetriever.Service
                                 return new MemoryStream(x.EventArgs.Result);
                             }), () => downloader.DownloadDataAsync(coverUri))
                 .Take(1);
-            
+
             return downloadOpservable;
         }
 
@@ -128,21 +133,21 @@ namespace CoverRetriever.Service
         {
             dynamic covers = JsonConvert.DeserializeObject(jsonResponce);
             var result = new List<RemoteCover>();
-            
-            var entriesCount = covers.responseData.results.Count;
+
+            var entriesCount = covers.items.Count;
             for (int i = 0; i < entriesCount; i++)
             {
-                var gimageSearch = covers.responseData.results[i];
+                var gimageSearch = covers.items[i];
 
-                var gImageUri = new Uri((string)gimageSearch.url, UriKind.Absolute);
-                double width = gimageSearch.width;
-                double height = gimageSearch.height;
+                var gImageUri = new Uri((string)gimageSearch.link, UriKind.Absolute);
+                double width = gimageSearch.image.width;
+                double height = gimageSearch.image.height;
 
-                var tdGImage = new Uri((string)gimageSearch.tbUrl, UriKind.Absolute);
-                double tdwidth = gimageSearch.tbWidth;
-                double tdheight = gimageSearch.tbHeight;
+                var tdGImage = new Uri((string)gimageSearch.image.thumbnailLink, UriKind.Absolute);
+                double tdwidth = gimageSearch.image.thumbnailWidth;
+                double tdheight = gimageSearch.image.thumbnailHeight;
                 result.Add(new RemoteCover(
-                            (string) gimageSearch.imageId,
+                            (string)gimageSearch.title,
                             Path.GetFileName(gImageUri.AbsolutePath),
                             new Size(width, height),
                             new Size(tdwidth, tdheight),
