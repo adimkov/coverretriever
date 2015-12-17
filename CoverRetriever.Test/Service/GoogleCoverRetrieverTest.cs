@@ -20,9 +20,9 @@ namespace CoverRetriever.Test.Service
         public void GetCoverFor_should_download_and_parse_responce_from_google()
         {
             IEnumerable<RemoteCover> actual = null;
-            var target = new GoogleCoverRetrieverService();
+            var target = new BingCoverRetrieverService();
             target.GetCoverFor("Sex Pistols", "Pretty Vacant", 3).ForEach(x => actual = x);
-            
+
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.Count(), Is.EqualTo(3));
         }
@@ -32,7 +32,7 @@ namespace CoverRetriever.Test.Service
         {
             IEnumerable<RemoteCover> actual = null;
             Stream firstThumbStream = null;
-            var target = new GoogleCoverRetrieverService();
+            var target = new BingCoverRetrieverService();
             target.GetCoverFor("Sex Pistols", "Pretty Vacant", 1).ForEach(x => actual = x);
 
             Assert.That(actual, Is.Not.Null);

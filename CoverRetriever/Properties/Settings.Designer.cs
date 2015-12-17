@@ -43,7 +43,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("AIzaSyCPJqOuWozFjSw0pqp8eosBBssh2Oa7jAc")]
+        [global::System.Configuration.DefaultSettingValueAttribute("AIzaSyAndk2Rf--r_1NURD2Wyu9Llc2vqN2S3ew")]
         public string KeyGoogle {
             get {
                 return ((string)(this["KeyGoogle"]));
@@ -79,10 +79,28 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("016946005127462810279:k1mbjuwdts8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("003518012064168801550:kt1jmqg4jmu")]
         public string SearchGoogleCX {
             get {
                 return ((string)(this["SearchGoogleCX"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api.datamarket.azure.com/Bing/Search/")]
+        public string SearchBing {
+            get {
+                return ((string)(this["SearchBing"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("rztsZhUz5wJ5Q9qWb0R9Yd6IBXjO0hDf+kHgiwHxFfA")]
+        public string KeyBing {
+            get {
+                return ((string)(this["KeyBing"]));
             }
         }
     }

@@ -41,10 +41,10 @@ namespace CoverRetriever.Test.ViewModel
             var fileSystemService = GetFileSystemServiceMock();
             var coverRetrieverService = GetCoverRetrieverServiceMock();
             var fileConductorViewModelMock = GetFileConductorViewModelMock();
-            
+
             Assert.DoesNotThrow(() => new CoverRetrieverViewModel(
-                fileSystemService.Object, 
-                coverRetrieverService.Object, 
+                fileSystemService.Object,
+                coverRetrieverService.Object,
                 GetRootFolderViewModelMock().Object,
                 fileConductorViewModelMock.Object));
         }
@@ -76,7 +76,7 @@ namespace CoverRetriever.Test.ViewModel
         public void FileSystemSelectedItemChangedCommand_should_set_FileDetails()
         {
             var target = GetCoverRetrieverViewModel();
-            
+
             var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
             var root = GetAudioMockedFile(mettaProvider.Object);
 
@@ -220,7 +220,7 @@ namespace CoverRetriever.Test.ViewModel
 
             var target = GetCoverRetrieverViewModel();
             target.FileConductorViewModel.Tagger = new Lazy<ITaggerService>(() => taggerMock.Object);
-            
+
             target.FileSystemSelectedItemChangedCommand.Execute(root);
             target.FileConductorViewModel.GrabTagsCommand.Execute(null);
             _testScheduler.Start();
@@ -238,7 +238,7 @@ namespace CoverRetriever.Test.ViewModel
             var mettaProvider = new Mock<EditableObject>().As<IMetaProvider>();
             var root = GetAudioMockedFile(mettaProvider.Object);
             var taggerMock = new Mock<ITaggerService>();
-            
+
             taggerMock.Setup(x => x.LoadTagsForAudioFile(It.IsAny<string>()))
                 .Returns(Observable.Throw<IMetaProvider>(new Exception()));
 
@@ -270,7 +270,7 @@ namespace CoverRetriever.Test.ViewModel
             versionControlMock.Setup(x => x.GetLatestVersion()).Returns(Observable.Empty<RevisionVersion>);
 
 
-            
+
             var target = new CoverRetrieverViewModel(
                 fileSystemServiceMock.Object,
                 coverRetrieverServiceMock.Object,
@@ -279,7 +279,7 @@ namespace CoverRetriever.Test.ViewModel
             target.ObservableScheduler = _testScheduler;
             target.SubscribeScheduler = _testScheduler;
             target.VersionControl = new Lazy<IVersionControlService>(() => versionControlMock.Object);
-            
+
             return target;
         }
 
@@ -290,8 +290,8 @@ namespace CoverRetriever.Test.ViewModel
             Mock<ICoverRetrieverService> coverRetrieverServiceMock;
 
             return GetCoverRetrieverViewModel(
-                out fileSystemServiceMock, 
-                out fileConductorViewModelMock, 
+                out fileSystemServiceMock,
+                out fileConductorViewModelMock,
                 out coverRetrieverServiceMock);
         }
     }

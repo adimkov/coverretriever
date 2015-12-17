@@ -131,6 +131,7 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Rx-Core.2.0.20823\lib\Net40\System.Reactive.Core.dll</HintPath>
@@ -252,7 +253,9 @@
       <DependentUpon>CoverRetrieverResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\CoverRetrieverResourcesWrapper.cs" />
+    <Compile Include="Service\BingSearchContainer.cs" />
     <Compile Include="Service\DirectoryCoverOrganizer.cs" />
+    <Compile Include="Service\BingCoverRetrieverService.cs" />
     <Compile Include="Service\GoogleCoverRetrieverService.cs" />
     <Compile Include="Caching\ICacheService.cs" />
     <Compile Include="Service\ICoverRetrieverService.cs" />
