@@ -85,7 +85,7 @@ namespace CoverRetriever.View
         private void Browse_OnClick(object sender, RoutedEventArgs e)
         {
             var openDialog = new FolderBrowserDialog();
-            openDialog.Description = CoverRetrieverResources.TextStepOneHeader;
+            openDialog.Description = CoverRetrieverResources.TextStepTwoHeader;
             openDialog.ShowNewFolderButton = false;
             openDialog.SelectedPath = FolderPathTextBlock.Text;
 

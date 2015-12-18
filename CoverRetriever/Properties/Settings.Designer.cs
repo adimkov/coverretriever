@@ -103,5 +103,17 @@ namespace CoverRetriever.Properties {
                 return ((string)(this["KeyBing"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BingService")]
+        public string SearchService {
+            get {
+                return ((string)(this["SearchService"]));
+            }
+            set {
+                this["SearchService"] = value;
+            }
+        }
     }
 }

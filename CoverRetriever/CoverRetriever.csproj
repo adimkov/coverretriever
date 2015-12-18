@@ -242,6 +242,7 @@
     <Compile Include="Model\RemoteCover.cs" />
     <Compile Include="Model\RevisionVersion.cs" />
     <Compile Include="Model\RootFolderResult.cs" />
+    <Compile Include="Model\SearchProviderResult.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -270,6 +271,10 @@
     <Compile Include="ViewModel\CoverRetrieverViewModel.cs" />
     <Compile Include="ViewModel\FileConductorViewModel.cs" />
     <Compile Include="ViewModel\OpenFolderViewModel.cs" />
+    <Compile Include="ViewModel\SelectSearchProviderViewModel.cs" />
+    <Compile Include="View\SelectSearchProviderView.xaml.cs">
+      <DependentUpon>SelectSearchProviderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -381,6 +386,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\SelectSearchProviderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -440,6 +449,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\AcousticId.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Search.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <PropertyGroup>

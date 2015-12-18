@@ -26,15 +26,9 @@ namespace CoverRetriever.Service
 
     using ObservableExtensions = System.Linq.ObservableExtensions;
 
-    /// <summary>
-    ///  Service to grab covers through google engine.
-    /// </summary>
-    //[Export(typeof(ICoverRetrieverService))]
+    [Export("BingService", typeof(ICoverRetrieverService))]
     public class BingCoverRetrieverService : ICoverRetrieverService
     {
-
-
-
         private readonly BingSearchContainer _bingContainer;
 
         private readonly string _baseAddress;

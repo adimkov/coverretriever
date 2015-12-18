@@ -28,7 +28,7 @@ namespace CoverRetriever.Service
     /// <summary>
     ///  Service to grab covers through google engine.
     /// </summary>
-    [Export(typeof(ICoverRetrieverService))]
+    [Export("GoogleService", typeof(ICoverRetrieverService))]
     public class GoogleCoverRetrieverService : ICoverRetrieverService
     {
         /// <summary>

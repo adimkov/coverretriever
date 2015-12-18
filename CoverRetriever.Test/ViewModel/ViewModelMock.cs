@@ -31,7 +31,10 @@ namespace CoverRetriever.Test.ViewModel
         {
             return new Mock<OpenFolderViewModel>(new Mock<IFileSystemService>().Object);
         }
-
+        protected Mock<SelectSearchProviderViewModel> GetSearchProviderViewModelMock()
+        {
+            return new Mock<SelectSearchProviderViewModel>();
+        }
         protected Mock<FileConductorViewModel> GetFileConductorViewModelMock()
         {
             return new Mock<FileConductorViewModel>();
@@ -112,12 +115,12 @@ namespace CoverRetriever.Test.ViewModel
         protected IMetaProvider GetMockedSuggestedTags()
         {
             return new SuggestTag()
-                {
-                    Album = "test_album",
-                    Artist = "test_artist",
-                    Year = "2009",
-                    TrackName = "test_trackName"
-                };
+            {
+                Album = "test_album",
+                Artist = "test_artist",
+                Year = "2009",
+                TrackName = "test_trackName"
+            };
         }
     }
 }
