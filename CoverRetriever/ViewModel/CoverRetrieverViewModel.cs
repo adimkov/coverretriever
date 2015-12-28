@@ -60,7 +60,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// Service to grab album art from web.
         /// </summary>
-        private ICoverRetrieverService coverRetrieverService;
+        private readonly ICoverRetrieverService coverRetrieverService;
 
         /// <summary>
         /// Backing field for Loaded command.
@@ -96,7 +96,7 @@ namespace CoverRetriever.ViewModel
         /// Backing field for About command.
         /// </summary>
         private readonly DelegateCommand aboutCommand;
-
+        
         /// <summary>
         /// Backing field for CloseError command.
         /// </summary>
@@ -110,15 +110,7 @@ namespace CoverRetriever.ViewModel
         /// <summary>
         /// The request to open library window.
         /// </summary>
-        private readonly InteractionRequest<Notification> selectSearchProviderRequest;
-        /// <summary>
-        /// The request to open library window.
-        /// </summary>
         private readonly InteractionRequest<Notification> selectRootFolderRequest;
-
-        /// <summary>
-        /// The request to open provider window.
-        /// </summary>
 
         /// <summary>
         /// The request to show about window.
@@ -134,7 +126,6 @@ namespace CoverRetriever.ViewModel
         /// View model of open folder.
         /// </summary>
         private readonly OpenFolderViewModel openFolderViewModel;
-        private readonly SelectSearchProviderViewModel selectSearchProviderViewModel;
 
         /// <summary>
         /// Found album arts.
@@ -175,19 +166,19 @@ namespace CoverRetriever.ViewModel
         /// <param name="fileConductorViewModel">The file conductor view model.</param>
         [ImportingConstructor]
         public CoverRetrieverViewModel(
-            IFileSystemService fileSystemService,
+            IFileSystemService fileSystemService, 
+            ICoverRetrieverService coverRetrieverService, 
             OpenFolderViewModel openFolderViewModel,
-            SelectSearchProviderViewModel selectSearchProviderViewModel,
             FileConductorViewModel fileConductorViewModel)
         {
             this.fileSystemService = fileSystemService;
+            this.coverRetrieverService = coverRetrieverService;
             this.openFolderViewModel = openFolderViewModel;
             FileConductorViewModel = fileConductorViewModel;
             FileConductorViewModel.ParentViewModel = this;
             this.fileSystemService = fileSystemService;
-            this.selectSearchProviderViewModel = selectSearchProviderViewModel;
+
             openFolderViewModel.PushRootFolder.Subscribe(OnNextPushRootFolder);
-            selectSearchProviderViewModel.SelectedSearchProvider.Subscribe(OnNextSelectedSearchProvider);
             loadedCommand = new DelegateCommand(LoadedCommandExecute);
             fileSystemSelectedItemChangedCommand = new DelegateCommand<FileSystemItem>(FileSystemSelectedItemChangedCommandExecute);
             previewCoverCommand = new DelegateCommand<RemoteCover>(PreviewCoverCommandExecute);
@@ -196,9 +187,8 @@ namespace CoverRetriever.ViewModel
             finishCommand = new DelegateCommand(FinishCommandExecute);
             aboutCommand = new DelegateCommand(AboutCommandExecute);
             closeErrorMessage = new DelegateCommand(CloseErrorMessageExecute);
-
+            
             previewCoverRequest = new InteractionRequest<Notification>();
-            selectSearchProviderRequest = new InteractionRequest<Notification>();
             selectRootFolderRequest = new InteractionRequest<Notification>();
             aboutRequest = new InteractionRequest<Notification>();
 
@@ -229,18 +219,18 @@ namespace CoverRetriever.ViewModel
                 return fileSystemSelectedItemChangedCommand;
             }
         }
-
+        
         /// <summary>
         /// Gets preview selected cover.
         /// </summary>
-        public ICommand PreviewCoverCommand
+        public ICommand PreviewCoverCommand       
         {
             get
             {
                 return previewCoverCommand;
             }
         }
-
+        
         /// <summary>
         /// Gets save selected cover in to selected directory.
         /// </summary>
@@ -273,7 +263,7 @@ namespace CoverRetriever.ViewModel
                 return finishCommand;
             }
         }
-
+        
         /// <summary>
         /// Gets about dialog command.
         /// </summary>
@@ -306,17 +296,10 @@ namespace CoverRetriever.ViewModel
                 return previewCoverRequest;
             }
         }
-
+        
         /// <summary>
         /// Gets select new root folder dialog.
         /// </summary>
-        public IInteractionRequest SelectSearchProviderRequest
-        {
-            get
-            {
-                return selectSearchProviderRequest;
-            }
-        }
         public IInteractionRequest SelectRootFolderRequest
         {
             get
@@ -415,7 +398,7 @@ namespace CoverRetriever.ViewModel
                 return selectedSuggestedCover;
             }
 
-            set
+            set 
             {
                 selectedSuggestedCover = value;
                 RaisePropertyChanged("SelectedSuggestedCover");
@@ -525,17 +508,7 @@ namespace CoverRetriever.ViewModel
         /// </summary>
         private void LoadedCommandExecute()
         {
-            if (coverRetrieverService == null)
-            {
-                //ToDo ====>>>> add selectSearchProviderCommand
-                selectSearchProviderViewModel.IsCloseEnabled = false;
-                VersionControl.Value
-                    .GetLatestVersion()
-                    .Delay(TimeSpan.FromSeconds(DelayToCheckUpdate))
-                    .Catch<RevisionVersion, WebException>(x => Observable.Empty<RevisionVersion>())
-                    .Subscribe(GetLatestApplicatioVersion);
-            }
-            else if (rootFolder == null)
+            if (rootFolder == null)
             {
                 openFolderViewModel.IsCloseEnabled = false;
                 selectFolderCommand.Execute();
@@ -545,22 +518,6 @@ namespace CoverRetriever.ViewModel
                     .Catch<RevisionVersion, WebException>(x => Observable.Empty<RevisionVersion>())
                     .Subscribe(GetLatestApplicatioVersion);
             }
-        }
-        /// <summary>
-        /// Called when user choose search provider.
-        /// </summary>
-        /// <param name="rootFolderResult">The root folder result.</param>
-        private void OnNextSelectedSearchProvider(SearchProviderResult searchProviderResult)
-        {
-            if (searchProviderResult.SearchProvider == "Bing")
-            {
-                coverRetrieverService = new BingCoverRetrieverService();
-            }
-            else
-            {
-                coverRetrieverService = new GoogleCoverRetrieverService();
-            }
-            selectSearchProviderRequest.Raise(new CloseNotification());
         }
 
         /// <summary>
@@ -578,7 +535,6 @@ namespace CoverRetriever.ViewModel
                 .Subscribe(
                 x => rootFolder.Children.Add(x),
                 SelectFirstAudioFile);
-
             selectRootFolderRequest.Raise(new CloseNotification());
         }
 
@@ -608,7 +564,7 @@ namespace CoverRetriever.ViewModel
         private void PreviewCoverCommandExecute(RemoteCover remoteCover)
         {
             var viewModel = new CoverPreviewViewModel(remoteCover);
-
+            
             viewModel.SaveCover.Subscribe(
                 x =>
                 {
@@ -622,9 +578,9 @@ namespace CoverRetriever.ViewModel
             previewCoverRequest.Raise(new Notification
             {
                 Title = CoverRetrieverResources.CoverPreviewTitle.FormatUIString(
-                FileConductorViewModel.Artist,
+                FileConductorViewModel.Artist, 
                 FileConductorViewModel.Album),
-                Content = viewModel
+                Content = viewModel 
             });
         }
 
@@ -651,17 +607,6 @@ namespace CoverRetriever.ViewModel
         private void SelectFolderCommandExecute()
         {
             selectRootFolderRequest.Raise(new Notification
-            {
-                Title = CoverRetrieverResources.TitleStepTwo,
-                Content = openFolderViewModel
-            });
-        }
-        /// <summary>
-        /// Called when select the folder command executes.
-        /// </summary>
-        private void SelectProviderCommandExecute()
-        {
-            selectSearchProviderRequest.Raise(new Notification
             {
                 Title = CoverRetrieverResources.TitleStepOne,
                 Content = openFolderViewModel
@@ -715,9 +660,9 @@ namespace CoverRetriever.ViewModel
             {
                 audio = (AudioFile)folder.Children.FirstOrDefault(x => x is AudioFile);
             }
-
+            
             FileConductorViewModel.SelectedAudio = audio;
-
+            
             if (audio != null)
             {
                 if (FileConductorViewModel.IsNeededToRetrieveTags)
@@ -760,7 +705,7 @@ namespace CoverRetriever.ViewModel
                 {
                     return audioFile;
                 }
-
+                
                 if (folder != null)
                 {
                     var folderWithAudioFile = FindFirstAudioFile(folder);
@@ -807,5 +752,5 @@ namespace CoverRetriever.ViewModel
         {
             saveCoverCommand.RaiseCanExecuteChanged();
         }
-    }
+  }
 }

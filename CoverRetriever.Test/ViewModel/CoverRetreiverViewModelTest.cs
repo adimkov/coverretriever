@@ -44,8 +44,8 @@ namespace CoverRetriever.Test.ViewModel
 
             Assert.DoesNotThrow(() => new CoverRetrieverViewModel(
                 fileSystemService.Object,
+                coverRetrieverService.Object,
                 GetRootFolderViewModelMock().Object,
-                GetSearchProviderViewModelMock().Object,
                 fileConductorViewModelMock.Object));
         }
 
@@ -273,12 +273,11 @@ namespace CoverRetriever.Test.ViewModel
 
             var target = new CoverRetrieverViewModel(
                 fileSystemServiceMock.Object,
+                coverRetrieverServiceMock.Object,
                 GetRootFolderViewModelMock().Object,
-                GetSearchProviderViewModelMock().Object,
                 fileConductorViewModelMock.Object);
             target.ObservableScheduler = _testScheduler;
             target.SubscribeScheduler = _testScheduler;
-
             target.VersionControl = new Lazy<IVersionControlService>(() => versionControlMock.Object);
 
             return target;

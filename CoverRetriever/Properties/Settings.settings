@@ -29,8 +29,5 @@
     <Setting Name="KeyBing" Type="System.String" Scope="Application">
       <Value Profile="(Default)">rztsZhUz5wJ5Q9qWb0R9Yd6IBXjO0hDf+kHgiwHxFfA</Value>
     </Setting>
-    <Setting Name="SearchService" Type="System.String" Scope="User">
-      <Value Profile="(Default)">BingService</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

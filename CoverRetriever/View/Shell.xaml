@@ -142,11 +142,6 @@
                 <view:OpenFolderView />
             </interaction:WindowTrigerAction>
         </prism:InteractionRequestTrigger>
-        <prism:InteractionRequestTrigger SourceObject="{Binding SelectSearchProviderRequest}">
-            <interaction:WindowTrigerAction>
-                <view:SelectSearchProviderView />
-            </interaction:WindowTrigerAction>
-        </prism:InteractionRequestTrigger>
         <prism:InteractionRequestTrigger SourceObject="{Binding AboutRequest}">
             <interaction:WindowTrigerAction>
                 <view:AboutView />

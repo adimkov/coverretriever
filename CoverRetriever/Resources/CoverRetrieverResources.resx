@@ -241,14 +241,6 @@
     <value>Step 1. Choose a folder with audio files</value>
     <comment>Open folder dialog</comment>
   </data>
-  <data name="TextStepTwo" xml:space="preserve">
-    <value>System will load audio files to search for a cover from selected folder (including subfolders)</value>
-    <comment>Open folder dialog</comment>
-  </data>
-  <data name="TextStepTwoHeader" xml:space="preserve">
-    <value>Step 2. Choose a folder with audio files</value>
-    <comment>Open folder dialog</comment>
-  </data>
   <data name="TextTaggerPoweredBy" xml:space="preserve">
     <value>Tag finder powered by:</value>
     <comment>About</comment>
@@ -262,10 +254,6 @@
     <comment>File сonductor view</comment>
   </data>
   <data name="TitleStepOne" xml:space="preserve">
-    <value>Choose a folder</value>
-    <comment>Open folder dialog</comment>
-  </data>
-  <data name="TitleStepTwo" xml:space="preserve">
     <value>Choose a folder</value>
     <comment>Open folder dialog</comment>
   </data>
