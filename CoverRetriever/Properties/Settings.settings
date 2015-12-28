@@ -24,7 +24,7 @@
       <Value Profile="(Default)">003518012064168801550:kt1jmqg4jmu</Value>
     </Setting>
     <Setting Name="SearchBing" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://api.datamarket.azure.com/Bing/Search/</Value>
+      <Value Profile="(Default)">https://www.bing.com/images/search?q={0}</Value>
     </Setting>
     <Setting Name="KeyBing" Type="System.String" Scope="Application">
       <Value Profile="(Default)">rztsZhUz5wJ5Q9qWb0R9Yd6IBXjO0hDf+kHgiwHxFfA</Value>

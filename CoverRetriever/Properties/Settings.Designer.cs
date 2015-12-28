@@ -88,7 +88,7 @@ namespace CoverRetriever.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://api.datamarket.azure.com/Bing/Search/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.bing.com/images/search?q={0}")]
         public string SearchBing {
             get {
                 return ((string)(this["SearchBing"]));

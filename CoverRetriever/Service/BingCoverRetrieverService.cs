@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BingCoverRetrieverService.cs" author="Anton Dimkov">
 //   Copyright (c) Anton Dimkov 2015. All rights reserved.  
 // </copyright>
@@ -17,41 +17,32 @@ namespace CoverRetriever.Service
     using System.Net;
     using System.Reactive.Linq;
     using System.Windows;
+    using System.Text.RegularExpressions;
 
     using CoverRetriever.Model;
     using CoverRetriever.Properties;
-
-    using Newtonsoft.Json;
     using Bing;
 
     using ObservableExtensions = System.Linq.ObservableExtensions;
+    using CsQuery;
 
     /// <summary>
     ///  Service to grab covers through google engine.
     /// </summary>
-    //[Export(typeof(ICoverRetrieverService))]
+    [Export(typeof(ICoverRetrieverService))]
     public class BingCoverRetrieverService : ICoverRetrieverService
     {
 
 
-
-        private readonly BingSearchContainer _bingContainer;
-
         private readonly string _baseAddress;
-        private readonly string _accountKey;
         private readonly string _searchPattern;
         /// Initializes a new instance of the <see cref="BingCoverRetrieverService"/> class.
         /// </summary>
         public BingCoverRetrieverService()
         {
             _baseAddress = Settings.Default.SearchBing;
-            _bingContainer = new BingSearchContainer(new Uri(_baseAddress));
 
-            // replace this value with your account key
-            _accountKey = Settings.Default.KeyBing;
             _searchPattern = Settings.Default.SearhGooglePattern;
-            // the next line configures the bingContainer to use your credentials.
-            _bingContainer.Credentials = new NetworkCredential(_accountKey, _accountKey);
 
         }
 
@@ -69,13 +60,12 @@ namespace CoverRetriever.Service
                 throw new CoverSearchException("Invalid cover count size. Actual: {0}. Valid range: 1-8".FormatString(coverCount));
             }
 
-            var imageQuery = _bingContainer.Image(_searchPattern.FormatString(artist, album), null, null, null, null, null, null);
+            var query = _searchPattern.FormatString(artist, album);
 
             var bingClient = new WebClient();
-            bingClient.Credentials = new NetworkCredential(_accountKey, _accountKey);
 
             var observableJson = Observable.FromEventPattern<DownloadStringCompletedEventArgs>(bingClient, "DownloadStringCompleted");
-            var uri = $"{imageQuery.RequestUri}&$format=JSON";
+            var uri = _baseAddress.FormatString(query);
 
             return ObservableExtensions.Defer(
                 observableJson.Finally(bingClient.Dispose).Select(
@@ -83,10 +73,10 @@ namespace CoverRetriever.Service
                                 {
                                     if (jsonResponce.EventArgs.Error != null)
                                     {
-                                        throw new CoverSearchException("Unable to get response from google", jsonResponce.EventArgs.Error);
+                                        throw new CoverSearchException("Unable to get response from bing", jsonResponce.EventArgs.Error);
                                     }
 
-                                    return ParseBingImageResponse(jsonResponce.EventArgs.Result).Take(coverCount);//jsonResponce.EventArgs.Result
+                                    return ParseBingImageResponse(query, coverCount);//jsonResponce.EventArgs.Result
                                 }),
                 () => bingClient.DownloadStringAsync(new Uri(uri))).Take(1);
         }
@@ -122,24 +112,37 @@ namespace CoverRetriever.Service
         /// </summary>
         /// <param name="jsonResponce">The json response.</param>
         /// <returns>The list of covers.</returns>
-        private IEnumerable<RemoteCover> ParseBingImageResponse(string jsonResponce)
+        private IEnumerable<RemoteCover> ParseBingImageResponse(string query, int coverCount)
         {
-            dynamic covers = JsonConvert.DeserializeObject(jsonResponce);
+
             var result = new List<RemoteCover>();
 
-            var entriesCount = covers.d.results.Count;
-            for (int i = 0; i < entriesCount; i++)
+            CQ dom = CQ.CreateFromUrl($"https://www.bing.com/images/search?q={query}");
+            var items = dom[".item"].Take(coverCount);
+            foreach (var item in items)
             {
-                var image = covers.d.results[i];
-                var gImageUri = new Uri((string)image.MediaUrl, UriKind.Absolute);
-                double width = (double)image.Width;
-                double height = (double)image.Height;
+                var image = dom[item].Find(".thumb");
+                var imgInfo = dom[item].Find(".fileInfo");
+                var imageThumb = dom[item].Find("img");
 
-                var tdGImage = new Uri((string)image.Thumbnail.MediaUrl, UriKind.Absolute);
-                double tdwidth = (double)image.Thumbnail.Width;
-                double tdheight = (double)image.Thumbnail.Height;
+                Regex r = new Regex(@"(?<width>\d+) x (?<height>\d+).", RegexOptions.None);
+                Match m = r.Match(imgInfo.Text());
+
+
+                var gImageUri = new Uri(image.Attr("href"), UriKind.Absolute);
+                double width = 0;
+                double height = 0;
+                if (m.Success)
+                {
+                    width = int.Parse(r.Match(imgInfo.Text()).Result("${width}"));
+                    height = int.Parse(r.Match(imgInfo.Text()).Result("${height}"));
+                }
+
+                var tdGImage = new Uri(imageThumb.Attr("src"), UriKind.Absolute);
+                double tdwidth = double.Parse(imageThumb.Attr("width"));
+                double tdheight = double.Parse(imageThumb.Attr("height"));
                 result.Add(new RemoteCover(
-                            image.ID.ToString(),
+                            image.Attr("h"),
                             Path.GetFileName(gImageUri.AbsolutePath),
                             new Size(width, height),
                             new Size(tdwidth, tdheight),
@@ -147,6 +150,8 @@ namespace CoverRetriever.Service
                             DownloadCover(gImageUri),
                             DownloadCover(tdGImage)));
             }
+
+
             return result;
         }
     }
