@@ -106,7 +106,32 @@ namespace CoverRetriever.Service
 
             return downloadOpservable;
         }
+        /// <summary>
+        /// Download cover by uri.
+        /// </summary>
+        /// <param name="coverUri">Uri of cover.</param>
+        /// <returns>Sream of cover.</returns>
+        public IObservable<Stream> DownloadCover(Uri coverUri, Uri thumbUri)
+        {
+            ////todo: implement a caching
+            var downloader = new WebClient();
+            var downloadOpservable = ObservableExtensions.Defer(Observable.FromEventPattern<DownloadDataCompletedEventArgs>(downloader, "DownloadDataCompleted")
+                .Finally(downloader.Dispose)
+                    .Select(
+                        x =>
+                        {
+                            if (x.EventArgs.Error != null)
+                            {
 
+                                return DownloadCover(thumbUri).SingleOrDefault();
+                            }
+
+                            return new MemoryStream(x.EventArgs.Result);
+                        }), () => downloader.DownloadDataAsync(coverUri))
+                .Take(1);
+
+            return downloadOpservable;
+        }
         /// <summary>
         /// Parses the google image response.
         /// </summary>
@@ -129,7 +154,7 @@ namespace CoverRetriever.Service
                 Match m = r.Match(imgInfo.Text());
 
 
-                var gImageUri = new Uri(image.Attr("href"), UriKind.Absolute);
+                var bImageUri = new Uri(image.Attr("href"), UriKind.Absolute);
                 double width = 0;
                 double height = 0;
                 if (m.Success)
@@ -141,13 +166,14 @@ namespace CoverRetriever.Service
                 var tdGImage = new Uri(imageThumb.Attr("src"), UriKind.Absolute);
                 double tdwidth = double.Parse(imageThumb.Attr("width"));
                 double tdheight = double.Parse(imageThumb.Attr("height"));
+
                 result.Add(new RemoteCover(
                             image.Attr("h"),
-                            Path.GetFileName(gImageUri.AbsolutePath),
+                            Path.GetFileName(bImageUri.AbsolutePath),
                             new Size(width, height),
                             new Size(tdwidth, tdheight),
                             tdGImage,
-                            DownloadCover(gImageUri),
+                            DownloadCover(bImageUri, tdGImage),
                             DownloadCover(tdGImage)));
             }
 
