@@ -62,12 +62,12 @@ namespace CoverRetriever.AudioInfo.Helper
         public static void ReplacePictures(this Tag tag, params IPicture[] newPictures)
         {
             var pictures = new List<IPicture>(tag.Pictures);
-            
+
             foreach (var picture in newPictures)
             {
                 var localPicture = picture;
                 int indexOfPicture = pictures.IndexOf(tag.GetCoverSafe(localPicture.Type));
-                
+
                 if (indexOfPicture >= 0)
                 {
                     pictures.RemoveAt(indexOfPicture);
@@ -99,7 +99,7 @@ namespace CoverRetriever.AudioInfo.Helper
             {
                 read = coverStream.Read(buffer, 0, buffer.Length);
                 downloadedCover.Write(buffer, 0, read);
-            } 
+            }
             while (read != 0);
 
             downloadedCover.Position = 0;
@@ -107,7 +107,8 @@ namespace CoverRetriever.AudioInfo.Helper
             EnsureImageStreamValid(downloadedCover);
             var frontCover = new Picture(new ByteVector(downloadedCover.ToArray(), (int)downloadedCover.Length));
             frontCover.Type = pictureType;
-            frontCover.MimeType = GetMimeTipeFromFileExtension(Path.GetExtension(name));
+            var fileExt = Path.GetExtension(name).Length != 0 ? Path.GetExtension(name) : ".jpg";
+            frontCover.MimeType = GetMimeTipeFromFileExtension(fileExt);
 
             return frontCover;
         }

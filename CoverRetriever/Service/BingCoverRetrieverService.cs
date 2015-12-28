@@ -76,7 +76,7 @@ namespace CoverRetriever.Service
                                         throw new CoverSearchException("Unable to get response from bing", jsonResponce.EventArgs.Error);
                                     }
 
-                                    return ParseBingImageResponse(query, coverCount);//jsonResponce.EventArgs.Result
+                                    return ParseBingImageResponse(query, coverCount);
                                 }),
                 () => bingClient.DownloadStringAsync(new Uri(uri))).Take(1);
         }
