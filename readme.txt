@@ -37,3 +37,5 @@ Cover Retriever is a small, simple, easy to use application specially designed t
 	*Added manual editing of tag
 	*Added possibility to save a particular Tag (Artist, Album) for file or for Folder
 	*Other minor improvements
+1.1.0	(2015-12-29)
+	*Changed google search API on Bing.
